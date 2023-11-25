@@ -9,7 +9,23 @@
 </head>
 
 <body>
-  <div id="content"></div>
+  <div id="content">
+    <div class="text">
+      <h2>what the hell is this thing</h2>
+      <p>Paste slab data from talespire into the top input, edit it in the
+        bottom one, and then copy new value from the top back into talespire.
+      </p>
+      <p>This is unity so remember that y axis is up. The "data" sections are
+        <label><input type="checkbox" checked id="data-shown-checkbox">
+          shown</label>
+        only for convenience. Bottom input has to be a valid json.
+      </p>
+    </div>
+
+    <textarea id="paste-input" placeholder="base64"
+      spellcheck="false"></textarea>
+    <textarea id="data-input" placeholder="data" spellcheck="false"></textarea>
+  </div>
 
   <script src="./dist/main.js"></script>
 </body>

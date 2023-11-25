@@ -25,8 +25,8 @@ function parseIndex(assetIndex) {
         type: key,
         folder: asset.Folder,
         group: asset.GroupTag,
-        uuid: asset.Id,
         name: asset.Name,
+        // uuid: asset.Id,
         // colliderBounds: asset.ColliderBoundsBound,
         // assets: asset.Assets,
       };
@@ -38,7 +38,7 @@ function parseIndex(assetIndex) {
   return parsedIndex;
 }
 
-function readSlab(buffer) {
+function readSlab(buffer, isDataShown = true) {
   // console.log(Array.from(new Uint8Array(buffer)));
   let bufferPointer = 0;
 
@@ -79,12 +79,13 @@ function readSlab(buffer) {
     // skip _reserved_ bytes (?)
     bufferPointer += 2;
 
-    layouts.push({
+    const layout = {
       uuid,
-      data: parsedIndex[uuid],
       assetCount,
       assets: []
-    });
+    };
+    if (isDataShown) layout.data = parsedIndex[uuid];
+    layouts.push(layout);
   }
 
   for (let i = 0; i < layoutCount; i++) {
@@ -99,6 +100,7 @@ function readSlab(buffer) {
 
       layouts[i].assets.push({ x, y, z, rotation });
     }
+    delete layouts[i].assetCount;
   }
 
   const additionalData = new Uint8Array(buffer.slice(bufferPointer));
