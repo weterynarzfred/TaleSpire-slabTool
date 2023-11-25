@@ -26,8 +26,8 @@ function cleanupGeneratedData(layouts) {
       }
 
       minimums.x = Math.min(minimums.x, asset.x);
-      minimums.y = Math.min(minimums.x, asset.y);
-      minimums.z = Math.min(minimums.x, asset.z);
+      minimums.y = Math.min(minimums.y, asset.y);
+      minimums.z = Math.min(minimums.z, asset.z);
     }
   }
 
