@@ -192,7 +192,7 @@ function decodeSlab(paste) {
 }
 
 function encodeSlab(binaryData) {
-  const bitData = pako.deflate(binaryData);
+  const bitData = pako.gzip(binaryData);
   const binaryString = String.fromCharCode(...Array.from(bitData));
   const paste = btoa(binaryString);
 
