@@ -1,4 +1,5 @@
 import cleanupGeneratedData from './cleanupGeneratedData';
+import rotateLayout from './rotateLayout';
 
 const UUIDS = [
   "e39623c4-77bc-44f7-b591-8e9fdfc2414d",
@@ -50,9 +51,7 @@ function generate() {
     }
   }
 
-  console.log(layouts);
-
-  return cleanupGeneratedData(layouts);
+  return cleanupGeneratedData(rotateLayout(layouts, 30));
 }
 
 export default generate;
