@@ -1,19 +1,41 @@
+import { jsonrepair } from 'jsonrepair';
+
 import generate from './generate';
-import { decodeSlab, encodeSlab, readSlab, writeSlab } from './talespire';
+import readSlab from './readSlab';
+import { decodeSlab, encodeSlab } from './encoding';
+import writeSlab from './writeSlab';
 
 const pasteInputElement = document.getElementById('paste-input');
 const dataInputElement = document.getElementById('data-input');
 const dataShownCheckboxElement = document.getElementById('data-shown-checkbox');
+const copyButtonElement = document.getElementById('copy-button');
 
-let isDataShown = true;
+copyButtonElement.addEventListener('click', () => {
+  navigator.clipboard.writeText(pasteInputElement.value).then(() => {
+    copyButtonElement.innerText = 'copied';
+    setTimeout(() => {
+      copyButtonElement.innerText = 'copy';
+    }, 500);
+  });
+});
+
+let isDataShown = false;
 
 function parseBase64(base64) {
   try {
-    return JSON.stringify(
-      readSlab(decodeSlab(pasteInputElement.value), isDataShown),
-      null,
-      2
-    );
+    const decodedSlab = decodeSlab(pasteInputElement.value);
+    const layoutsObject = readSlab(decodedSlab, isDataShown);
+    return JSON.stringify(layoutsObject, null, 2);
+  } catch { }
+
+  return false;
+}
+
+function parseJson(json) {
+  try {
+    const cleanedJson = jsonrepair(json);
+    const layoutsObject = JSON.parse(cleanedJson);
+    return encodeSlab(writeSlab(layoutsObject));
   } catch { }
 
   return false;
@@ -31,18 +53,13 @@ pasteInputElement.addEventListener('input', () => {
 });
 
 dataInputElement.addEventListener('input', () => {
-  let base64;
-
   if (!dataInputElement.value) {
-    base64 = '';
-  } else {
-    try {
-      base64 = encodeSlab(writeSlab(JSON.parse(dataInputElement.value)));
-    } catch {
-      base64 = "something is BrOkEn";
-    }
+    pasteInputElement.value = '';
   }
-  pasteInputElement.value = base64;
+
+  const base64 = parseJson(dataInputElement.value);
+  if (base64) pasteInputElement.value = base64;
+  else pasteInputElement.value = "something is BrOkEn";
 });
 
 dataShownCheckboxElement.addEventListener('change', () => {
@@ -56,3 +73,5 @@ const generatedData = generate();
 console.log(generatedData);
 const base64 = encodeSlab(writeSlab(generatedData));
 pasteInputElement.value = base64;
+const data = parseBase64(pasteInputElement.value);
+if (data) dataInputElement.value = data;

@@ -15,13 +15,17 @@
       <p>Paste slab data from talespire into the top input, edit it in the
         bottom one, and then copy new value from the top back into talespire.
       </p>
-      <p>This is unity so remember that y axis is up. The "data" sections are
-        <label><input type="checkbox" checked id="data-shown-checkbox">
-          shown</label>
-        only for convenience. Bottom input has to be a valid json.
-      </p>
+      <ul>
+        <li>This is unity data, so remember that y axis is up.</li>
+        <li>
+          <label>The "data" sections can be
+            <input type="checkbox" id="data-shown-checkbox">
+            shown for convenience</label>
+        </li>
+      </ul>
     </div>
 
+    <button id="copy-button">copy</button>
     <textarea id="paste-input" placeholder="base64"
       spellcheck="false"></textarea>
     <textarea id="data-input" placeholder="data" spellcheck="false"></textarea>
