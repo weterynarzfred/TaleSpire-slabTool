@@ -1,3 +1,4 @@
+import generate from './generate';
 import { decodeSlab, encodeSlab, readSlab, writeSlab } from './talespire';
 
 const pasteInputElement = document.getElementById('paste-input');
@@ -50,3 +51,8 @@ dataShownCheckboxElement.addEventListener('change', () => {
   const data = parseBase64(pasteInputElement.value);
   if (data) dataInputElement.value = data;
 });
+
+const generatedData = generate();
+console.log(generatedData);
+const base64 = encodeSlab(writeSlab(generatedData));
+pasteInputElement.value = base64;
