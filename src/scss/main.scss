@@ -37,14 +37,26 @@ textarea {
   }
 }
 
+#controls {
+  display: flex;
+  align-items: center;
+  margin-bottom: .8rem;
+
+  #byte-count {
+    margin-left: 1em;
+  }
+}
+
 button {
   background: none;
   color: inherit;
   border: 1px solid #555;
   padding: .5em 1em;
-  margin-bottom: 1em;
   cursor: pointer;
   text-align: center;
+  text-transform: uppercase;
+  font-size: .8em;
+  letter-spacing: .1em;
   min-width: 7em;
 
   &:hover {
@@ -57,7 +69,7 @@ button {
 }
 
 #paste-input {
-  margin-bottom: 1em;
+  margin-bottom: .8rem;
   height: 10em;
   min-height: 10em;
 }

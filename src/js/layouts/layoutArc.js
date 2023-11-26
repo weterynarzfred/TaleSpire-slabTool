@@ -34,7 +34,6 @@ export default class LayoutArc extends Layout {
       y: setts.offset.y / setts.count,
       z: setts.offset.z / setts.count,
     };
-    console.log(scaledOffset);
     for (let i = 0; i < setts.count; i++) {
       const arcPos = i / setts.count * setts.arc / 180 * Math.PI;
       const layout = {

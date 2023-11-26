@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bytes": "^3.1.2",
     "cash-dom": "^8.1.5",
     "jsonrepair": "^3.4.1",
     "lodash": "^4.17.21",

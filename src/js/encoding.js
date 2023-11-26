@@ -16,7 +16,11 @@ function encodeSlab(binaryData) {
   const binaryString = String.fromCharCode(...Array.from(bitData));
   const paste = btoa(binaryString);
 
-  return '```' + paste + '```';
+  return {
+    base64: '```' + paste + '```',
+    rawDataLength: binaryData.byteLength,
+    dataLength: bitData.length
+  };
 }
 
 export {
