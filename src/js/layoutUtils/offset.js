@@ -5,7 +5,7 @@ Layout.prototype.offset = function (
   isRandom = false
 ) {
   const usedOffset = { x: 0, y: 0, z: 0 };
-  Object.assign(usedOffset, offset);
+  _.merge(usedOffset, offset);
 
   for (let i = 0; i < this.layouts.length; i++) {
     for (let j = 0; j < this.layouts[i].assets.length; j++) {

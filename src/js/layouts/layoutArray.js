@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import _ from 'lodash';
 import Layout from '../Layout';
 
 /**
@@ -53,7 +53,7 @@ export default class LayoutArray extends Layout {
    */
   constructor(settings) {
     const setts = _.clone(DEFAULT_SETTINGS);
-    Object.assign(setts, settings);
+    _.merge(setts, settings);
 
     const layouts = [];
 

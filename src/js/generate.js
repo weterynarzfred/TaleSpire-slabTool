@@ -1,5 +1,5 @@
 import LayoutArc from './layouts/LayoutArc';
-import LayoutArray from './layouts/layoutArray';
+import LayoutArray from './layouts/LayoutArray';
 import Layout from './Layout';
 
 // "e39623c4-77bc-44f7-b591-8e9fdfc2414d" - brick
@@ -27,10 +27,10 @@ function generate() {
       "6f145508-4bb0-45eb-bff9-5b625ddce745",
     ],
     count: 90,
-    arc: 90,
+    arc: 720,
     radius: 15 * 0.53,
+    offset: { y: 0.1 },
   }).rotateElements(90)
-    .scale({ z: 3 })
     .offset({ x: 0.02, y: 0.02, z: 0.02 }, true)
     .offset({ x: -0.3, y: 2.1, z: -0.4 });
 

@@ -2,7 +2,7 @@ import Layout from '../Layout';
 
 Layout.prototype.scale = function (scale = {}) {
   const usedScale = { x: 1, y: 1, z: 1 };
-  Object.assign(usedScale, scale);
+  _.merge(usedScale, scale);
 
   const minimums = { x: Infinity, y: Infinity, z: Infinity };
   const maximums = { x: -Infinity, y: -Infinity, z: -Infinity };

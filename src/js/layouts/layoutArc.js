@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import _ from 'lodash';
 import Layout from '../Layout';
 
 /**
@@ -7,6 +7,7 @@ import Layout from '../Layout';
  * @property {number} count
  * @property {number} radius
  * @property {number} arc
+ * @property {vector3} offset
  */
 
 const DEFAULT_SETTINGS = {
@@ -14,6 +15,7 @@ const DEFAULT_SETTINGS = {
   count: 1,
   radius: 1,
   arc: 360,
+  offset: { x: 0, y: 0, z: 0 },
 };
 
 export default class LayoutArc extends Layout {
@@ -23,7 +25,7 @@ export default class LayoutArc extends Layout {
    */
   constructor(settings) {
     const setts = _.clone(DEFAULT_SETTINGS);
-    Object.assign(setts, settings);
+    _.merge(setts, settings);
 
     const layouts = [];
 
@@ -32,9 +34,9 @@ export default class LayoutArc extends Layout {
       const layout = {
         uuid: setts.uuids[Math.floor(Math.random() * setts.uuids.length)],
         assets: [{
-          x: Math.sin(arcPos) * setts.radius,
-          y: 0,
-          z: Math.cos(arcPos) * setts.radius,
+          x: Math.sin(arcPos) * setts.radius + setts.offset.x * i,
+          y: setts.offset.y * i,
+          z: Math.cos(arcPos) * setts.radius + setts.offset.z * i,
           rotation: arcPos * 180 / Math.PI,
         }]
       };

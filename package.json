@@ -12,8 +12,8 @@
   "dependencies": {
     "cash-dom": "^8.1.5",
     "jsonrepair": "^3.4.1",
-    "pako": "^2.1.0",
-    "underscore": "^1.13.6"
+    "lodash": "^4.17.21",
+    "pako": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
