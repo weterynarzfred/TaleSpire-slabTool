@@ -32,7 +32,7 @@ function generate() {
     offset: { y: 10 },
   }).rotateElements(90)
     .offset({ x: 0.02, y: 0.02, z: 0.02 }, true)
-    .offset({ x: -0.3, y: 2.1, z: -0.4 });
+    .offset({ x: -7.5 * 0.53, z: 7.5 * 0.53 });
 
   const layout = arc
     .add(
@@ -55,7 +55,7 @@ function generate() {
         .rotationVariations([0, 90, 180, 270])
         .rotateElements(15, true)
         .rotate(180)
-        .offset({ x: 15 * 0.53, z: 15 * 0.53 })
+        .offset({ x: -15 * 0.53, z: 15 * 0.53 })
     )
     .add(
       wall.clone()
@@ -63,8 +63,21 @@ function generate() {
         .rotationVariations([0, 90, 180, 270])
         .rotateElements(15, true)
         .rotate(270)
-        .offset({ x: 15 * 0.53 })
-    ).rotate(90);
+        .offset({ x: -15 * 0.53 })
+    ).offset({ x: 7.5 * 0.53, z: -7.5 * 0.53 })
+    .rotate(30);
+
+  const tower = new LayoutArc({
+    uuids: ["e39623c4-77bc-44f7-b591-8e9fdfc2414d"],
+    count: 36,
+    arc: 360,
+    radius: 2.5,
+    offset: { y: 2, z: 1 },
+  }).array({ y: 0.25, z: 1 / 36, rotation: 5 }, 25)
+    .rotationVariations([0, 90, 180, 270])
+    .offset({ x: 0.02, y: 0.02, z: 0.02 }, true);
+
+  layout.add(tower);
 
   return layout.toOrigin().layouts;
 }

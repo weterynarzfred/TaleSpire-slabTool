@@ -52,7 +52,7 @@ export default class LayoutArray extends Layout {
    * @param {settings} settings
    */
   constructor(settings) {
-    const setts = _.clone(DEFAULT_SETTINGS);
+    const setts = _.cloneDeep(DEFAULT_SETTINGS);
     _.merge(setts, settings);
 
     const layouts = [];
