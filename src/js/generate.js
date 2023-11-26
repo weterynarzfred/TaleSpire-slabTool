@@ -30,6 +30,7 @@ function generate() {
     arc: 90,
     radius: 15 * 0.53,
   }).rotateElements(90)
+    .scale({ z: 3 })
     .offset({ x: 0.02, y: 0.02, z: 0.02 }, true)
     .offset({ x: -0.3, y: 2.1, z: -0.4 });
 
@@ -69,5 +70,3 @@ function generate() {
 }
 
 export default generate;
-
-

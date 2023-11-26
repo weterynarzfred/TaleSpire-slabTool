@@ -1,7 +1,7 @@
 import Layout from '../Layout';
 
 Layout.prototype.toOrigin = function () {
-  let minimums = { x: Infinity, y: Infinity, z: Infinity };
+  const minimums = { x: Infinity, y: Infinity, z: Infinity };
   for (const layout of this.layouts) {
     for (const asset of layout.assets) {
       minimums.x = Math.min(minimums.x, asset.x);
