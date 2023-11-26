@@ -60,7 +60,7 @@ function layoutArray(settings) {
   const setts = _.clone(DEFAULT_SETTINGS);
   Object.assign(setts, settings);
 
-  let layouts = [];
+  const layouts = [];
 
   for (let i = 0; i < setts.counts[0]; i++) {
     for (let j = 0; j < setts.counts[1]; j++) {

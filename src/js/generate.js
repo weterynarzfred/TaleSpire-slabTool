@@ -1,9 +1,10 @@
 import cleanupGeneratedData from './cleanupGeneratedData';
+import layoutArc from './layouts/layoutArc';
 import layoutArray from './layouts/layoutArray';
-import rotateLayout from './rotateLayout';
+import rotateLayout from './layoutUtils/rotateLayout';
 
 function generate() {
-  const layouts = layoutArray({
+  let layouts = layoutArray({
     uuids: [
       "e39623c4-77bc-44f7-b591-8e9fdfc2414d", // brick
       // "6f145508-4bb0-45eb-bff9-5b625ddce745",
@@ -24,7 +25,17 @@ function generate() {
     bounds: { x: 0, y: 0, z: 0.53 * 15 },
   });
 
-  return cleanupGeneratedData(rotateLayout(layouts, 15));
+  layouts = layouts.concat(layoutArc({
+    uuids: [
+      "6f145508-4bb0-45eb-bff9-5b625ddce745",
+    ],
+    count: 30,
+    arc: 90,
+    radius: 5,
+    rotate: 90,
+  }));
+
+  return cleanupGeneratedData(rotateLayout(layouts, 0));
 }
 
 export default generate;
