@@ -29,14 +29,20 @@ export default class LayoutArc extends Layout {
 
     const layouts = [];
 
+    const scaledOffset = {
+      x: setts.offset.x / setts.count,
+      y: setts.offset.y / setts.count,
+      z: setts.offset.z / setts.count,
+    };
+    console.log(scaledOffset);
     for (let i = 0; i < setts.count; i++) {
       const arcPos = i / setts.count * setts.arc / 180 * Math.PI;
       const layout = {
         uuid: setts.uuids[Math.floor(Math.random() * setts.uuids.length)],
         assets: [{
-          x: Math.sin(arcPos) * setts.radius + setts.offset.x * i,
-          y: setts.offset.y * i,
-          z: Math.cos(arcPos) * setts.radius + setts.offset.z * i,
+          x: Math.sin(arcPos) * setts.radius + scaledOffset.x * i,
+          y: scaledOffset.y * i,
+          z: Math.cos(arcPos) * setts.radius + scaledOffset.z * i,
           rotation: arcPos * 180 / Math.PI,
         }]
       };

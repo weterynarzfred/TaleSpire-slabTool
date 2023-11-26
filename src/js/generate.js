@@ -4,9 +4,9 @@ import Layout from './Layout';
 
 // "e39623c4-77bc-44f7-b591-8e9fdfc2414d" - brick
 // "6f145508-4bb0-45eb-bff9-5b625ddce745" - shelf
-// "c088991c-5896-43d2-91a1-0e2268490ba4" - 
-// "fa309f05-6efc-41ec-91a7-1157fb7029f3" - 
-// "6b834055-c529-4c15-a3e1-eaf72d7aef4b" - 
+// "c088991c-5896-43d2-91a1-0e2268490ba4" - chair
+// "fa309f05-6efc-41ec-91a7-1157fb7029f3" - mug of beer
+// "6b834055-c529-4c15-a3e1-eaf72d7aef4b" - barrel
 
 function generate() {
   const wall = new LayoutArray({
@@ -29,7 +29,7 @@ function generate() {
     count: 90,
     arc: 720,
     radius: 15 * 0.53,
-    offset: { y: 0.1 },
+    offset: { y: 10 },
   }).rotateElements(90)
     .offset({ x: 0.02, y: 0.02, z: 0.02 }, true)
     .offset({ x: -0.3, y: 2.1, z: -0.4 });
