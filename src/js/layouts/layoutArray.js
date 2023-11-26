@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import cleanupGeneratedData from '../cleanupGeneratedData';
+import Layout from '../Layout';
 
 /**
  * @typedef {object} vector3
@@ -13,8 +13,6 @@ import cleanupGeneratedData from '../cleanupGeneratedData';
  * @property {string[]} uuids
  * @property {number[]} counts
  * @property {vector3[]} offsets
- * @property {number} rotate rotation of the elements
- * @property {number} rotateMax
  * @property {number} rotationVariations
  * @property {vector3} randomOffset
  * @property {vector3} bounds
@@ -28,10 +26,6 @@ const DEFAULT_SETTINGS = {
     { x: 1, y: 0, z: 0 },
     { x: 0, y: 1, z: 0 },
   ],
-  rotate: 0,
-  rotateMax: 0,
-  rotationVariations: 1,
-  randomOffset: { x: 0, y: 0, z: 0 },
   bounds: { x: 0, y: 0, z: 0 },
 };
 
@@ -46,37 +40,36 @@ function getOffset(settings, i, j, k) {
       offset %= settings.bounds[axis] - 0.001;
     }
 
-    axes[axis] = offset + (Math.random() * 2 - 1) * settings.randomOffset[axis];
+    axes[axis] = offset;
   }
 
   return axes;
 }
 
-/**
- * Arranges elements in a grid
- * @param {settings} settings
- */
-function layoutArray(settings) {
-  const setts = _.clone(DEFAULT_SETTINGS);
-  Object.assign(setts, settings);
+export default class LayoutArray extends Layout {
+  /**
+   * Arranges elements in a grid
+   * @param {settings} settings
+   */
+  constructor(settings) {
+    const setts = _.clone(DEFAULT_SETTINGS);
+    Object.assign(setts, settings);
 
-  const layouts = [];
+    const layouts = [];
 
-  for (let i = 0; i < setts.counts[0]; i++) {
-    for (let j = 0; j < setts.counts[1]; j++) {
-      for (let k = 0; k < setts.counts[2]; k++) {
-        let rotation = 360 / setts.rotationVariations * Math.floor(Math.random() * setts.rotationVariations) + Math.random() * (setts.rotateMax - setts.rotate) + setts.rotate;
-        const { x, y, z } = getOffset(setts, i, j, k);
+    for (let i = 0; i < setts.counts[0]; i++) {
+      for (let j = 0; j < setts.counts[1]; j++) {
+        for (let k = 0; k < setts.counts[2]; k++) {
+          const { x, y, z } = getOffset(setts, i, j, k);
 
-        layouts.push({
-          uuid: setts.uuids[Math.floor(Math.random() * setts.uuids.length)],
-          assets: [{ x, y, z, rotation }]
-        });
+          layouts.push({
+            uuid: setts.uuids[Math.floor(Math.random() * setts.uuids.length)],
+            assets: [{ x, y, z }]
+          });
+        }
       }
     }
+
+    super(layouts);
   }
-
-  return cleanupGeneratedData(layouts);
 }
-
-export default layoutArray;
