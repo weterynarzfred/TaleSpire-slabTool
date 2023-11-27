@@ -1,9 +1,17 @@
-import { useTrackedState } from './StateProvider';
-import Results from './Results';
+import { useTrackedState, useUpdate } from './StateProvider';
 import BlockSlab from './BlockSlab';
 
 export default function BlockList({ path = [] }) {
+  const dispatch = useUpdate();
   const state = useTrackedState();
+
+  function handleAddSlab() {
+    dispatch({
+      type: "ADD_BLOCK",
+      blockType: 'slab',
+      path,
+    });
+  }
 
   const blocks = [];
   for (const id in state.blocks) {
@@ -15,8 +23,10 @@ export default function BlockList({ path = [] }) {
 
   return <div id="blocks">
 
-    <Results />
     {blocks}
+    <div className="block-controls">
+      <button className="add-slab-button" onClick={handleAddSlab}>add slab</button>
+    </div>
 
   </div>;
 }

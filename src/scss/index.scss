@@ -33,6 +33,12 @@ textarea {
   border: none;
   box-shadow: 0 0 0 1px #333 inset;
   border-radius: 5px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   &:focus {
     outline: none;
@@ -44,7 +50,8 @@ button {
   height: 100%;
   background: none;
   color: inherit;
-  border: 1px solid #333;
+  border: none;
+  box-shadow: 0 0 0 1px #333;
   padding: .5em 1em;
   cursor: pointer;
   text-align: center;
@@ -87,15 +94,8 @@ button {
     text-align: center;
   }
 
+  &--slab,
   &--results {
-    textarea {
-      height: 10em;
-      margin: .8rem 0 0 0;
-      background-color: #222;
-    }
-  }
-
-  &--slab {
     .block__contents {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -103,14 +103,38 @@ button {
       gap: .8rem;
       height: 20em;
 
-      .paste-input {
+      .base64-input {
         height: 100%;
       }
 
-      .data-input {
+      .json-input {
         height: 100%;
         grid-row-end: span 2;
       }
     }
   }
+
+  &--results {
+    .block__contents {
+      height: 10em;
+
+      textarea {
+        height: 10em;
+        background-color: #222;
+      }
+
+      button {
+        box-shadow: 0 0 0 1px #f55;
+      }
+    }
+  }
+}
+
+.block-controls {
+  background-color: #111;
+  padding: 1em;
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px #000;
+  margin-bottom: .8rem;
+
 }

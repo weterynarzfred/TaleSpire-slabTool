@@ -1,4 +1,5 @@
 import BlockList from './BlockList';
+import Results from './Results';
 import StateProvider from './StateProvider';
 
 export default function App() {
@@ -10,7 +11,8 @@ export default function App() {
         <ul>
           <li>☐ write the intro</li>
           <li>🗹 calculating results</li>
-          <li>☐ adding/removing modifiers</li>
+          <li>🗹 adding modifiers</li>
+          <li>☐ removing modifiers</li>
           <li>☐ nested modifiers</li>
           <li>modifiers
             <ul>
@@ -20,13 +22,15 @@ export default function App() {
               <li>☐ rotate</li>
               <li>☐ rotateElements</li>
               <li>☐ rotationVariations</li>
-              <li>☐ slace</li>
+              <li>☐ scale</li>
+              <li>☐ replace</li>
             </ul>
           </li>
           <li>☐ fix copy buttons</li>
-          <li>☐ saving state to local Storage <i><small>(?)</small></i></li>
+          <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
         </ul>
       </div>
+      <Results />
       <BlockList />
     </div>
   </StateProvider>;

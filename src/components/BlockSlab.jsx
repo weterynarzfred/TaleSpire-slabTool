@@ -40,6 +40,7 @@ export default function BlockSlab({ data, path }) {
 
     try {
       const cleanedJson = jsonrepair(event.currentTarget.value);
+      console.log(cleanedJson);
       const layoutsObject = JSON.parse(cleanedJson);
       const newLayout = new Layout(layoutsObject);
       const binaryData = newLayout.binaryData;
@@ -77,9 +78,9 @@ export default function BlockSlab({ data, path }) {
         <button className="copy-button">copy</button>
         <div className="byte-count">{bytes(dataLength) ?? '???'}</div>
       </div>
-      <textarea className="data-input" placeholder="data"
+      <textarea className="json-input" placeholder="data"
         spellCheck="false" value={json} onChange={handleJsonInput} />
-      <textarea className="paste-input" placeholder="base64"
+      <textarea className="base64-input" placeholder="base64"
         spellCheck="false" value={base64} onChange={handleBase64Input} />
     </div>
 

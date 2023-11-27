@@ -19,7 +19,7 @@ export default class Layout {
   }
 
   get base64() {
-    const { base64 } = encodeSlab(writeSlab(this.layouts));
+    const { base64 } = this.binaryData;
     return base64;
   }
 

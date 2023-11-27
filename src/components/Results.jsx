@@ -7,10 +7,13 @@ export default function Results() {
 
   return <div className="block block--results">
     <div className="block__title">results</div>
-    <div className="controls">
-      <button className="copy-button">copy</button>
-      <div className="byte-count">{bytes(data.dataLength)}</div>
+    <div className="block__contents">
+      <div className="controls">
+        <button className="copy-button">copy</button>
+        <div className="byte-count">{bytes(data.dataLength)}</div>
+      </div>
+      <textarea className="json-input" readOnly value={state.layout.json} />
+      <textarea className="base64-input" readOnly value={data.base64} />
     </div>
-    <textarea readOnly value={data.base64} />
   </div>;
 }

@@ -3,11 +3,8 @@ import { useReducer } from "react";
 import { createContainer } from 'react-tracked';
 import _ from 'lodash';
 import Layout from '../lib/Layout';
-
-const getId = (() => {
-  let lastId = 0;
-  return () => lastId++;
-})();
+import { blockAtPath, getId, recalculateLayout } from '../lib/reducer/utils';
+import addBlock from '../lib/reducer/addBlock';
 
 const initialState = {
   blocks: {},
@@ -25,27 +22,24 @@ initialState.blocks[initialId] = {
 
 recalculateLayout(initialState);
 
-function recalculateLayout(state) {
-  const layout = new Layout();
-  for (const id in state.blocks) {
-    const block = state.blocks[id];
-    if (block.type === 'slab') {
-      layout.add(new Layout(block.data.layouts));
-    }
-  }
-  layout.toOrigin();
-
-  state.layout = layout;
-}
-
 const reducer = produce((state, action) => {
-  if (action.type === "RECALCULATE") {
-    recalculateLayout(state);
-  } else if (action.type === "CHANGE_DATA") {
-    const block = _.get(state.blocks, action.path.join('.blocks.'));
-    block.data = action.data;
-    recalculateLayout(state);
+  switch (action.type) {
+    case "RECALCULATE":
+      recalculateLayout(state);
+      break;
+    case "CHANGE_DATA":
+      const block = blockAtPath(state, action.path);
+      block.data = action.data;
+      recalculateLayout(state);
+      break;
+    case "ADD_BLOCK":
+      addBlock(state, action);
+      break;
+    default:
+      throw "unrecognized action type";
   }
+
+  console.log(_.cloneDeep(state));
 });
 
 const { Provider, useTrackedState, useUpdate } = createContainer(
