@@ -1,3 +1,50 @@
+@font-face {
+  font-family: "Lato";
+  src: url('../media/Lato-Light.ttf');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url('../media/Lato-LightItalic.ttf');
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url('../media/Lato-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url('../media/Lato-Italic.ttf');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url('../media/Lato-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url('../media/Lato-BoldItalic.ttf');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Fira Code";
+  src: url('../media/FiraCode-VariableFont.ttf');
+}
+
 * {
   box-sizing: border-box;
 }
@@ -10,6 +57,7 @@ body {
   background-color: #222;
   color: #eee;
   font-family: sans-serif;
+  font-family: 'Lato', sans-serif;
 }
 
 #content {
@@ -33,6 +81,7 @@ textarea {
   border: none;
   box-shadow: 0 0 0 1px #333 inset;
   border-radius: 5px;
+  font-family: "Fira Code", monospace;
   -ms-overflow-style: none;
   scrollbar-width: none;
 
@@ -59,7 +108,6 @@ button {
   font-size: .8em;
   letter-spacing: .1em;
   min-width: 7em;
-  border-radius: 5px;
 
   &:hover {
     background-color: #333;

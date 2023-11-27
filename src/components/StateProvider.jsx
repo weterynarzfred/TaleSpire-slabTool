@@ -38,8 +38,6 @@ const reducer = produce((state, action) => {
     default:
       throw "unrecognized action type";
   }
-
-  console.log(_.cloneDeep(state));
 });
 
 const { Provider, useTrackedState, useUpdate } = createContainer(

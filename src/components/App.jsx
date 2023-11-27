@@ -9,6 +9,7 @@ export default function App() {
       <div className="text">
         <h2>// TODO:</h2>
         <ul>
+          <li>🗹 change the font of the todo list</li>
           <li>☐ write the intro</li>
           <li>🗹 calculating results</li>
           <li>🗹 adding modifiers</li>
@@ -28,6 +29,7 @@ export default function App() {
           </li>
           <li>☐ fix copy buttons</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
+          <li>☐ collapsing modifier blocks</li>
         </ul>
       </div>
       <Results />

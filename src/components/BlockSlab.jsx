@@ -40,7 +40,6 @@ export default function BlockSlab({ data, path }) {
 
     try {
       const cleanedJson = jsonrepair(event.currentTarget.value);
-      console.log(cleanedJson);
       const layoutsObject = JSON.parse(cleanedJson);
       const newLayout = new Layout(layoutsObject);
       const binaryData = newLayout.binaryData;
