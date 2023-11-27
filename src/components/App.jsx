@@ -18,7 +18,11 @@ export default function App() {
           <li>modifiers
             <ul>
               <li>🗹 slab</li>
-              <li>☐ array</li>
+              <li>🗹 array
+                <ul>
+                  <li>☐ wrapping box</li>
+                </ul>
+              </li>
               <li>☐ offset</li>
               <li>☐ rotate</li>
               <li>☐ rotateElements</li>

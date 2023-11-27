@@ -94,6 +94,27 @@ textarea {
   }
 }
 
+input {
+  background: none;
+  padding: 0.2em 1em;
+  border: none;
+  box-shadow: 0 0 0 1px #333 inset;
+  font: inherit;
+  font-family: "Fira Code", monospace;
+  color: inherit;
+
+  &:focus {
+    outline: none;
+  }
+
+  &[type=number]::-webkit-inner-spin-button,
+  &[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+
 button {
   display: block;
   height: 100%;
@@ -207,13 +228,38 @@ button {
       }
     }
   }
+
+  &--array {
+    .block__contents {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      label {
+        display: flex;
+        align-items: center;
+        margin-bottom: .8rem;
+
+        .label {
+          min-width: 6em;
+          text-align: right;
+          margin-right: .5em;
+          font-size: .8em;
+          text-transform: uppercase;
+          letter-spacing: .1em;
+        }
+      }
+    }
+  }
 }
 
 .block-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
   background-color: #111;
   padding: 1em;
   border-radius: 5px;
   box-shadow: 0 0 0 1px #000;
   margin-bottom: .8rem;
-
+  gap: .8rem;
 }

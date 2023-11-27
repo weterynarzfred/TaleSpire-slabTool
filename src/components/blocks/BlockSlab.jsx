@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { jsonrepair } from 'jsonrepair';
+import bytes from 'bytes';
 import Layout from '../../lib/Layout';
 import { decodeSlab } from '../../lib/encoding';
 import readSlab from '../../lib/readSlab';
 import { useUpdate } from '../StateProvider';
-import { jsonrepair } from 'jsonrepair';
-import bytes from 'bytes';
 import BlockDeleteButton from '../BlockDeleteButton';
 
 export default function BlockSlab({ data, path }) {

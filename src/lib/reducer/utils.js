@@ -6,6 +6,8 @@ function recalculateLayout(state) {
     const block = state.blocks[id];
     if (block.type === 'slab') {
       layout.add(new Layout(block.data.layouts));
+    } else if (block.type === 'array') {
+      layout.array(block.data.offset, block.data.count);
     }
   }
   layout.toOrigin();

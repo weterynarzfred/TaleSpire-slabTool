@@ -1,14 +1,15 @@
 import { useTrackedState, useUpdate } from './StateProvider';
+import BlockArray from './blocks/BlockArray';
 import BlockSlab from './blocks/BlockSlab';
 
 export default function BlockList({ path = [] }) {
   const dispatch = useUpdate();
   const state = useTrackedState();
 
-  function handleAddSlab() {
+  function handleAddSlab(blockType) {
     dispatch({
       type: "ADD_BLOCK",
-      blockType: 'slab',
+      blockType,
       path,
     });
   }
@@ -18,6 +19,8 @@ export default function BlockList({ path = [] }) {
     const block = state.blocks[id];
     if (block.type === 'slab') {
       blocks.push(<BlockSlab key={id} data={block.data} path={[...path, id]} />);
+    } else if (block.type === 'array') {
+      blocks.push(<BlockArray key={id} data={block.data} path={[...path, id]} />);
     }
   }
 
@@ -25,7 +28,8 @@ export default function BlockList({ path = [] }) {
 
     {blocks}
     <div className="block-controls">
-      <button className="add-slab-button" onClick={handleAddSlab}>add slab</button>
+      <button className="add-block-button" onClick={() => handleAddSlab('slab')}>add slab</button>
+      <button className="add-block-button" onClick={() => handleAddSlab('array')}>add array</button>
     </div>
 
   </div>;

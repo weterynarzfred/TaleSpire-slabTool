@@ -1,6 +1,6 @@
-import { produce } from 'immer';
 import { useReducer } from "react";
 import { createContainer } from 'react-tracked';
+import { produce } from 'immer';
 import _ from 'lodash';
 import Layout from '../lib/Layout';
 import { blockAtPath, getId, recalculateLayout } from '../lib/reducer/utils';
@@ -30,7 +30,7 @@ const reducer = produce((state, action) => {
       break;
     case "CHANGE_DATA":
       const block = blockAtPath(state, action.path);
-      block.data = action.data;
+      Object.assign(block.data, action.data);
       recalculateLayout(state);
       break;
     case "ADD_BLOCK":
