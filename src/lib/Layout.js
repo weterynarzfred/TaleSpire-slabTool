@@ -1,3 +1,6 @@
+import { encodeSlab } from './encoding';
+import writeSlab from './writeSlab';
+
 export default class Layout {
   layouts;
 
@@ -13,6 +16,19 @@ export default class Layout {
 
   clone() {
     return new Layout(JSON.parse(JSON.stringify(this.layouts)));
+  }
+
+  get base64() {
+    const { base64 } = encodeSlab(writeSlab(this.layouts));
+    return base64;
+  }
+
+  get binaryData() {
+    return encodeSlab(writeSlab(this.layouts));
+  }
+
+  get json() {
+    return JSON.stringify(this.layouts, null, 2);
   }
 }
 

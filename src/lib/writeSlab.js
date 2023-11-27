@@ -9,6 +9,8 @@ const ASSET_SIZE = 8;
 const ADDITIONAL_DATA_SIZE = 2; // ?
 
 function writeSlab(layouts) {
+  if (!layouts) return;
+
   const header = 0xD1CEFACE;
   const version = 2;
   const layoutCount = layouts.length;

@@ -1,5 +1,5 @@
-import index1 from '../../data/index_cyberpunk_sci-fi.json';
-import index2 from '../../data/index_medieval_fantasy.json';
+import index1 from '../data/index_cyberpunk_sci-fi.json';
+import index2 from '../data/index_medieval_fantasy.json';
 
 
 const indexes = [

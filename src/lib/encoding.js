@@ -1,8 +1,6 @@
 import pako from 'pako';
 
 function decodeSlab(paste) {
-  if (!paste) throw "slab empty";
-
   const binaryString = atob(paste.replace(/[` ]/g, ""));
   const bitArray = binaryString.split('').map(x => x.charCodeAt(0));
   const deflatedData = new Uint8Array(bitArray);
@@ -12,13 +10,16 @@ function decodeSlab(paste) {
 }
 
 function encodeSlab(binaryData) {
+  if (!binaryData) return {};
+
   const bitData = pako.gzip(binaryData);
   const binaryString = String.fromCharCode(...Array.from(bitData));
   const paste = btoa(binaryString);
 
   return {
-    base64: '```' + paste + '```',
+    rawData: binaryData,
     rawDataLength: binaryData.byteLength,
+    base64: '```' + paste + '```',
     dataLength: bitData.length
   };
 }
