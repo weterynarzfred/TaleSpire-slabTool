@@ -128,6 +128,7 @@ button {
 }
 
 .block {
+  position: relative;
   background-color: #111;
   padding: 1em;
   border-radius: 5px;
@@ -140,6 +141,36 @@ button {
     letter-spacing: .1em;
     font-weight: 700;
     text-align: center;
+  }
+
+  .BlockDeleteButton {
+    position: absolute;
+    top: .6em;
+    right: .6em;
+    display: block;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    background-color: #222;
+    border: 1px solid #999;
+    cursor: pointer;
+
+    path {
+      stroke: #ccc;
+      stroke-width: 5;
+    }
+
+    &:hover {
+      border-color: #f55;
+
+      path {
+        stroke: #f55;
+      }
+    }
+
+    &:active {
+      background-color: #333;
+    }
   }
 
   &--slab,

@@ -5,6 +5,7 @@ import _ from 'lodash';
 import Layout from '../lib/Layout';
 import { blockAtPath, getId, recalculateLayout } from '../lib/reducer/utils';
 import addBlock from '../lib/reducer/addBlock';
+import deleteBlock from '../lib/reducer/deleteBlock';
 
 const initialState = {
   blocks: {},
@@ -34,6 +35,9 @@ const reducer = produce((state, action) => {
       break;
     case "ADD_BLOCK":
       addBlock(state, action);
+      break;
+    case "DELETE_BLOCK":
+      deleteBlock(state, action);
       break;
     default:
       throw "unrecognized action type";

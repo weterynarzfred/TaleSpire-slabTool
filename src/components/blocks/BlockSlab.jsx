@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '../lib/Layout';
-import { decodeSlab } from '../lib/encoding';
-import readSlab from '../lib/readSlab';
-import { useUpdate } from './StateProvider';
+import Layout from '../../lib/Layout';
+import { decodeSlab } from '../../lib/encoding';
+import readSlab from '../../lib/readSlab';
+import { useUpdate } from '../StateProvider';
 import { jsonrepair } from 'jsonrepair';
 import bytes from 'bytes';
+import BlockDeleteButton from '../BlockDeleteButton';
 
 export default function BlockSlab({ data, path }) {
   const dispatch = useUpdate();
@@ -71,6 +72,7 @@ export default function BlockSlab({ data, path }) {
 
   return <div className="block block--slab">
     <div className="block__title">slab</div>
+    <BlockDeleteButton path={path} />
 
     <div className="block__contents">
       <div className="controls">

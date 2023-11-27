@@ -1,5 +1,5 @@
 import { useTrackedState, useUpdate } from './StateProvider';
-import BlockSlab from './BlockSlab';
+import BlockSlab from './blocks/BlockSlab';
 
 export default function BlockList({ path = [] }) {
   const dispatch = useUpdate();

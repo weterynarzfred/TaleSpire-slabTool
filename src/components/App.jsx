@@ -13,7 +13,7 @@ export default function App() {
           <li>☐ write the intro</li>
           <li>🗹 calculating results</li>
           <li>🗹 adding modifiers</li>
-          <li>☐ removing modifiers</li>
+          <li>🗹 removing modifiers</li>
           <li>☐ nested modifiers</li>
           <li>modifiers
             <ul>
