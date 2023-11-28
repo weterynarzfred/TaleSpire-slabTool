@@ -1,4 +1,5 @@
-import { blockAtPath, recalculateLayout } from './utils';
+import { blockAtPath } from './utils';
+import recalculateLayout from './recalculateLayout';
 
 export default function deleteBlock(state, action) {
   const currentPath = [...action.path];

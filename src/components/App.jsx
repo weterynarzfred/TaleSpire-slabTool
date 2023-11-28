@@ -14,7 +14,7 @@ export default function App() {
           <li>🗹 calculating results</li>
           <li>🗹 adding modifiers</li>
           <li>🗹 removing modifiers</li>
-          <li>☐ nested modifiers</li>
+          <li>🗹 nested modifiers</li>
           <li>modifiers
             <ul>
               <li>🗹 slab</li>
@@ -30,6 +30,7 @@ export default function App() {
               <li>☐ rotationVariations</li>
               <li>☐ scale</li>
               <li>☐ replace</li>
+              <li>☐ figure out arcs</li>
             </ul>
           </li>
           <li>☐ changing modifiers' order</li>

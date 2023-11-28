@@ -3,9 +3,11 @@ import { createContainer } from 'react-tracked';
 import { produce } from 'immer';
 import _ from 'lodash';
 import Layout from '../lib/Layout';
-import { blockAtPath, getId, recalculateLayout } from '../lib/reducer/utils';
+import { blockAtPath, getId } from '../lib/reducer/utils';
+import recalculateLayout from '../lib/reducer/recalculateLayout';
 import addBlock from '../lib/reducer/addBlock';
 import deleteBlock from '../lib/reducer/deleteBlock';
+import changeData from '../lib/reducer/changeData';
 
 const initialState = {
   blocks: {},
@@ -20,6 +22,7 @@ initialState.blocks[initialId] = {
   data: {
     layouts: [{ uuid: 'fa309f05-6efc-41ec-91a7-1157fb7029f3', assets: [{}] }],
   },
+  isSubListHidden: true,
 };
 
 recalculateLayout(initialState);
@@ -30,15 +33,17 @@ const reducer = produce((state, action) => {
       recalculateLayout(state);
       break;
     case "CHANGE_DATA":
-      const block = blockAtPath(state, action.path);
-      _.set(block.data, action.dataPath.join('.'), action.value);
-      recalculateLayout(state);
+      changeData(state, action);
       break;
     case "ADD_BLOCK":
       addBlock(state, action);
       break;
     case "DELETE_BLOCK":
       deleteBlock(state, action);
+      break;
+    case "SET_BLOCK_PROPERTY":
+      const block = blockAtPath(state, action.path);
+      block[action.key] = action.value;
       break;
     default:
       throw "unrecognized action type";

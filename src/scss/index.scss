@@ -54,8 +54,8 @@ body {
   min-height: 100vh;
   min-height: calc(var(--vh, 1vh) * 100);
 
-  background-color: #222;
-  color: #eee;
+  background-color: #001a20;
+  color: #f7efe3;
   font-family: sans-serif;
   font-family: 'Lato', sans-serif;
 }
@@ -79,8 +79,6 @@ textarea {
   color: inherit;
   padding: 1em;
   border: none;
-  box-shadow: 0 0 0 1px #333 inset;
-  border-radius: 5px;
   font-family: "Fira Code", monospace;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -99,7 +97,6 @@ input {
   width: 6em;
   padding: 0.2em .5em;
   border: none;
-  box-shadow: 0 0 0 1px #333 inset;
   font: inherit;
   font-family: "Fira Code", monospace;
   color: inherit;
@@ -116,13 +113,14 @@ input {
 }
 
 
-button {
+.add-block-button,
+.copy-button {
   display: block;
   height: 100%;
   background: none;
   color: inherit;
-  border: none;
-  box-shadow: 0 0 0 1px #333;
+  border: 2px solid #eee;
+  background-color: #222;
   padding: .5em 1em;
   cursor: pointer;
   text-align: center;
@@ -151,35 +149,35 @@ button {
 
 .block {
   position: relative;
-  background-color: #111;
-  padding: 1em;
-  border-radius: 5px;
-  box-shadow: 0 0 0 1px #000;
+  background-color: #333;
   margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  overflow: hidden;
 
   &__title {
     text-transform: uppercase;
-    margin-bottom: .8rem;
-    letter-spacing: .1em;
-    font-weight: 700;
+    padding: .3em;
+    margin-bottom: .5rem;
+    letter-spacing: .2em;
     text-align: center;
+    background-color: #f7efe3;
+    color: #000;
   }
 
   .BlockDeleteButton {
     position: absolute;
-    top: .6em;
+    top: .3em;
     right: .6em;
     display: block;
     width: 1.2em;
     height: 1.2em;
     border-radius: 50%;
-    background-color: #222;
-    border: 1px solid #999;
+    border: 2px solid #222;
     cursor: pointer;
 
     path {
-      stroke: #ccc;
-      stroke-width: 5;
+      stroke: #222;
+      stroke-width: 10;
     }
 
     &:hover {
@@ -195,13 +193,22 @@ button {
     }
   }
 
+  .block__contents {
+    margin: 0 .5rem;
+
+    textarea,
+    input {
+      background-color: #222;
+    }
+  }
+
   &--slab,
   &--results {
-    .block__contents {
+    >.block__contents {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: min-content auto;
-      gap: .8rem;
+      gap: .5rem;
       height: 20em;
 
       .base64-input {
@@ -216,16 +223,76 @@ button {
   }
 
   &--results {
-    .block__contents {
-      height: 10em;
+    >.block__title {
+      border-bottom: 1px solid #999;
+      font-weight: 700;
+    }
+
+    >.block__contents {
+      height: 30em;
 
       textarea {
-        height: 10em;
-        background-color: #222;
+        background: #444;
       }
 
       button {
-        box-shadow: 0 0 0 1px #f55;
+        background-color: #f55;
+        border: 2px solid #f7efe3;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &--array,
+  &--offset,
+  &--rotate {
+    >.block__contents {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1em;
+    }
+  }
+
+  .BlockList {
+    position: relative;
+    margin-top: .5rem;
+    margin-left: 3rem;
+    min-height: 1em;
+
+    .block {
+      border: 2px solid #f7efe3;
+    }
+
+    .block-controls {
+      background: none;
+      padding: 0;
+      margin-bottom: 0;
+
+      .add-block-button {
+        padding-top: .5em;
+        padding-bottom: .5em;
+      }
+    }
+
+    &__hide {
+      position: absolute;
+      top: 0;
+      left: -3rem;
+      width: 9rem;
+      background: none;
+      border: none;
+      color: #999;
+      font-size: .8rem;
+      text-align: left;
+      padding: .1em .2em .2em .5rem;
+      cursor: pointer;
+
+      &:hover {
+        color: #aaa;
+      }
+
+      &:active {
+        color: #bbb;
       }
     }
   }
@@ -235,15 +302,19 @@ button {
   label {
     display: flex;
     align-items: center;
-    margin-bottom: .8rem;
+    padding-left: .5em;
 
     .label {
-      min-width: 12em;
       text-align: right;
-      margin-right: .5em;
       font-size: .8em;
       text-transform: uppercase;
       letter-spacing: .1em;
+    }
+
+    input {
+      border: none;
+      text-align: center;
+      margin-left: .5em;
     }
   }
 }
@@ -251,10 +322,13 @@ button {
 .block-controls {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
-  background-color: #111;
-  padding: 1em;
-  border-radius: 5px;
-  box-shadow: 0 0 0 1px #000;
+  background-color: #f7efe3;
+  padding: .5rem;
   margin-bottom: .8rem;
-  gap: .8rem;
+  gap: .5rem;
+
+  .add-block-button {
+    padding-top: .75em;
+    padding-bottom: .75em;
+  }
 }

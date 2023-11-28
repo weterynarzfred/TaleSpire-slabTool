@@ -6,6 +6,7 @@ import { decodeSlab } from '../../lib/encoding';
 import readSlab from '../../lib/readSlab';
 import { useUpdate } from '../StateProvider';
 import BlockHeader from '../BlockHeader';
+import BlockList from '../BlockList';
 
 export default function BlockSlab({ block }) {
   const dispatch = useUpdate();
@@ -85,10 +86,6 @@ export default function BlockSlab({ block }) {
         spellCheck="false" value={base64} onChange={handleBase64Input} />
     </div>
 
-    <div className="block__sub-blocks">
-      <div className="sub-block-list"></div>
-      <div className="sub-block-controls"></div>
-    </div>
-
+    <BlockList path={block.path} />
   </div>;
 };

@@ -1,8 +1,10 @@
+import _ from 'lodash';
 import { useTrackedState, useUpdate } from './StateProvider';
 import BlockArray from './blocks/BlockArray';
 import BlockOffset from './blocks/BlockOffset';
 import BlockRotate from './blocks/BlockRotate';
 import BlockSlab from './blocks/BlockSlab';
+import { blockAtPath } from '../lib/reducer/utils';
 
 export default function BlockList({ path = [] }) {
   const state = useTrackedState();
@@ -16,29 +18,44 @@ export default function BlockList({ path = [] }) {
     });
   }
 
-  const blocks = [];
-  for (const id in state.blocks) {
-    const block = state.blocks[id];
-    if (block.type === 'slab') {
-      blocks.push(<BlockSlab key={id} block={block} />);
-    } else if (block.type === 'array') {
-      blocks.push(<BlockArray key={id} block={block} />);
-    } else if (block.type === 'offset') {
-      blocks.push(<BlockOffset key={id} block={block} />);
-    } else if (block.type === 'rotate') {
-      blocks.push(<BlockRotate key={id} block={block} />);
+  const parentBlock = blockAtPath(state, path);
+  const hasSubBlocks = parentBlock.blocks && Object.keys(parentBlock.blocks).length;
+  const blockElements = [];
+  if (!parentBlock.isSubListHidden) {
+    for (const id in parentBlock.blocks) {
+      const block = parentBlock.blocks[id];
+      if (block.type === 'slab') {
+        blockElements.push(<BlockSlab key={id} block={block} />);
+      } else if (block.type === 'array') {
+        blockElements.push(<BlockArray key={id} block={block} />);
+      } else if (block.type === 'offset') {
+        blockElements.push(<BlockOffset key={id} block={block} />);
+      } else if (block.type === 'rotate') {
+        blockElements.push(<BlockRotate key={id} block={block} />);
+      }
     }
   }
 
-  return <div id="blocks">
-
-    {blocks}
-    <div className="block-controls">
-      <button className="add-block-button" onClick={() => handleAddSlab('slab')}>add slab</button>
-      <button className="add-block-button" onClick={() => handleAddSlab('array')}>add array</button>
-      <button className="add-block-button" onClick={() => handleAddSlab('offset')}>add offset</button>
-      <button className="add-block-button" onClick={() => handleAddSlab('rotate')}>add rotate</button>
-    </div>
-
+  return <div className="BlockList">
+    {parentBlock.isSubListHidden ? null :
+      <>
+        {blockElements}
+        <div className="block-controls">
+          <button className="add-block-button" onClick={() => handleAddSlab('slab')}>add slab</button>
+          <button className="add-block-button" onClick={() => handleAddSlab('array')}>add array</button>
+          <button className="add-block-button" onClick={() => handleAddSlab('offset')}>add offset</button>
+          <button className="add-block-button" onClick={() => handleAddSlab('rotate')}>add rotate</button>
+        </div>
+      </>
+    }
+    {path.length > 0 ? <button
+      className="BlockList__hide"
+      onClick={() => dispatch({
+        type: "SET_BLOCK_PROPERTY",
+        path,
+        key: 'isSubListHidden',
+        value: !parentBlock.isSubListHidden
+      })}
+    >{parentBlock.isSubListHidden ? `show sub-blocks (${hasSubBlocks ? Object.keys(parentBlock.blocks).length : 0})` : 'hide'}</button> : null}
   </div>;
 }
