@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { jsonrepair } from 'jsonrepair';
 import bytes from 'bytes';
 import Layout from '../../lib/Layout';
@@ -14,6 +14,9 @@ export default function BlockSlab({ block }) {
   const [base64, setBase64] = useState("");
   const [json, setJson] = useState("");
   const [dataLength, setDataLength] = useState("");
+
+  const copyButtonRef = useRef(null);
+  const base64InputRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -72,17 +75,24 @@ export default function BlockSlab({ block }) {
     }
   }
 
+  function handleCopyButton() {
+    navigator.clipboard.writeText(base64InputRef.current.value).then(() => {
+      copyButtonRef.current.innerText = 'copied';
+      setTimeout(() => copyButtonRef.current.innerText = 'copy', 500);
+    });
+  }
+
   return <div className="block block--slab">
     <BlockHeader block={block} />
 
     <div className="block__contents">
       <div className="controls">
-        <button className="copy-button">copy</button>
+        <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>copy</button>
         <div className="byte-count">{bytes(dataLength) ?? '???'}</div>
       </div>
       <textarea className="json-input" placeholder="data"
         spellCheck="false" value={json} onChange={handleJsonInput} />
-      <textarea className="base64-input" placeholder="base64"
+      <textarea className="base64-input" ref={base64InputRef} placeholder="base64"
         spellCheck="false" value={base64} onChange={handleBase64Input} />
     </div>
 
