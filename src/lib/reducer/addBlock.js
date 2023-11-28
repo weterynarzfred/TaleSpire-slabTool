@@ -6,6 +6,7 @@ export default function addBlock(state, action) {
   const id = getId();
   parentBlock.blocks[id] = {
     id,
+    path: [...action.path, id],
     type: action.blockType,
     data: {},
   };

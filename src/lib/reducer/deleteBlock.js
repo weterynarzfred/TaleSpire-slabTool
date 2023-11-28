@@ -1,9 +1,9 @@
 import { blockAtPath, recalculateLayout } from './utils';
 
 export default function deleteBlock(state, action) {
-  const id = action.path.pop();
-  const parentPath = action.path;
-  const parentBlock = blockAtPath(state, parentPath);
+  const currentPath = [...action.path];
+  const id = currentPath.pop();
+  const parentBlock = blockAtPath(state, currentPath);
   delete parentBlock.blocks[id];
   recalculateLayout(state);
 }

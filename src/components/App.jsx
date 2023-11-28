@@ -31,6 +31,7 @@ export default function App() {
               <li>☐ replace</li>
             </ul>
           </li>
+          <li>☐ changing modifiers' order</li>
           <li>☐ fix copy buttons</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
           <li>☐ collapsing modifier blocks</li>

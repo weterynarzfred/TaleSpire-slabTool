@@ -18,9 +18,9 @@ export default function BlockList({ path = [] }) {
   for (const id in state.blocks) {
     const block = state.blocks[id];
     if (block.type === 'slab') {
-      blocks.push(<BlockSlab key={id} data={block.data} path={[...path, id]} />);
+      blocks.push(<BlockSlab key={id} block={block} />);
     } else if (block.type === 'array') {
-      blocks.push(<BlockArray key={id} data={block.data} path={[...path, id]} />);
+      blocks.push(<BlockArray key={id} block={block} />);
     }
   }
 

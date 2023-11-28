@@ -5,9 +5,9 @@ import Layout from '../../lib/Layout';
 import { decodeSlab } from '../../lib/encoding';
 import readSlab from '../../lib/readSlab';
 import { useUpdate } from '../StateProvider';
-import BlockDeleteButton from '../BlockDeleteButton';
+import BlockHeader from '../BlockHeader';
 
-export default function BlockSlab({ data, path }) {
+export default function BlockSlab({ block }) {
   const dispatch = useUpdate();
 
   const [base64, setBase64] = useState("");
@@ -16,7 +16,7 @@ export default function BlockSlab({ data, path }) {
 
   useEffect(() => {
     try {
-      const newLayout = new Layout(data.layouts);
+      const newLayout = new Layout(block.data.layouts);
       const binaryData = newLayout.binaryData;
       setJson(newLayout.json);
       setBase64(binaryData.base64);
@@ -31,7 +31,7 @@ export default function BlockSlab({ data, path }) {
   function saveLayout(layout) {
     dispatch({
       type: "CHANGE_DATA",
-      path,
+      path: block.path,
       data: { layouts: layout.layouts },
     });
   }
@@ -71,8 +71,7 @@ export default function BlockSlab({ data, path }) {
   }
 
   return <div className="block block--slab">
-    <div className="block__title">slab</div>
-    <BlockDeleteButton path={path} />
+    <BlockHeader block={block} />
 
     <div className="block__contents">
       <div className="controls">
