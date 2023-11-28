@@ -31,7 +31,7 @@ const reducer = produce((state, action) => {
       break;
     case "CHANGE_DATA":
       const block = blockAtPath(state, action.path);
-      Object.assign(block.data, action.data);
+      _.set(block.data, action.dataPath.join('.'), action.value);
       recalculateLayout(state);
       break;
     case "ADD_BLOCK":

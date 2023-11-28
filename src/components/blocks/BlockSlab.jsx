@@ -32,7 +32,8 @@ export default function BlockSlab({ block }) {
     dispatch({
       type: "CHANGE_DATA",
       path: block.path,
-      data: { layouts: layout.layouts },
+      dataPath: ['layouts'],
+      value: layout.layouts,
     });
   }
 

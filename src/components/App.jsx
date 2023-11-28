@@ -21,9 +21,10 @@ export default function App() {
               <li>🗹 array
                 <ul>
                   <li>☐ wrapping box</li>
+                  <li>☐ merge with clone and offset <i><small>(?)</small></i></li>
                 </ul>
               </li>
-              <li>☐ offset</li>
+              <li>🗹 offset</li>
               <li>☐ rotate</li>
               <li>☐ rotateElements</li>
               <li>☐ rotationVariations</li>
