@@ -6,7 +6,7 @@ export default function BlockInput({ path, dataPath, def = 0 }) {
   const dispatch = useUpdate();
 
   function handleChange(event) {
-    const value = parseFloat(event.currentTarget.value);
+    const value = event.currentTarget.value;
 
     dispatch({
       type: "CHANGE_DATA",

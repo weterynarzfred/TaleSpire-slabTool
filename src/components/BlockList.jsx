@@ -1,6 +1,7 @@
 import { useTrackedState, useUpdate } from './StateProvider';
 import BlockArray from './blocks/BlockArray';
 import BlockOffset from './blocks/BlockOffset';
+import BlockRotate from './blocks/BlockRotate';
 import BlockSlab from './blocks/BlockSlab';
 
 export default function BlockList({ path = [] }) {
@@ -24,6 +25,8 @@ export default function BlockList({ path = [] }) {
       blocks.push(<BlockArray key={id} block={block} />);
     } else if (block.type === 'offset') {
       blocks.push(<BlockOffset key={id} block={block} />);
+    } else if (block.type === 'rotate') {
+      blocks.push(<BlockRotate key={id} block={block} />);
     }
   }
 
@@ -34,6 +37,7 @@ export default function BlockList({ path = [] }) {
       <button className="add-block-button" onClick={() => handleAddSlab('slab')}>add slab</button>
       <button className="add-block-button" onClick={() => handleAddSlab('array')}>add array</button>
       <button className="add-block-button" onClick={() => handleAddSlab('offset')}>add offset</button>
+      <button className="add-block-button" onClick={() => handleAddSlab('rotate')}>add rotate</button>
     </div>
 
   </div>;

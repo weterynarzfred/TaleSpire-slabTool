@@ -25,7 +25,7 @@ export default function App() {
                 </ul>
               </li>
               <li>🗹 offset</li>
-              <li>☐ rotate</li>
+              <li>🗹 rotate</li>
               <li>☐ rotateElements</li>
               <li>☐ rotationVariations</li>
               <li>☐ scale</li>

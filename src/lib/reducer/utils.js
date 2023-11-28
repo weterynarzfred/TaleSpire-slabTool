@@ -7,11 +7,13 @@ function recalculateLayout(state) {
 
     // TODO: change these so that you only need to pass block.data
     if (block.type === 'slab') {
-      layout.add(new Layout(block.data.layouts));
+      layout.add(new Layout(_.cloneDeep(block.data.layouts)));
     } else if (block.type === 'array') {
       layout.array(block.data.offset, block.data.count);
     } else if (block.type === 'offset') {
       layout.offset(block.data.offset, block.data.isRandom);
+    } else if (block.type === 'rotate') {
+      layout.rotate(block.data.rotation);
     }
   }
   layout.toOrigin();

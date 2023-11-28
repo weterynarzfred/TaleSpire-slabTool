@@ -12,10 +12,5 @@ export default function BlockArray({ block }) {
       <BlockInput path={block.path} dataPath={['offset', 'rotation']} />
       <BlockInput path={block.path} dataPath={['count']} def="1" />
     </div>
-
-    <div className="block__sub-blocks">
-      <div className="sub-block-list"></div>
-      <div className="sub-block-controls"></div>
-    </div>
   </div>;
 };
