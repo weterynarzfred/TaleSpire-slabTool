@@ -101,6 +101,10 @@ input {
   font-family: "Fira Code", monospace;
   color: inherit;
 
+  &[type=text] {
+    width: 12em;
+  }
+
   &:focus {
     outline: none;
   }

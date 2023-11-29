@@ -1,4 +1,4 @@
-import { useUpdate } from './StateProvider';
+import { useUpdate } from '../StateProvider';
 
 export default function BlockHeader({ block }) {
   const dispatch = useUpdate();

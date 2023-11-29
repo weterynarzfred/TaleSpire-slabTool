@@ -1,5 +1,5 @@
-import BlockHeader from '../BlockHeader';
-import BlockInput from '../BlockInput';
+import BlockHeader from '../blockParts/BlockHeader';
+import BlockInput from '../blockParts/BlockInput';
 
 export default function BlockArray({ block }) {
   return <div className="block block--array">

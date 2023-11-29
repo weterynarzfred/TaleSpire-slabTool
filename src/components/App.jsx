@@ -1,6 +1,6 @@
-import BlockList from './BlockList';
 import Results from './Results';
 import StateProvider from './StateProvider';
+import BlockList from './blockParts/BlockList';
 
 export default function App() {
 
@@ -25,9 +25,12 @@ export default function App() {
                 </ul>
               </li>
               <li>🗹 offset</li>
-              <li>🗹 rotate</li>
-              <li>☐ rotateElements</li>
-              <li>☐ rotationVariations</li>
+              <li>🗹 rotate
+                <ul>
+                  <li>🗹 rotation variations</li>
+                  <li>☐ rotate elements</li>
+                </ul>
+              </li>
               <li>☐ scale</li>
               <li>☐ replace</li>
               <li>☐ figure out arcs</li>

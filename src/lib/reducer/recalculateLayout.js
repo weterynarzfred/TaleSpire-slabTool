@@ -15,7 +15,7 @@ function applyBlock(layout, block) {
   } else if (block.type === 'offset') {
     layout.offset(block.data.offset, block.data.isRandom);
   } else if (block.type === 'rotate') {
-    layout.rotate(block.data.rotation);
+    layout.rotate(block.data);
   }
 }
 

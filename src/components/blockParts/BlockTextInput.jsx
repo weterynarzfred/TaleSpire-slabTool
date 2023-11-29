@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import { useUpdate, useTrackedState } from './StateProvider';
+import { useUpdate, useTrackedState } from '../StateProvider';
 
-export default function BlockInput({ path, dataPath, def = 0 }) {
+export default function BlockTextInput({ path, dataPath, def = "" }) {
   const state = useTrackedState();
   const dispatch = useUpdate();
 
@@ -20,8 +20,8 @@ export default function BlockInput({ path, dataPath, def = 0 }) {
 
   return <div className="BlockInput">
     <label>
-      <div className="label">{dataPath.join('.')}: </div>
-      <input type="number" value={value ?? def} onChange={handleChange} />
+      <div className="label">{dataPath.join('.').replace("_", " ")}: </div>
+      <input type="text" value={value ?? def} onChange={handleChange} />
     </label>
   </div>;
 }

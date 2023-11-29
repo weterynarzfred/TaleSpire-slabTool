@@ -5,8 +5,8 @@ import Layout from '../../lib/Layout';
 import { decodeSlab } from '../../lib/encoding';
 import readSlab from '../../lib/readSlab';
 import { useUpdate } from '../StateProvider';
-import BlockHeader from '../BlockHeader';
-import BlockList from '../BlockList';
+import BlockHeader from '../blockParts/BlockHeader';
+import BlockList from '../blockParts/BlockList';
 
 export default function BlockSlab({ block }) {
   const dispatch = useUpdate();

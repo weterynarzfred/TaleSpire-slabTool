@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import { useTrackedState, useUpdate } from './StateProvider';
-import BlockArray from './blocks/BlockArray';
-import BlockOffset from './blocks/BlockOffset';
-import BlockRotate from './blocks/BlockRotate';
-import BlockSlab from './blocks/BlockSlab';
-import { blockAtPath } from '../lib/reducer/utils';
+import { useTrackedState, useUpdate } from '../StateProvider';
+import BlockArray from '../blocks/BlockArray';
+import BlockOffset from '../blocks/BlockOffset';
+import BlockRotate from '../blocks/BlockRotate';
+import BlockSlab from '../blocks/BlockSlab';
+import { blockAtPath } from '../../lib/reducer/utils';
 
 export default function BlockList({ path = [] }) {
   const state = useTrackedState();
