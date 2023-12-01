@@ -1,27 +1,33 @@
+import Select from 'react-select';
 import _ from 'lodash';
 import { useUpdate, useTrackedState } from '../StateProvider';
 
-export default function BlockTextInput({ path, dataPath, def = "" }) {
+export default function BlockSelectInput({ path, dataPath, options, def = "" }) {
   const state = useTrackedState();
   const dispatch = useUpdate();
 
-  function handleChange(event) {
-    const value = event.currentTarget.value;
-
+  function handleChange(selected) {
     dispatch({
       type: "CHANGE_DATA",
       path,
       dataPath,
-      value,
+      value: selected.value,
     });
   }
 
   const value = _.get(state.blocks, path.join('.blocks.') + '.data.' + dataPath.join('.'));
 
-  return <div className="BlockInput BlockTextInput">
+  return <div className="BlockInput BlockSelectInput">
     <label>
       <div className="label">{dataPath.join('.').replace("_", " ")}: </div>
-      <input type="text" value={value ?? def} onChange={handleChange} />
+      <Select
+        className='select'
+        classNamePrefix="select"
+        isSearchable={false}
+        defaultValue={value ?? def}
+        options={options}
+        onChange={handleChange}
+      />
     </label>
   </div>;
 }

@@ -71,52 +71,6 @@ body {
   }
 }
 
-textarea {
-  display: block;
-  width: 100%;
-  resize: none;
-  background: none;
-  color: inherit;
-  padding: 1em;
-  border: none;
-  font-family: "Fira Code", monospace;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  &:focus {
-    outline: none;
-  }
-}
-
-input {
-  background: none;
-  width: 6em;
-  padding: 0.2em .5em;
-  border: none;
-  font: inherit;
-  font-family: "Fira Code", monospace;
-  color: inherit;
-
-  &[type=text] {
-    width: 12em;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &[type=number]::-webkit-inner-spin-button,
-  &[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-}
-
-
 .add-block-button,
 .copy-button {
   display: block;
@@ -156,7 +110,6 @@ input {
   background-color: #333;
   margin-bottom: .8rem;
   padding-bottom: .5rem;
-  overflow: hidden;
 
   &__title {
     text-transform: uppercase;
@@ -199,11 +152,6 @@ input {
 
   .block__contents {
     margin: 0 .5rem;
-
-    textarea,
-    input {
-      background-color: #222;
-    }
   }
 
   &--slab,
@@ -249,7 +197,8 @@ input {
 
   &--array,
   &--offset,
-  &--rotate {
+  &--rotate,
+  &--scale {
     >.block__contents {
       display: flex;
       flex-wrap: wrap;
@@ -302,27 +251,6 @@ input {
   }
 }
 
-.BlockInput {
-  label {
-    display: flex;
-    align-items: center;
-    padding-left: .5em;
-
-    .label {
-      text-align: right;
-      font-size: .8em;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-    }
-
-    input {
-      border: none;
-      text-align: center;
-      margin-left: .5em;
-    }
-  }
-}
-
 .block-controls {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
@@ -336,3 +264,5 @@ input {
     padding-bottom: .75em;
   }
 }
+
+@import url('inputs.scss');

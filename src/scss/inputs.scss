@@ -1,0 +1,124 @@
+$inputBackgroundColor: #222;
+$inputTextColor: inherit;
+
+textarea {
+  display: block;
+  width: 100%;
+  resize: none;
+  background: none;
+  color: inherit;
+  padding: 1em;
+  border: none;
+  font-family: "Fira Code", monospace;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+input {
+  background: none;
+  width: 6em;
+  padding: 0.2em .5em;
+  border: none;
+  font: inherit;
+  font-family: "Fira Code", monospace;
+  color: inherit;
+
+  &[type=text] {
+    width: 12em;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &[type=number]::-webkit-inner-spin-button,
+  &[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.BlockInput {
+  label {
+    display: flex;
+    align-items: center;
+    padding-left: .5em;
+
+    .label {
+      text-align: right;
+      font-size: .8em;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    input,
+    .select {
+      border: none;
+      text-align: center;
+      margin-left: .5em;
+    }
+
+    .select {
+      &__control {
+        min-height: 0;
+        border-radius: 0;
+        background-color: $inputBackgroundColor;
+        border: none;
+
+        &--menu-is-open,
+        &--is-focused {
+          box-shadow: none;
+        }
+      }
+
+      &__single-value {
+        color: $inputTextColor;
+      }
+
+      &__indicator,
+      &__value-container {
+        padding: 0 .5em;
+      }
+
+      &__menu {
+        border-radius: 0;
+        background-color: $inputBackgroundColor;
+        color: $inputTextColor;
+        margin-top: 0;
+      }
+
+      &__option {
+        padding: 0.2em .5em;
+
+        &--is-selected {
+          background-color: #555;
+        }
+
+        &--is-focused {
+          background-color: #444;
+        }
+      }
+
+      &__indicator-separator {
+        display: none;
+      }
+    }
+  }
+}
+
+.block__contents {
+
+  textarea,
+  input {
+    background-color: $inputBackgroundColor;
+    color: $inputTextColor;
+  }
+}

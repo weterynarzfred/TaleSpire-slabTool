@@ -15,25 +15,45 @@ export default function App() {
           <li>🗹 adding modifiers</li>
           <li>🗹 removing modifiers</li>
           <li>🗹 nested modifiers</li>
+          <li>input types
+            <ul>
+              <li>🗹 number</li>
+              <li>🗹 text</li>
+              <li>🗹 select</li>
+              <li>☐ boolean</li>
+            </ul>
+          </li>
           <li>modifiers
             <ul>
               <li>🗹 slab</li>
               <li>🗹 array
                 <ul>
-                  <li>☐ wrapping box</li>
-                  <li>☐ merge with clone and offset <i><small>(?)</small></i></li>
+                  <li>☐ simply clone and then apply sub-modifiers</li>
+                  <li>☐ apply relative to last / initial</li>
                 </ul>
               </li>
-              <li>🗹 offset</li>
+              <li>🗹 offset
+                <ul>
+                  <li>☐ options for per axis wrapping</li>
+                </ul>
+              </li>
               <li>🗹 rotate
                 <ul>
                   <li>🗹 rotation variations</li>
-                  <li>☐ rotate elements</li>
+                  <li>☐ option to rotate elements</li>
+                  <li>☐ around zero / bounding box center</li>
+                  <li>☐ axis offset</li>
+                  <li>☐ axis selection</li>
                 </ul>
               </li>
               <li>☐ scale</li>
-              <li>☐ replace</li>
-              <li>☐ figure out arcs</li>
+              <li>☐ replace anything / id -{'>'} id / slab</li>
+              <li>☐ drop to nearest surface <small><i>(?)</i></small></li>
+              <li>☐ filter random / too close / id and apply sub-modifiers
+                <ul>
+                  <li>☐ option to remove filtered</li>
+                </ul>
+              </li>
             </ul>
           </li>
           <li>☐ changing modifiers' order</li>
