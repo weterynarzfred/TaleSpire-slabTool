@@ -16,6 +16,8 @@ function applyBlock(layout, block) {
     layout.offset(block.data.offset, block.data.isRandom);
   } else if (block.type === 'rotate') {
     layout.rotate(block.data);
+  } else if (block.type === 'scale') {
+    layout.scale(block.data);
   }
 }
 

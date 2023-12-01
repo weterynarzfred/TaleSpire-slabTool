@@ -5,6 +5,7 @@ import BlockOffset from '../blocks/BlockOffset';
 import BlockRotate from '../blocks/BlockRotate';
 import BlockSlab from '../blocks/BlockSlab';
 import { blockAtPath } from '../../lib/reducer/utils';
+import BlockScale from '../blocks/BlockScale';
 
 export default function BlockList({ path = [] }) {
   const state = useTrackedState();
@@ -32,6 +33,8 @@ export default function BlockList({ path = [] }) {
         blockElements.push(<BlockOffset key={id} block={block} />);
       } else if (block.type === 'rotate') {
         blockElements.push(<BlockRotate key={id} block={block} />);
+      } else if (block.type === 'scale') {
+        blockElements.push(<BlockScale key={id} block={block} />);
       }
     }
   }
@@ -45,6 +48,7 @@ export default function BlockList({ path = [] }) {
           <button className="add-block-button" onClick={() => handleAddSlab('array')}>add array</button>
           <button className="add-block-button" onClick={() => handleAddSlab('offset')}>add offset</button>
           <button className="add-block-button" onClick={() => handleAddSlab('rotate')}>add rotate</button>
+          <button className="add-block-button" onClick={() => handleAddSlab('scale')}>add scale</button>
         </div>
       </>
     }

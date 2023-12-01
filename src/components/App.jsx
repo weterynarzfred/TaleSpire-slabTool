@@ -46,7 +46,7 @@ export default function App() {
                   <li>☐ axis selection</li>
                 </ul>
               </li>
-              <li>☐ scale</li>
+              <li>🗹 scale</li>
               <li>☐ replace anything / id -{'>'} id / slab</li>
               <li>☐ drop to nearest surface <small><i>(?)</i></small></li>
               <li>☐ filter random / too close / id and apply sub-modifiers
