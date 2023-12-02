@@ -20,7 +20,10 @@ initialState.blocks[initialId] = {
   path: [initialId],
   type: 'slab',
   data: {
-    layouts: [{ uuid: 'fa309f05-6efc-41ec-91a7-1157fb7029f3', assets: [{}] }],
+    layouts: [{
+      uuid: 'fa309f05-6efc-41ec-91a7-1157fb7029f3',
+      assets: [{}],
+    }],
   },
   isSubListHidden: true,
 };

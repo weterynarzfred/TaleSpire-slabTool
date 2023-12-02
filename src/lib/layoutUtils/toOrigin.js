@@ -12,9 +12,9 @@ Layout.prototype.toOrigin = function () {
 
   for (const layout of this.layouts) {
     for (const asset of layout.assets) {
-      asset.x -= minimums.x;
-      asset.y -= minimums.y;
-      asset.z -= minimums.z;
+      asset.x = Math.round((asset.x - minimums.x) * 1e6) / 1e6;
+      asset.y = Math.round((asset.y - minimums.y) * 1e6) / 1e6;
+      asset.z = Math.round((asset.z - minimums.z) * 1e6) / 1e6;
       asset.rotation = (asset.rotation % 360 + 360) % 360;
     }
   }

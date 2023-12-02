@@ -1,4 +1,3 @@
-
 function blockAtPath(state, path) {
   if (!path || !path.length) return state;
   return _.get(state.blocks, path.join('.blocks.'));

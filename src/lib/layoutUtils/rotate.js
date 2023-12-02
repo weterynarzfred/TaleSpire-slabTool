@@ -2,7 +2,6 @@ import Layout from '../Layout';
 
 Layout.prototype.rotate = function ({ rotation = 0, rotation_variations = "", elements_only = false }) {
   const rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '').split(/[;, ]+/).filter(e => e !== "");
-  elements_only = parseInt(elements_only);
 
   for (let i = 0; i < this.layouts.length; i++) {
     for (let j = 0; j < this.layouts[i].assets.length; j++) {
