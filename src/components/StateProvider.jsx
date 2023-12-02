@@ -54,9 +54,9 @@ const { Provider, useTrackedState, useUpdate } = createContainer(
   ({ reducer, initialState }) => useReducer(reducer, initialState)
 );
 
-export default function StateProvider(props) {
+export default function StateProvider({ children }) {
   return <Provider reducer={reducer} initialState={initialState}>
-    {props.children}
+    {children}
   </Provider>;
 };
 

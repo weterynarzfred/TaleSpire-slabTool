@@ -7,6 +7,8 @@ import readSlab from '../../lib/readSlab';
 import { useUpdate } from '../StateProvider';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockList from '../blockParts/BlockList';
+import BlockContents from '../blockParts/BlockContents';
+import classNames from 'classnames';
 
 export default function BlockSlab({ block }) {
   const dispatch = useUpdate();
@@ -82,10 +84,10 @@ export default function BlockSlab({ block }) {
     });
   }
 
-  return <div className="block block--slab">
+  return <div className={classNames(`block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
     <BlockHeader block={block} />
 
-    <div className="block__contents">
+    <BlockContents block={block}>
       <div className="controls">
         <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>copy</button>
         <div className="byte-count">{bytes(dataLength) ?? '???'}</div>
@@ -94,7 +96,7 @@ export default function BlockSlab({ block }) {
         spellCheck="false" value={json} onChange={handleJsonInput} />
       <textarea className="base64-input" ref={base64InputRef} placeholder="base64"
         spellCheck="false" value={base64} onChange={handleBase64Input} />
-    </div>
+    </BlockContents>
 
     <BlockList path={block.path} />
   </div>;

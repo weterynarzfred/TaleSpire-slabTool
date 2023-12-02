@@ -10,6 +10,8 @@ import BlockScale from '../blocks/BlockScale';
 export default function BlockList({ path = [] }) {
   const state = useTrackedState();
   const dispatch = useUpdate();
+  const parentBlock = blockAtPath(state, path);
+  if (parentBlock.isCollapsed) return;
 
   function handleAddSlab(blockType) {
     dispatch({
@@ -19,7 +21,6 @@ export default function BlockList({ path = [] }) {
     });
   }
 
-  const parentBlock = blockAtPath(state, path);
   const hasSubBlocks = parentBlock.blocks && Object.keys(parentBlock.blocks).length;
   const blockElements = [];
   if (!parentBlock.isSubListHidden) {

@@ -29,7 +29,7 @@ export default function App() {
               <li>🗹 array
                 <ul>
                   <li>☐ simply clone and then apply sub-modifiers</li>
-                  <li>☐ apply relative to last / initial</li>
+                  <li>☐ apply modifiers relative to last / initial instance</li>
                 </ul>
               </li>
               <li>🗹 offset
@@ -59,7 +59,8 @@ export default function App() {
           <li>☐ changing modifiers' order</li>
           <li>🗹 fix the copy buttons</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
-          <li>☐ collapsing modifier blocks</li>
+          <li>🗹 collapsing modifier blocks</li>
+          <li>☐ tooltips</li>
         </ul>
       </div>
       <Results />

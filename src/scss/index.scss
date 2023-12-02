@@ -111,14 +111,23 @@ body {
   margin-bottom: .8rem;
   padding-bottom: .5rem;
 
+  &--is-collapsed {
+    margin-bottom: .5rem;
+    padding-bottom: 0;
+  }
+
   &__title {
     text-transform: uppercase;
     padding: .3em;
-    margin-bottom: .5rem;
     letter-spacing: .2em;
     text-align: center;
     background-color: #f7efe3;
     color: #000;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ecdabf;
+    }
   }
 
   .BlockDeleteButton {
@@ -151,7 +160,7 @@ body {
   }
 
   .block__contents {
-    margin: 0 .5rem;
+    margin: .5em .5rem 0 .5em;
   }
 
   &--slab,
@@ -178,6 +187,11 @@ body {
     >.block__title {
       border-bottom: 1px solid #999;
       font-weight: 700;
+      cursor: auto;
+
+      &:hover {
+        background-color: #f7efe3;
+      }
     }
 
     >.block__contents {
@@ -209,6 +223,7 @@ body {
   .BlockList {
     position: relative;
     margin-top: .5rem;
+    margin-right: 1rem;
     margin-left: 3rem;
     min-height: 1em;
 
