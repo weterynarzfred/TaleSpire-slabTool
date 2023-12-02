@@ -19,6 +19,7 @@ export default function BlockCheckboxInput({ dataPath, path }) {
     <label>
       <span className="label">{dataPath.join('.').replace('_', ' ')}:</span>
       <input type="checkbox" checked={value ?? false} onChange={handleCheckbox} />
+      <div className="checkbox-display">{value ? '✓' : ''}</div>
     </label>
   </div>;
 }

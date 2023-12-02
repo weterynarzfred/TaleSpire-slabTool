@@ -20,7 +20,7 @@ export default function App() {
               <li>🗹 number</li>
               <li>🗹 text</li>
               <li>🗹 select</li>
-              <li>☐ boolean</li>
+              <li>🗹 boolean</li>
             </ul>
           </li>
           <li>modifiers

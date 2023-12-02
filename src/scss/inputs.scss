@@ -1,4 +1,5 @@
 $inputBackgroundColor: #222;
+$inputHoverColor: #444;
 $inputTextColor: inherit;
 
 textarea {
@@ -51,6 +52,7 @@ input {
     display: flex;
     align-items: center;
     padding-left: .5em;
+    height: 2em;
 
     .label {
       text-align: right;
@@ -61,13 +63,25 @@ input {
 
     input,
     .select {
+      height: 100%;
       border: none;
       text-align: center;
       margin-left: .5em;
     }
 
+    input {
+      &:hover {
+        background-color: #444;
+      }
+
+      &:active {
+        background-color: #555;
+      }
+    }
+
     .select {
       &__control {
+        height: 100%;
         min-height: 0;
         border-radius: 0;
         background-color: $inputBackgroundColor;
@@ -103,12 +117,30 @@ input {
         }
 
         &--is-focused {
-          background-color: #444;
+          background-color: $inputHoverColor;
         }
       }
 
       &__indicator-separator {
         display: none;
+      }
+    }
+
+    input[type="checkbox"] {
+      display: none;
+
+      +.checkbox-display {
+        width: 2rem;
+        height: 2rem;
+        padding-bottom: .1em;
+        background-color: $inputBackgroundColor;
+        margin-left: .5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        cursor: pointer;
+        user-select: none;
       }
     }
   }
