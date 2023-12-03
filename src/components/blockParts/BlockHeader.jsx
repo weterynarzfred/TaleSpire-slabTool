@@ -44,6 +44,7 @@ export default function BlockHeader({ block }) {
       <div className="block__title">
         {block.type} {block.isCollapsed && hasSubBlocks ? `(+${Object.keys(block.blocks).length})` : ''}
       </div>
+      {block.isError ? <div className="block__error">({block.error})</div> : null}
     </div>
   </div>;
 }

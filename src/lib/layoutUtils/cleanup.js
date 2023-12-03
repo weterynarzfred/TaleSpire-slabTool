@@ -15,6 +15,7 @@ Layout.prototype.cleanup = function () {
 
   this.layouts = [];
   for (const uuid in layoutsObject) {
+    if (!layoutsObject[uuid].length) continue;
     this.layouts.push({
       uuid,
       assets: layoutsObject[uuid],

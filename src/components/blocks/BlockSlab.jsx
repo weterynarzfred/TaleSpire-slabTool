@@ -16,6 +16,7 @@ export default function BlockSlab({ block }) {
   const [base64, setBase64] = useState("");
   const [json, setJson] = useState("");
   const [dataLength, setDataLength] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const copyButtonRef = useRef(null);
   const base64InputRef = useRef(null);
@@ -54,8 +55,10 @@ export default function BlockSlab({ block }) {
       setBase64(binaryData.base64);
       setDataLength(binaryData.dataLength);
       saveLayout(newLayout);
+      setIsError(false);
     } catch {
       setBase64("something is bRoKeN;");
+      setIsError(true);
       setDataLength("");
     }
   }
@@ -71,8 +74,10 @@ export default function BlockSlab({ block }) {
       const binaryData = newLayout.binaryData;
       setDataLength(binaryData.dataLength);
       saveLayout(newLayout);
+      setIsError(false);
     } catch {
       setJson("something is bRoKeN;");
+      setIsError(true);
       setDataLength("");
     }
   }
@@ -84,7 +89,10 @@ export default function BlockSlab({ block }) {
     });
   }
 
-  return <div className={classNames(`block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
+  return <div className={classNames(`block block--${block.type}`, {
+    "block--is-collapsed": block.isCollapsed,
+    "block--is-error": block.isError || isError,
+  })}>
     <BlockHeader block={block} />
 
     <BlockContents block={block}>

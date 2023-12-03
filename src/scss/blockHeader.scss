@@ -3,6 +3,10 @@
     position: relative;
     padding: .3em;
     background-color: #f7efe3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
 
     &:hover {
       background-color: #ecdabf;
@@ -14,9 +18,14 @@
     letter-spacing: .2em;
     text-align: center;
     font-weight: 900;
-    color: #000;
     text-shadow: 0 0 .5px #000;
     cursor: pointer;
+  }
+
+  .block__error {
+    margin-left: .5em;
+    color: #900;
+    font-weight: 900;
   }
 
   .block__move {
@@ -32,6 +41,7 @@
     .block__move-down {
       width: 5em;
       background-color: #222;
+      color: #f7efe3;
       text-align: center;
       text-transform: uppercase;
       letter-spacing: .1em;
@@ -59,6 +69,36 @@
     .block__title {
       border-bottom: 1px solid #999;
       cursor: auto;
+    }
+  }
+
+  .BlockDeleteButton {
+    position: absolute;
+    top: .3em;
+    right: .6em;
+    display: block;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    border: 2px solid #222;
+    cursor: pointer;
+    z-index: 1;
+
+    path {
+      stroke: #222;
+      stroke-width: 10;
+    }
+
+    &:hover {
+      border-color: #f55;
+
+      path {
+        stroke: #f55;
+      }
+    }
+
+    &:active {
+      background-color: #333;
     }
   }
 }

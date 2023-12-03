@@ -5,7 +5,10 @@ import BlockInput from '../blockParts/BlockInput';
 import BlockList from '../blockParts/BlockList';
 
 export default function BlockDuplicate({ block }) {
-  return <div className={classNames(`block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
+  return <div className={classNames(`block block--${block.type}`, {
+    "block--is-collapsed": block.isCollapsed,
+    "block--is-error": block.isError,
+  })}>
     <BlockHeader block={block} />
 
     <BlockContents block={block}>

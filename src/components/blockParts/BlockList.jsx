@@ -6,6 +6,7 @@ import BlockRotate from '../blocks/BlockRotate';
 import BlockSlab from '../blocks/BlockSlab';
 import { getBlockAtPath } from '../../lib/reducer/utils';
 import BlockScale from '../blocks/BlockScale';
+import BlockReplace from '../blocks/BlockReplace';
 
 function isChildOfDuplicate(state, path) {
   let currentPath = [];
@@ -47,6 +48,8 @@ export default function BlockList({ path = [] }) {
         blockElements.push(<BlockRotate key={block.id} block={block} />);
       } else if (block.type === 'scale') {
         blockElements.push(<BlockScale key={block.id} block={block} />);
+      } else if (block.type === 'replace') {
+        blockElements.push(<BlockReplace key={block.id} block={block} />);
       }
     }
   }
@@ -67,6 +70,10 @@ export default function BlockList({ path = [] }) {
           <button className="add-block-button" onClick={() => handleAddSlab('offset')}>add offset</button>
           <button className="add-block-button" onClick={() => handleAddSlab('rotate')}>add rotate</button>
           <button className="add-block-button" onClick={() => handleAddSlab('scale')}>add scale</button>
+          {
+            isChildOfDuplicate(state, path) ? null :
+              <button className="add-block-button" onClick={() => handleAddSlab('replace')}>add replace</button>
+          }
         </div>
       </>
     }

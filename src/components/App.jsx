@@ -46,7 +46,7 @@ export default function App() {
                 </ul>
               </li>
               <li>🗹 scale</li>
-              <li>☐ replace anything / id -{'>'} id / slab</li>
+              <li>🗹 replace anything / id -{'>'} id / slab</li>
               <li>☐ drop to nearest surface <small><i>(?)</i></small>
                 <ul>
                   <li>option to drop the whole slab</li>
@@ -61,10 +61,13 @@ export default function App() {
           </li>
           <li>🗹 changing modifiers' order</li>
           <li>🗹 fix the copy buttons</li>
+          <li>🗹 display at least some errors in inputs</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
           <li>☐ saving state to json <i><small>(?)</small></i></li>
           <li>🗹 collapsing modifier blocks</li>
+          <li>☐ disabling modifier blocks</li>
           <li>☐ tooltips</li>
+          <li>☐ fix rotating tiles</li>
         </ul>
       </div>
       <Results />
