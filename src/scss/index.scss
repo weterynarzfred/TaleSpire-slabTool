@@ -61,7 +61,7 @@ body {
 }
 
 #content {
-  padding: 1em;
+  padding: 1em 1em 10vh 1em;
 
   .text {
     max-width: 40em;
@@ -217,6 +217,13 @@ body {
       display: flex;
       flex-wrap: wrap;
       gap: 1em;
+
+      .input-group {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+      }
     }
   }
 

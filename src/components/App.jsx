@@ -40,15 +40,19 @@ export default function App() {
               <li>🗹 rotate
                 <ul>
                   <li>🗹 rotation variations</li>
-                  <li>☐ option to rotate elements</li>
-                  <li>☐ around zero / bounding box center</li>
-                  <li>☐ axis offset</li>
-                  <li>☐ axis selection</li>
+                  <li>🗹 option to rotate elements</li>
+                  <li>🗹 around zero / bounding box center</li>
+                  <li>🗹 axis offset</li>
+                  <li>🗹 axis selection</li>
                 </ul>
               </li>
               <li>🗹 scale</li>
               <li>☐ replace anything / id -{'>'} id / slab</li>
-              <li>☐ drop to nearest surface <small><i>(?)</i></small></li>
+              <li>☐ drop to nearest surface <small><i>(?)</i></small>
+                <ul>
+                  <li>option to drop the whole slab</li>
+                </ul>
+              </li>
               <li>☐ filter random / too close / id and apply sub-modifiers
                 <ul>
                   <li>☐ option to remove filtered</li>
@@ -59,6 +63,7 @@ export default function App() {
           <li>☐ changing modifiers' order</li>
           <li>🗹 fix the copy buttons</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
+          <li>☐ saving state to json <i><small>(?)</small></i></li>
           <li>🗹 collapsing modifier blocks</li>
           <li>☐ tooltips</li>
         </ul>
