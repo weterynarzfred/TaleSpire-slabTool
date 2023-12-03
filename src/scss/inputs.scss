@@ -1,6 +1,7 @@
-$inputBackgroundColor: #222;
+$inputBackgroundColor: #151515;
 $inputHoverColor: #444;
-$inputTextColor: inherit;
+$inputActiveColor: #555;
+$inputTextColor: #eee;
 
 textarea {
   display: block;
@@ -69,15 +70,6 @@ input {
       margin-left: .5em;
     }
 
-    input {
-      &:hover {
-        background-color: #444;
-      }
-
-      &:active {
-        background-color: #555;
-      }
-    }
 
     .select {
       &__control {
@@ -113,7 +105,7 @@ input {
         padding: 0.2em .5em;
 
         &--is-selected {
-          background-color: #555;
+          background-color: $inputActiveColor;
         }
 
         &--is-focused {
@@ -142,6 +134,10 @@ input {
         cursor: pointer;
         user-select: none;
       }
+
+      &:checked+.checkbox-display {
+        box-shadow: 0 0 0 2px $inputActiveColor inset;
+      }
     }
   }
 }
@@ -152,5 +148,26 @@ input {
   input {
     background-color: $inputBackgroundColor;
     color: $inputTextColor;
+  }
+
+  .BlockInput {
+    &:hover {
+
+      input,
+      .checkbox-display,
+      .select__control {
+        background-color: #444;
+      }
+    }
+
+    &:active {
+
+      input,
+      .checkbox-display,
+      .select__control {
+        background-color: $inputActiveColor;
+      }
+    }
+
   }
 }

@@ -26,10 +26,9 @@ export default function App() {
           <li>modifiers
             <ul>
               <li>🗹 slab</li>
-              <li>🗹 array
+              <li>🗹 duplicate
                 <ul>
-                  <li>☐ simply clone and then apply sub-modifiers</li>
-                  <li>☐ apply modifiers relative to last / initial instance</li>
+                  <li>🗹 simply clone and then apply sub-modifiers</li>
                 </ul>
               </li>
               <li>🗹 offset
@@ -53,7 +52,7 @@ export default function App() {
                   <li>option to drop the whole slab</li>
                 </ul>
               </li>
-              <li>☐ filter random / too close / id and apply sub-modifiers
+              <li>☐ filter random / too close <small><i>(?)</i></small> / id and apply sub-modifiers
                 <ul>
                   <li>☐ option to remove filtered</li>
                 </ul>

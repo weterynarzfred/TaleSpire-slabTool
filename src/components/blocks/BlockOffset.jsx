@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import BlockContents from '../blockParts/BlockContents';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockInput from '../blockParts/BlockInput';
+import BlockCheckboxInput from '../blockParts/BlockCheckboxInput';
 
 export default function BlockOffset({ block }) {
 
@@ -12,7 +13,7 @@ export default function BlockOffset({ block }) {
       <BlockInput path={block.path} dataPath={['offset', 'x']} />
       <BlockInput path={block.path} dataPath={['offset', 'y']} />
       <BlockInput path={block.path} dataPath={['offset', 'z']} />
-      <BlockInput path={block.path} dataPath={['isRandom']} />
+      <BlockCheckboxInput path={block.path} dataPath={['is_random']} />
     </BlockContents>
 
     <div className="block__sub-blocks">

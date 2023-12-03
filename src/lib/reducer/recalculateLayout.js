@@ -1,7 +1,6 @@
 import Layout from '../Layout';
 
 function applyBlock(layout, block) {
-  // TODO: change these so that you only need to pass block.data
   if (block.type === 'slab') {
     const newLayout = new Layout(_.cloneDeep(block.data.layouts));
     if (block.blocks && Object.keys(block.blocks).length) {
@@ -10,10 +9,10 @@ function applyBlock(layout, block) {
       }
     }
     layout.add(newLayout);
-  } else if (block.type === 'array') {
-    layout.array(block.data.offset, block.data.count);
+  } else if (block.type === 'duplicate') {
+    layout.duplicate(block.data, block.blocks);
   } else if (block.type === 'offset') {
-    layout.offset(block.data.offset, block.data.isRandom);
+    layout.offset(block.data);
   } else if (block.type === 'rotate') {
     layout.rotate(block.data);
   } else if (block.type === 'scale') {
@@ -30,3 +29,5 @@ export default function recalculateLayout(state) {
 
   state.layout = layout.clone();
 }
+
+export { applyBlock };

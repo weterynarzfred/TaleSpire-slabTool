@@ -3,7 +3,15 @@ import Layout from '../Layout';
 Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset = {}, rotation_variations = "", rotation_from = 0, rotation_to = 0, elements_only = false }) {
   const axisPosition = { x: 0, y: 0, z: 0 };
   _.merge(axisPosition, axis_offset);
-  const rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '').split(/[;, ]+/).filter(e => e !== "").map(e => parseFloat(e));
+  axisPosition.x = parseFloat(axisPosition.x);
+  axisPosition.y = parseFloat(axisPosition.y);
+  axisPosition.z = parseFloat(axisPosition.z);
+
+  let rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '').split(/[;, ]+/).filter(e => e !== "").map(e => parseFloat(e));
+  if (rotationArray.length === 0) rotationArray = [0];
+
+  if (axis !== 'y') elements_only = false;
+  if (elements_only) center = 'zero';
 
   if (center === 'center') {
     const minimums = { x: Infinity, y: Infinity, z: Infinity };
@@ -33,6 +41,10 @@ Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset =
       const rotSin = Math.sin(rotationRad);
 
       if (!elements_only) {
+        this.layouts[i].assets[j].x -= axisPosition.x;
+        this.layouts[i].assets[j].y -= axisPosition.y;
+        this.layouts[i].assets[j].z -= axisPosition.z;
+
         const oldX = this.layouts[i].assets[j].x;
         const oldY = this.layouts[i].assets[j].y;
         const oldZ = this.layouts[i].assets[j].z;
@@ -47,6 +59,10 @@ Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset =
           this.layouts[i].assets[j].x = oldX * rotCos - oldY * rotSin;
           this.layouts[i].assets[j].y = oldX * rotSin + oldY * rotCos;
         }
+
+        this.layouts[i].assets[j].x += axisPosition.x;
+        this.layouts[i].assets[j].y += axisPosition.y;
+        this.layouts[i].assets[j].z += axisPosition.z;
       }
 
       if (axis === 'y') {

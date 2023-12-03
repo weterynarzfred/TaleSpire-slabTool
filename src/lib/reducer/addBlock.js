@@ -11,7 +11,7 @@ export default function addBlock(state, action) {
     type: action.blockType,
     data: {},
   };
-  if (['slab', 'clone'].includes(action.blockType)) {
+  if (['slab'].includes(action.blockType)) {
     parentBlock.blocks[id].isSubListHidden = true;
   }
   recalculateLayout(state);

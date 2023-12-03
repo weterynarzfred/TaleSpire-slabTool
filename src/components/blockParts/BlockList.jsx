@@ -1,17 +1,28 @@
 import _ from 'lodash';
 import { useTrackedState, useUpdate } from '../StateProvider';
-import BlockArray from '../blocks/BlockArray';
+import BlockDuplicate from '../blocks/BlockDuplicate';
 import BlockOffset from '../blocks/BlockOffset';
 import BlockRotate from '../blocks/BlockRotate';
 import BlockSlab from '../blocks/BlockSlab';
 import { blockAtPath } from '../../lib/reducer/utils';
 import BlockScale from '../blocks/BlockScale';
 
+function isChildOfDuplicate(state, path) {
+  let currentPath = [];
+  for (let i = 0; i < path.length; i++) {
+    currentPath.push(path[i]);
+    const currentBlock = blockAtPath(state, currentPath);
+    if (currentBlock.type === 'duplicate') return true;
+  }
+
+  return false;
+};
+
 export default function BlockList({ path = [] }) {
   const state = useTrackedState();
   const dispatch = useUpdate();
   const parentBlock = blockAtPath(state, path);
-  if (parentBlock.isCollapsed) return;
+  if (parentBlock.isCollapsed) return null;
 
   function handleAddSlab(blockType) {
     dispatch({
@@ -28,8 +39,8 @@ export default function BlockList({ path = [] }) {
       const block = parentBlock.blocks[id];
       if (block.type === 'slab') {
         blockElements.push(<BlockSlab key={id} block={block} />);
-      } else if (block.type === 'array') {
-        blockElements.push(<BlockArray key={id} block={block} />);
+      } else if (block.type === 'duplicate') {
+        blockElements.push(<BlockDuplicate key={id} block={block} />);
       } else if (block.type === 'offset') {
         blockElements.push(<BlockOffset key={id} block={block} />);
       } else if (block.type === 'rotate') {
@@ -45,8 +56,14 @@ export default function BlockList({ path = [] }) {
       <>
         {blockElements}
         <div className="block-controls">
-          <button className="add-block-button" onClick={() => handleAddSlab('slab')}>add slab</button>
-          <button className="add-block-button" onClick={() => handleAddSlab('array')}>add array</button>
+          {
+            isChildOfDuplicate(state, path) ? null :
+              <button className="add-block-button" onClick={() => handleAddSlab('slab')}>add slab</button>
+          }
+          {
+            isChildOfDuplicate(state, path) ? null :
+              <button className="add-block-button" onClick={() => handleAddSlab('duplicate')}>add duplicate</button>
+          }
           <button className="add-block-button" onClick={() => handleAddSlab('offset')}>add offset</button>
           <button className="add-block-button" onClick={() => handleAddSlab('rotate')}>add rotate</button>
           <button className="add-block-button" onClick={() => handleAddSlab('scale')}>add scale</button>

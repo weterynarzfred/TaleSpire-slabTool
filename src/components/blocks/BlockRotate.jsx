@@ -23,7 +23,6 @@ export default function BlockRotate({ block }) {
 
     <BlockContents block={block}>
       <div className="input-group">
-        {/* if comma separated list, picks one of the values at random */}
         <BlockTextInput path={block.path} dataPath={['rotation_variations']} />
         <BlockInput path={block.path} dataPath={['rotation_from']} />
         <BlockInput path={block.path} dataPath={['rotation_to']} />
@@ -36,32 +35,35 @@ export default function BlockRotate({ block }) {
           options={axes}
           def={axes[1]}
         />
-        <BlockSelectInput
-          path={block.path}
-          dataPath={['center']}
-          options={center}
-          def={center[0]}
-        />
-        {
-          (block.data.axis !== 'x') ?
-            <BlockInput path={block.path} dataPath={['axis_offset', 'x']} /> :
-            null
-        }
-        {
-          (block.data.axis !== undefined && block.data.axis !== 'y') ?
-            <BlockInput path={block.path} dataPath={['axis_offset', 'y']} /> :
-            null
-        }
-        {
-          (block.data.axis !== 'z') ?
-            <BlockInput path={block.path} dataPath={['axis_offset', 'z']} /> :
-            null
-        }
         {
           (!block.data.axis || block.data.axis === 'y') ?
             <BlockCheckboxInput path={block.path} dataPath={['elements_only']} /> :
             null
         }
+        {
+          (!block.data.elements_only || (block.data.axis && block.data.axis !== 'y')) ? <BlockSelectInput
+            path={block.path}
+            dataPath={['center']}
+            options={center}
+            def={center[0]}
+            key="center"
+          /> : null
+        }
+        {
+          (!block.data.elements_only || (block.data.axis && block.data.axis !== 'y')) ?
+            [
+              (block.data.axis !== 'x') ?
+                <BlockInput path={block.path} dataPath={['axis_offset', 'x']} key="offset.x" /> :
+                null,
+              (block.data.axis !== undefined && block.data.axis !== 'y') ?
+                <BlockInput path={block.path} dataPath={['axis_offset', 'y']} key="offset.y" /> :
+                null,
+              (block.data.axis !== 'z') ?
+                <BlockInput path={block.path} dataPath={['axis_offset', 'z']} key="offset.z" /> :
+                null
+            ] : null
+        }
+
       </div>
     </BlockContents >
   </div >;
