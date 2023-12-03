@@ -1,7 +1,8 @@
 import _ from 'lodash';
+import classNames from 'classnames';
 import { useUpdate, useTrackedState } from '../StateProvider';
 
-export default function BlockTextInput({ path, dataPath, def = "" }) {
+export default function BlockTextInput({ path, dataPath, def = "", className = "" }) {
   const state = useTrackedState();
   const dispatch = useUpdate();
 
@@ -18,7 +19,7 @@ export default function BlockTextInput({ path, dataPath, def = "" }) {
 
   const value = _.get(state.blocks, path.join('.blocks.') + '.data.' + dataPath.join('.'));
 
-  return <div className="BlockInput BlockTextInput">
+  return <div className={classNames("BlockInput BlockTextInput", className)}>
     <label>
       <div className="label">{dataPath.join('.').replace("_", " ")}: </div>
       <input type="text" value={value ?? def} onChange={handleChange} />

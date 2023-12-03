@@ -140,6 +140,7 @@ body {
     border-radius: 50%;
     border: 2px solid #222;
     cursor: pointer;
+    z-index: 1;
 
     path {
       stroke: #222;
@@ -202,11 +203,13 @@ body {
   &--duplicate,
   &--offset,
   &--rotate,
-  &--scale {
+  &--scale,
+  &--replace {
     >.block__contents {
       display: flex;
       flex-wrap: wrap;
-      gap: 1em;
+      column-gap: 1.5rem;
+      row-gap: .5rem;
 
       .input-group {
         width: 100%;

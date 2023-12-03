@@ -42,7 +42,7 @@ export default function BlockHeader({ block }) {
         <div className="block__move-down" onClick={event => handleBlockMove(event, 1)}>down</div>
       </div>
       <div className="block__title">
-        {block.type} {block.isCollapsed && hasSubBlocks ? `+(${Object.keys(block.blocks).length})` : ''}
+        {block.type} {block.isCollapsed && hasSubBlocks ? `(+${Object.keys(block.blocks).length})` : ''}
       </div>
     </div>
   </div>;
