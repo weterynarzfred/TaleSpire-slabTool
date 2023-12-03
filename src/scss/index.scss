@@ -41,6 +41,20 @@
 }
 
 @font-face {
+  font-family: "Lato";
+  src: url('../media/Lato-Black.ttf');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url('../media/Lato-BlackItalic.ttf');
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
   font-family: "Fira Code";
   src: url('../media/FiraCode-VariableFont.ttf');
 }
@@ -116,20 +130,6 @@ body {
     padding-bottom: 0;
   }
 
-  &__title {
-    text-transform: uppercase;
-    padding: .3em;
-    letter-spacing: .2em;
-    text-align: center;
-    background-color: #f7efe3;
-    color: #000;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #ecdabf;
-    }
-  }
-
   .BlockDeleteButton {
     position: absolute;
     top: .3em;
@@ -184,16 +184,6 @@ body {
   }
 
   &--results {
-    >.block__title {
-      border-bottom: 1px solid #999;
-      font-weight: 700;
-      cursor: auto;
-
-      &:hover {
-        background-color: #f7efe3;
-      }
-    }
-
     >.block__contents {
       height: 30em;
 
@@ -287,4 +277,5 @@ body {
   }
 }
 
+@import url('blockHeader.scss');
 @import url('inputs.scss');

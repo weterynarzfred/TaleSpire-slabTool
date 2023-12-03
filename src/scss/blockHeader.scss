@@ -1,0 +1,64 @@
+.BlockHeader {
+  .block__title-bar {
+    position: relative;
+    padding: .3em;
+    background-color: #f7efe3;
+
+    &:hover {
+      background-color: #ecdabf;
+    }
+  }
+
+  .block__title {
+    text-transform: uppercase;
+    letter-spacing: .2em;
+    text-align: center;
+    font-weight: 900;
+    color: #000;
+    text-shadow: 0 0 .5px #000;
+    cursor: pointer;
+  }
+
+  .block__move {
+    position: absolute;
+    top: 0;
+    left: .5rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+
+    .block__move-up,
+    .block__move-down {
+      width: 5em;
+      background-color: #222;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: .7em;
+      padding: .4em 0;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #444;
+      }
+
+      &:active {
+        background-color: #555;
+      }
+    }
+  }
+
+  .block--results {
+    .block__title-bar {
+      &:hover {
+        background-color: #f7efe3;
+      }
+    }
+
+    .block__title {
+      border-bottom: 1px solid #999;
+      cursor: auto;
+    }
+  }
+}

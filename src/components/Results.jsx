@@ -17,7 +17,11 @@ export default function Results() {
   }
 
   return <div className="block block--results">
-    <div className="block__title">results</div>
+    <div className="BlockHeader">
+      <div className="block__title-bar">
+        <div className="block__title">results</div>
+      </div>
+    </div>
     <div className="block__contents">
       <div className="controls">
         <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>copy</button>

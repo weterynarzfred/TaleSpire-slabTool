@@ -3,11 +3,12 @@ import { createContainer } from 'react-tracked';
 import { produce } from 'immer';
 import _ from 'lodash';
 import Layout from '../lib/Layout';
-import { blockAtPath, getId } from '../lib/reducer/utils';
+import { getBlockAtPath, getId } from '../lib/reducer/utils';
 import recalculateLayout from '../lib/reducer/recalculateLayout';
 import addBlock from '../lib/reducer/addBlock';
 import deleteBlock from '../lib/reducer/deleteBlock';
 import changeData from '../lib/reducer/changeData';
+import moveBlock from '../lib/reducer/moveBlock';
 
 const initialState = {
   blocks: {},
@@ -18,6 +19,7 @@ const initialId = getId();
 initialState.blocks[initialId] = {
   id: initialId,
   path: [initialId],
+  order: 0,
   type: 'slab',
   data: {
     layouts: [{
@@ -44,8 +46,11 @@ const reducer = produce((state, action) => {
     case "DELETE_BLOCK":
       deleteBlock(state, action);
       break;
+    case "MOVE_BLOCK":
+      moveBlock(state, action);
+      break;
     case "SET_BLOCK_PROPERTY":
-      const block = blockAtPath(state, action.path);
+      const block = getBlockAtPath(state, action.path);
       block[action.key] = action.value;
       break;
     default:

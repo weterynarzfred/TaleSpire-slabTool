@@ -1,8 +1,8 @@
 import recalculateLayout from './recalculateLayout';
-import { blockAtPath } from './utils';
+import { getBlockAtPath } from './utils';
 
 export default function changeData(state, action) {
-  const block = blockAtPath(state, action.path);
+  const block = getBlockAtPath(state, action.path);
   _.set(block.data, action.dataPath.join('.'), action.value);
   recalculateLayout(state);
 }

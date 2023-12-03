@@ -4,14 +4,14 @@ import BlockDuplicate from '../blocks/BlockDuplicate';
 import BlockOffset from '../blocks/BlockOffset';
 import BlockRotate from '../blocks/BlockRotate';
 import BlockSlab from '../blocks/BlockSlab';
-import { blockAtPath } from '../../lib/reducer/utils';
+import { getBlockAtPath } from '../../lib/reducer/utils';
 import BlockScale from '../blocks/BlockScale';
 
 function isChildOfDuplicate(state, path) {
   let currentPath = [];
   for (let i = 0; i < path.length; i++) {
     currentPath.push(path[i]);
-    const currentBlock = blockAtPath(state, currentPath);
+    const currentBlock = getBlockAtPath(state, currentPath);
     if (currentBlock.type === 'duplicate') return true;
   }
 
@@ -21,7 +21,7 @@ function isChildOfDuplicate(state, path) {
 export default function BlockList({ path = [] }) {
   const state = useTrackedState();
   const dispatch = useUpdate();
-  const parentBlock = blockAtPath(state, path);
+  const parentBlock = getBlockAtPath(state, path);
   if (parentBlock.isCollapsed) return null;
 
   function handleAddSlab(blockType) {
@@ -35,18 +35,18 @@ export default function BlockList({ path = [] }) {
   const hasSubBlocks = parentBlock.blocks && Object.keys(parentBlock.blocks).length;
   const blockElements = [];
   if (!parentBlock.isSubListHidden) {
-    for (const id in parentBlock.blocks) {
-      const block = parentBlock.blocks[id];
+    const subBlocksArray = parentBlock.blocks ? Object.values(parentBlock.blocks).sort((a, b) => a.order - b.order) : [];
+    for (const block of subBlocksArray) {
       if (block.type === 'slab') {
-        blockElements.push(<BlockSlab key={id} block={block} />);
+        blockElements.push(<BlockSlab key={block.id} block={block} />);
       } else if (block.type === 'duplicate') {
-        blockElements.push(<BlockDuplicate key={id} block={block} />);
+        blockElements.push(<BlockDuplicate key={block.id} block={block} />);
       } else if (block.type === 'offset') {
-        blockElements.push(<BlockOffset key={id} block={block} />);
+        blockElements.push(<BlockOffset key={block.id} block={block} />);
       } else if (block.type === 'rotate') {
-        blockElements.push(<BlockRotate key={id} block={block} />);
+        blockElements.push(<BlockRotate key={block.id} block={block} />);
       } else if (block.type === 'scale') {
-        blockElements.push(<BlockScale key={id} block={block} />);
+        blockElements.push(<BlockScale key={block.id} block={block} />);
       }
     }
   }

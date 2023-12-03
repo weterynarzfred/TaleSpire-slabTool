@@ -4,7 +4,7 @@ export default function BlockHeader({ block }) {
   const dispatch = useUpdate();
 
   function handleBlockHeaderClick(event) {
-    if (event.isFromDeleteButton) return;
+    if (event.isFromButton) return;
     dispatch({
       type: "SET_BLOCK_PROPERTY",
       path: block.path,
@@ -14,9 +14,18 @@ export default function BlockHeader({ block }) {
   }
 
   function handleBlockDeleteButton(event) {
-    event.isFromDeleteButton = true;
+    event.isFromButton = true;
     dispatch({
       type: "DELETE_BLOCK",
+      path: block.path,
+    });
+  }
+
+  function handleBlockMove(event, direction) {
+    event.isFromButton = true;
+    dispatch({
+      type: "MOVE_BLOCK",
+      direction,
       path: block.path,
     });
   }
@@ -27,6 +36,14 @@ export default function BlockHeader({ block }) {
       <path d="M30 30L70 70" />
       <path d="M30 70L70 30" />
     </svg>
-    <div className="block__title">{block.type} {block.isCollapsed && hasSubBlocks ? `+(${Object.keys(block.blocks).length})` : ''}</div>
+    <div className="block__title-bar">
+      <div className="block__move">
+        <div className="block__move-up" onClick={event => handleBlockMove(event, -1)}>up</div>
+        <div className="block__move-down" onClick={event => handleBlockMove(event, 1)}>down</div>
+      </div>
+      <div className="block__title">
+        {block.type} {block.isCollapsed && hasSubBlocks ? `+(${Object.keys(block.blocks).length})` : ''}
+      </div>
+    </div>
   </div>;
 }

@@ -59,7 +59,7 @@ export default function App() {
               </li>
             </ul>
           </li>
-          <li>☐ changing modifiers' order</li>
+          <li>🗹 changing modifiers' order</li>
           <li>🗹 fix the copy buttons</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
           <li>☐ saving state to json <i><small>(?)</small></i></li>
