@@ -1,6 +1,6 @@
 import Layout from '../Layout';
 
-Layout.prototype.toOrigin = function () {
+Layout.prototype.normalize = function () {
   const minimums = { x: Infinity, y: Infinity, z: Infinity };
   for (const layout of this.layouts) {
     for (const asset of layout.assets) {

@@ -26,7 +26,7 @@ export default function recalculateLayout(state) {
   for (const id in state.blocks) {
     applyBlock(layout, state.blocks[id]);
   }
-  layout.toOrigin();
+  layout.normalize();
 
   state.layout = layout.clone();
 }
