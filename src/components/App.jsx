@@ -7,71 +7,87 @@ export default function App() {
   return <StateProvider>
     <div id="content">
       <div className="text">
-        <h2>// TODO:</h2>
+        <h1>TaleSpire – SlabTools</h1>
+        <p>This is a simple work in progress tool for editing slabs from <a href="https://talespire.com/" target="_blank" rel="noopener noreferrer">TaleSpire</a>. Don't expect much from it.</p>
+      </div>
+
+      <Results />
+      <BlockList />
+
+      <div className="text" id="foot">
+        <h2>done</h2>
+        <li>🗹 encoding and decoding slabs results</li>
+        <li>🗹 adding modifiers</li>
+        <li>🗹 removing modifiers</li>
+        <li>🗹 calculating results</li>
+        <li>🗹 nested modifiers</li>
+        <li>input types
+          <ul>
+            <li>🗹 number</li>
+            <li>🗹 text</li>
+            <li>🗹 select</li>
+            <li>🗹 boolean</li>
+          </ul>
+        </li>
+        <li>modifiers
+          <ul>
+            <li>🗹 slab</li>
+            <li>🗹 duplicate</li>
+            <li>🗹 offset</li>
+            <li>🗹 rotate
+              <ul>
+                <li>🗹 rotation variations</li>
+                <li>🗹 option to rotate elements</li>
+                <li>🗹 around zero / bounding box center</li>
+                <li>🗹 axis offset</li>
+                <li>🗹 axis selection</li>
+              </ul>
+            </li>
+            <li>🗹 scale</li>
+            <li>🗹 replace anything / id -{'>'} id / slab</li>
+          </ul>
+        </li>
+        <li>🗹 changing modifiers' order</li>
+        <li>🗹 copy to clipboard buttons</li>
+        <li>🗹 display at least some errors in inputs</li>
+        <li>🗹 collapsing modifier blocks</li>
+        <h2>todo</h2>
         <ul>
-          <li>🗹 change the font of the todo list</li>
-          <li>☐ write the intro</li>
-          <li>🗹 calculating results</li>
-          <li>🗹 adding modifiers</li>
-          <li>🗹 removing modifiers</li>
-          <li>🗹 nested modifiers</li>
-          <li>input types
-            <ul>
-              <li>🗹 number</li>
-              <li>🗹 text</li>
-              <li>🗹 select</li>
-              <li>🗹 boolean</li>
-            </ul>
-          </li>
+          <li>☐ tooltips</li>
+          <li>☐ make a showcase video</li>
           <li>modifiers
             <ul>
-              <li>🗹 slab</li>
-              <li>🗹 duplicate
-                <ul>
-                  <li>🗹 simply clone and then apply sub-modifiers</li>
-                </ul>
-              </li>
-              <li>🗹 offset
-                <ul>
-                  <li>☐ options for per axis wrapping</li>
-                </ul>
-              </li>
-              <li>🗹 rotate
-                <ul>
-                  <li>🗹 rotation variations</li>
-                  <li>🗹 option to rotate elements</li>
-                  <li>🗹 around zero / bounding box center</li>
-                  <li>🗹 axis offset</li>
-                  <li>🗹 axis selection</li>
-                </ul>
-              </li>
-              <li>🗹 scale</li>
-              <li>🗹 replace anything / id -{'>'} id / slab</li>
+              <li>☐ offset - option for per axis wrapping</li>
+              <li>☐ rotate - decide if the center selection is useful</li>
+            </ul>
+          </li>
+        </ul>
+        <li>☐ upload this thing somewhere</li>
+        <h2>do later</h2>
+        <ul>
+          <li>modifiers
+            <ul>
               <li>☐ drop to nearest surface <small><i>(?)</i></small>
                 <ul>
                   <li>option to drop the whole slab</li>
                 </ul>
               </li>
-              <li>☐ filter random / too close <small><i>(?)</i></small> / id and apply sub-modifiers
+              <li>☐ filter random / by id and apply sub-modifiers
                 <ul>
-                  <li>☐ option to remove filtered</li>
+                  <li>☐ option to remove filtered elements</li>
+                  <li>☐ filter elements that are too close to each other <small><i>(?)</i></small></li>
                 </ul>
               </li>
             </ul>
           </li>
-          <li>🗹 changing modifiers' order</li>
-          <li>🗹 fix the copy buttons</li>
-          <li>🗹 display at least some errors in inputs</li>
+          <li>☐ better error handling</li>
+          <li>☐ drag and drop modifier order</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
           <li>☐ saving state to json <i><small>(?)</small></i></li>
-          <li>🗹 collapsing modifier blocks</li>
           <li>☐ disabling modifier blocks</li>
-          <li>☐ tooltips</li>
-          <li>🗹 fix tile rotations</li>
+          <li>☐ check if making this into a symbiote is useful</li>
         </ul>
       </div>
-      <Results />
-      <BlockList />
     </div>
   </StateProvider>;
 }
