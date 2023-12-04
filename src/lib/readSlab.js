@@ -5,7 +5,7 @@
 
 import parsedIndex from './assetData';
 
-function readSlab(buffer, showData = true) {
+function readSlab(buffer) {
   let bufferPointer = 0;
 
   // header
@@ -47,7 +47,7 @@ function readSlab(buffer, showData = true) {
       assetCount,
       assets: []
     };
-    if (showData) layout.data = parsedIndex[uuid];
+    // layout.data = parsedIndex[uuid];
     layouts.push(layout);
   }
 

@@ -1,4 +1,17 @@
 import Layout from '../Layout';
+import parsedIndex from '../assetData';
+
+function rotateTheCenter(center, rotation) {
+  const rotationRad = -rotation / 180 * Math.PI;
+  const rotCos = Math.cos(rotationRad);
+  const rotSin = Math.sin(rotationRad);
+
+  return {
+    x: Math.abs(center.x * rotCos - center.z * rotSin),
+    y: center.y,
+    z: Math.abs(center.x * rotSin + center.z * rotCos),
+  };
+}
 
 Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset = {}, rotation_variations = "", rotation_from = 0, rotation_to = 0, elements_only = false }) {
   const axisPosition = { x: 0, y: 0, z: 0 };
@@ -32,8 +45,9 @@ Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset =
   }
 
   for (let i = 0; i < this.layouts.length; i++) {
-    for (let j = 0; j < this.layouts[i].assets.length; j++) {
+    const assetCenter = parsedIndex[this.layouts[i].uuid].center;
 
+    for (let j = 0; j < this.layouts[i].assets.length; j++) {
       let currentRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
       currentRotation += Math.random() * (rotation_to - rotation_from) + rotation_from;
       const rotationRad = -currentRotation / 180 * Math.PI;
@@ -41,9 +55,10 @@ Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset =
       const rotSin = Math.sin(rotationRad);
 
       if (!elements_only) {
-        this.layouts[i].assets[j].x -= axisPosition.x;
-        this.layouts[i].assets[j].y -= axisPosition.y;
-        this.layouts[i].assets[j].z -= axisPosition.z;
+        const currentAssetCenter = rotateTheCenter(assetCenter, this.layouts[i].assets[j].rotation);
+        this.layouts[i].assets[j].x -= axisPosition.x - currentAssetCenter.x;
+        this.layouts[i].assets[j].y -= axisPosition.y - currentAssetCenter.y;
+        this.layouts[i].assets[j].z -= axisPosition.z - currentAssetCenter.z;
 
         const oldX = this.layouts[i].assets[j].x;
         const oldY = this.layouts[i].assets[j].y;
@@ -60,9 +75,10 @@ Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset =
           this.layouts[i].assets[j].y = oldX * rotSin + oldY * rotCos;
         }
 
-        this.layouts[i].assets[j].x += axisPosition.x;
-        this.layouts[i].assets[j].y += axisPosition.y;
-        this.layouts[i].assets[j].z += axisPosition.z;
+        const rotatedAssetCenter = rotateTheCenter(currentAssetCenter, currentRotation);
+        this.layouts[i].assets[j].x += axisPosition.x - rotatedAssetCenter.x;
+        this.layouts[i].assets[j].y += axisPosition.y - rotatedAssetCenter.y;
+        this.layouts[i].assets[j].z += axisPosition.z - rotatedAssetCenter.z;
       }
 
       if (axis === 'y') {

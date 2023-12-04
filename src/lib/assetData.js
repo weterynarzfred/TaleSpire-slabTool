@@ -26,6 +26,7 @@ for (const index of indexes) {
         // uuid: asset.Id,
         // colliderBounds: asset.ColliderBoundsBound,
         // assets: asset.Assets,
+        center: asset.ColliderBoundsBound?.m_Center,
       };
 
       parsedIndex[asset.Id] = assetData;

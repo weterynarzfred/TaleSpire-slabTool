@@ -67,7 +67,7 @@ export default function App() {
           <li>🗹 collapsing modifier blocks</li>
           <li>☐ disabling modifier blocks</li>
           <li>☐ tooltips</li>
-          <li>☐ fix rotating tiles</li>
+          <li>🗹 fix tile rotations</li>
         </ul>
       </div>
       <Results />
