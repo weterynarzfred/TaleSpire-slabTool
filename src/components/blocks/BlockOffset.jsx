@@ -5,7 +5,6 @@ import BlockInput from '../blockParts/BlockInput';
 import BlockCheckboxInput from '../blockParts/BlockCheckboxInput';
 
 export default function BlockOffset({ block }) {
-
   return <div className={classNames(`block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
     <BlockHeader block={block} />
 

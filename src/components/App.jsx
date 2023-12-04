@@ -55,12 +55,7 @@ export default function App() {
         <ul>
           <li>☐ tooltips</li>
           <li>☐ make a showcase video</li>
-          <li>modifiers
-            <ul>
-              <li>☐ offset - option for per axis wrapping</li>
-              <li>☐ rotate - decide if the center selection is useful</li>
-            </ul>
-          </li>
+          <li>☐ rotate - decide if the center selection is useful</li>
         </ul>
         <li>☐ upload this thing somewhere</li>
         <h2>do later</h2>
@@ -86,6 +81,7 @@ export default function App() {
           <li>☐ saving state to json <i><small>(?)</small></i></li>
           <li>☐ disabling modifier blocks</li>
           <li>☐ check if making this into a symbiote is useful</li>
+          <li>☐ terrain generation</li>
         </ul>
       </div>
     </div>

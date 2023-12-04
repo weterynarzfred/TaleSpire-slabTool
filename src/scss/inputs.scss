@@ -75,6 +75,9 @@ input {
 
 
     .select {
+      min-width: 6em;
+      z-index: 2;
+
       &__control {
         height: 100%;
         min-height: 0;
