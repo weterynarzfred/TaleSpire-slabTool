@@ -76,7 +76,6 @@ input {
 
     .select {
       min-width: 6em;
-      z-index: 2;
 
       &__control {
         height: 100%;
@@ -88,6 +87,7 @@ input {
         &--menu-is-open,
         &--is-focused {
           box-shadow: none;
+          z-index: 1;
         }
       }
 

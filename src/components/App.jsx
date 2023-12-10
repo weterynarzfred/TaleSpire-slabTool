@@ -54,8 +54,10 @@ export default function App() {
         <h2>todo</h2>
         <ul>
           <li>☐ tooltips</li>
+          <li>☐ fixed copy results</li>
+          <li>☐ user comments in blocks</li>
+          <li>☐ duplication scaling</li>
           <li>☐ make a showcase video</li>
-          <li>☐ rotate - decide if the center selection is useful</li>
         </ul>
         <li>☐ upload this thing somewhere</li>
         <h2>do later</h2>

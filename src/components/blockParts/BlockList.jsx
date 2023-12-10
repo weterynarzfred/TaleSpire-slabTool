@@ -7,6 +7,7 @@ import BlockSlab from '../blocks/BlockSlab';
 import { getBlockAtPath } from '../../lib/reducer/utils';
 import BlockScale from '../blocks/BlockScale';
 import BlockReplace from '../blocks/BlockReplace';
+import classNames from 'classnames';
 
 function isChildOfDuplicate(state, path) {
   let currentPath = [];
@@ -78,7 +79,7 @@ export default function BlockList({ path = [] }) {
       </>
     }
     {path.length > 0 ? <button
-      className="BlockList__hide"
+      className={classNames("BlockList__hide", { "BlockList__hide--hidden": parentBlock.isSubListHidden })}
       onClick={() => dispatch({
         type: "SET_BLOCK_PROPERTY",
         path,

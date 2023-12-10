@@ -17,8 +17,14 @@ Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset =
   const axisPosition = { x: 0, y: 0, z: 0 };
   _.merge(axisPosition, axis_offset);
   axisPosition.x = parseFloat(axisPosition.x);
+  axisPosition.x = isNaN(axisPosition.x) ? 0 : axisPosition.x;
   axisPosition.y = parseFloat(axisPosition.y);
+  axisPosition.y = isNaN(axisPosition.y) ? 0 : axisPosition.y;
   axisPosition.z = parseFloat(axisPosition.z);
+  axisPosition.z = isNaN(axisPosition.z) ? 0 : axisPosition.z;
+
+  rotation_from = parseFloat(rotation_from);
+  rotation_to = parseFloat(rotation_to);
 
   let rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '').split(/[;, ]+/).filter(e => e !== "").map(e => parseFloat(e));
   if (rotationArray.length === 0) rotationArray = [0];
