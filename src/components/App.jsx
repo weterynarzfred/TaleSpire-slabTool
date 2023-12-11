@@ -1,8 +1,17 @@
+import { useEffect } from 'react';
 import Results from './Results';
 import StateProvider from './StateProvider';
 import BlockList from './blockParts/BlockList';
 
 export default function App() {
+
+  useEffect(() => {
+    document.addEventListener("wheel", function (event) {
+      if (document.activeElement.type !== "number") return;
+      document.activeElement.blur();
+      setTimeout(() => event.target.focus(), 0);
+    });
+  }, []);
 
   return <StateProvider>
     <div id="content">
