@@ -12,7 +12,7 @@ export default function Results() {
   function handleCopyButton() {
     navigator.clipboard.writeText(base64InputRef.current.value).then(() => {
       copyButtonRef.current.innerText = 'copied';
-      setTimeout(() => copyButtonRef.current.innerText = 'copy', 500);
+      setTimeout(() => copyButtonRef.current.innerText = 'copy result', 500);
     });
   }
 
@@ -24,7 +24,7 @@ export default function Results() {
     </div>
     <div className="block__contents">
       <div className="controls">
-        <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>copy</button>
+        <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>copy result</button>
         <div className="byte-count">{bytes(data.dataLength)}</div>
       </div>
       <textarea className="json-input" readOnly value={state.layout.json} />

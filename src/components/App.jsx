@@ -20,8 +20,8 @@ export default function App() {
         <p>This is a simple work in progress tool for editing slabs from <a href="https://talespire.com/" target="_blank" rel="noopener noreferrer">TaleSpire</a>. Don't expect much from it.</p>
       </div>
 
-      <Results />
       <BlockList />
+      <Results />
 
       <div className="text" id="foot">
         <h2>done</h2>
@@ -86,6 +86,7 @@ export default function App() {
               </li>
             </ul>
           </li>
+          <li>☐ add expression evaluation</li>
           <li>☐ better error handling</li>
           <li>☐ drag and drop modifier order</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>

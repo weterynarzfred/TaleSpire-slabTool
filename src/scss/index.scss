@@ -137,7 +137,7 @@ body {
   position: relative;
   background-color: #333;
   margin-bottom: .8rem;
-  padding-bottom: .5rem;
+  padding-bottom: .2rem;
 
   &--is-collapsed {
     margin-bottom: .5rem;
@@ -150,6 +150,7 @@ body {
 
   .block__contents {
     margin: .5em .5rem 0 .5em;
+    font-size: .8rem;
   }
 
   &--slab,
@@ -173,8 +174,36 @@ body {
   }
 
   &--results {
+    margin-top: 2rem;
+    background-color: transparent;
+
+    .block__title-bar {
+      background-color: transparent;
+      color: #f7efe3;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
     >.block__contents {
       height: 30em;
+      grid-template-rows: auto;
+
+      .controls {
+        position: fixed;
+        z-index: 21;
+        bottom: 0;
+        left: 0;
+        background-color: #001a20;
+        padding: .5em 1em;
+        border: solid #f7efe3;
+        border-width: 2px 2px 0 0;
+      }
+
+      .json-input {
+        grid-row-end: span 1;
+      }
 
       textarea {
         background: #444;
@@ -183,7 +212,17 @@ body {
       button {
         background-color: #f55;
         border: 2px solid #f7efe3;
+        border: none;
         font-weight: 700;
+        min-width: 12em;
+
+        &:hover {
+          background-color: #f66;
+        }
+
+        &:active {
+          background-color: #f77;
+        }
       }
     }
   }
@@ -224,6 +263,7 @@ body {
       background: none;
       padding: 0;
       margin-bottom: 0;
+      font-size: .8rem;
       z-index: 1;
 
       .add-block-button {
