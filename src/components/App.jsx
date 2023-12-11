@@ -63,7 +63,6 @@ export default function App() {
         <h2>todo</h2>
         <ul>
           <li>☐ tooltips</li>
-          <li>☐ fixed copy results</li>
           <li>☐ user comments in blocks</li>
           <li>☐ duplication scaling</li>
           <li>☐ make a showcase video</li>
