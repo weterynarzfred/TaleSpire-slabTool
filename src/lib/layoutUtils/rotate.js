@@ -51,7 +51,8 @@ Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset =
   }
 
   for (let i = 0; i < this.layouts.length; i++) {
-    const assetCenter = parsedIndex[this.layouts[i].uuid].center;
+    console.log(parsedIndex[this.layouts[i].uuid].type);
+    const assetCenter = parsedIndex[this.layouts[i].uuid].type === 'Tiles' ? parsedIndex[this.layouts[i].uuid].center : { x: 0, y: 0, z: 0 };
 
     for (let j = 0; j < this.layouts[i].assets.length; j++) {
       let currentRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
