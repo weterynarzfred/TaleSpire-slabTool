@@ -1,15 +1,22 @@
 import Layout from '../Layout';
 import parseInput from '../parseInput';
 
-Layout.prototype.scale = function ({ scale = {}, center = "zero", axis_offset = {} }) {
-  scale.x = parseInput('float', scale.x, 1);
-  scale.y = parseInput('float', scale.y, 1);
-  scale.z = parseInput('float', scale.z, 1);
+Layout.prototype.scale = function (
+  {
+    scale = {},
+    center = "zero",
+    axis_offset = {}
+  },
+  scope
+) {
+  scale.x = parseInput('float', scale.x, 1, scope);
+  scale.y = parseInput('float', scale.y, 1, scope);
+  scale.z = parseInput('float', scale.z, 1, scope);
 
   const axisPosition = {
-    x: parseInput('float', axis_offset.x, 0),
-    y: parseInput('float', axis_offset.y, 0),
-    z: parseInput('float', axis_offset.z, 0),
+    x: parseInput('float', axis_offset.x, 0, scope),
+    y: parseInput('float', axis_offset.y, 0, scope),
+    z: parseInput('float', axis_offset.z, 0, scope),
   };
 
   if (center === "center") {

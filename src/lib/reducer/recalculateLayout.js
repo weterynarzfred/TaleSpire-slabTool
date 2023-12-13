@@ -1,6 +1,6 @@
 import Layout from '../Layout';
 
-function applyBlock(layout, block) {
+function applyBlock(layout, block, scope = {}) {
   try {
     if (block.type === 'slab') {
       const newLayout = new Layout(_.cloneDeep(block.data.layouts));
@@ -9,18 +9,18 @@ function applyBlock(layout, block) {
         const blockArray = Object.values(block.blocks)
           .sort((a, b) => a.order - b.order);
         for (const subBlock of blockArray) {
-          applyBlock(newLayout, subBlock);
+          applyBlock(newLayout, subBlock, scope);
         }
       }
       layout.add(newLayout);
     } else if (block.type === 'duplicate') {
-      layout.duplicate(block.data, block.blocks);
+      layout.duplicate(block.data, block.blocks, scope);
     } else if (block.type === 'offset') {
-      layout.offset(block.data);
+      layout.offset(block.data, scope);
     } else if (block.type === 'rotate') {
-      layout.rotate(block.data);
+      layout.rotate(block.data, scope);
     } else if (block.type === 'scale') {
-      layout.scale(block.data);
+      layout.scale(block.data, scope);
     } else if (block.type === 'replace') {
 
       layout.replace(block.data);

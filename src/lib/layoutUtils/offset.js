@@ -1,8 +1,12 @@
 import Layout from '../Layout';
+import parseInput from '../parseInput';
 
-Layout.prototype.offset = function ({ offset = {}, is_random = false }) {
-  const usedOffset = { x: 0, y: 0, z: 0 };
-  _.merge(usedOffset, offset);
+Layout.prototype.offset = function ({ offset = {}, is_random = false }, scope) {
+  const usedOffset = {
+    x: parseInput('float', offset.x, 0, scope),
+    y: parseInput('float', offset.y, 0, scope),
+    z: parseInput('float', offset.z, 0, scope),
+  };
 
   for (let i = 0; i < this.layouts.length; i++) {
     for (let j = 0; j < this.layouts[i].assets.length; j++) {

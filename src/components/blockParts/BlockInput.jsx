@@ -21,7 +21,7 @@ export default function BlockInput({ path, dataPath, def = 0 }) {
   return <div className="BlockInput">
     <label>
       <div className="label">{dataPath.join('.')}: </div>
-      <input type="number" value={value ?? def} onChange={handleChange} />
+      <input type="text" value={value ?? def} onChange={handleChange} />
     </label>
   </div>;
 }

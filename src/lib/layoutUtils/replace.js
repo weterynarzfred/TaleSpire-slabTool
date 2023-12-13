@@ -2,7 +2,15 @@ import Layout from '../Layout';
 import { decodeSlab } from '../encoding';
 import readSlab from '../readSlab';
 
-Layout.prototype.replace = function ({ from = 'all', from_uuid = '', to = 'uuid', to_uuid = '', to_slab = '' }) {
+Layout.prototype.replace = function (
+  {
+    from = 'all',
+    from_uuid = '',
+    to = 'uuid',
+    to_uuid = '',
+    to_slab = ''
+  }
+) {
   let slabLayout;
   if (from === 'uuid') {
     if (from_uuid === '') throw new Error('uuid empty');

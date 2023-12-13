@@ -14,15 +14,26 @@ function rotateTheCenter(center, rotation) {
   };
 }
 
-Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset = {}, rotation_variations = "", rotation_from, rotation_to, elements_only = false }) {
+Layout.prototype.rotate = function (
+  {
+    axis = "y",
+    center = "zero",
+    axis_offset = {},
+    rotation_variations = "",
+    rotation_from,
+    rotation_to,
+    elements_only = false
+  },
+  scope
+) {
   const axisPosition = {
-    x: parseInput('float', axis_offset.x, 0),
-    y: parseInput('float', axis_offset.y, 0),
-    z: parseInput('float', axis_offset.z, 0),
+    x: parseInput('float', axis_offset.x, 0, scope),
+    y: parseInput('float', axis_offset.y, 0, scope),
+    z: parseInput('float', axis_offset.z, 0, scope),
   };
 
-  rotation_from = parseInput('float', rotation_from, 0);
-  rotation_to = parseInput('float', rotation_to, 0);
+  rotation_from = parseInput('float', rotation_from, 0, scope);
+  rotation_to = parseInput('float', rotation_to, 0, scope);
 
   let rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '').split(/[;, ]+/).filter(e => e !== "").map(e => parseFloat(e));
   if (rotationArray.length === 0) rotationArray = [0];
