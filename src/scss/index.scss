@@ -314,6 +314,27 @@ body {
       }
     }
   }
+
+  .block__error {
+    width: 100%;
+    color: #fff;
+    margin-left: .5em;
+    font-weight: 900;
+    text-align: center;
+
+    &::before {
+      content: "!";
+      display: inline-block;
+      font-size: 0.9em;
+      width: 1.4em;
+      height: 1.4em;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      margin-right: .5em;
+      line-height: 1.1;
+      box-sizing: border-box;
+    }
+  }
 }
 
 .block-controls {

@@ -1,37 +1,30 @@
 .BlockHeader {
   .block__title-bar {
     position: relative;
-    padding: .3em;
+    padding: 0em 3em 0em .3em;
+    min-height: 2em;
     background-color: #f7efe3;
     display: flex;
     align-items: center;
-    justify-content: center;
     color: #000;
-
-    &:hover {
-      background-color: #ecdabf;
-    }
   }
 
   .block__title {
     text-transform: uppercase;
-    letter-spacing: .2em;
-    text-align: center;
+    letter-spacing: .1em;
     font-weight: 900;
     text-shadow: 0 0 .5px #000;
+    padding: .4em 1em;
+    min-width: 8em;
     cursor: pointer;
-  }
 
-  .block__error {
-    margin-left: .5em;
-    color: #900;
-    font-weight: 900;
+    &:hover {
+      opacity: .6;
+    }
   }
 
   .block__move {
-    position: absolute;
-    top: 0;
-    left: .5rem;
+    padding-left: .5rem;
     height: 100%;
     display: flex;
     align-items: center;
@@ -39,12 +32,11 @@
 
     .block__move-up,
     .block__move-down {
-      width: 5em;
+      width: 2em;
       background-color: #222;
       color: #f7efe3;
       text-align: center;
       text-transform: uppercase;
-      letter-spacing: .1em;
       font-size: .7em;
       padding: .4em 0;
       cursor: pointer;
@@ -55,6 +47,30 @@
 
       &:active {
         background-color: #555;
+      }
+    }
+  }
+
+  .BlockInput {
+    width: 100%;
+
+    label {
+      height: 1.5em;
+      padding: 0;
+    }
+
+    .label {
+      display: none;
+    }
+
+    input {
+      text-align: left;
+      width: 100%;
+      background-color: #0002;
+      margin: 0;
+
+      &:hover {
+        background-color: #0001;
       }
     }
   }
@@ -74,7 +90,7 @@
 
   .BlockDeleteButton {
     position: absolute;
-    top: .3em;
+    top: .4em;
     right: .6em;
     display: block;
     width: 1.2em;
@@ -100,5 +116,11 @@
     &:active {
       background-color: #333;
     }
+  }
+}
+
+.block--is-error {
+  .block__title-bar {
+    background-color: #faa;
   }
 }

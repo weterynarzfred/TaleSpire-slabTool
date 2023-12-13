@@ -61,10 +61,10 @@ export default function App() {
         <li>🗹 display at least some errors in inputs</li>
         <li>🗹 collapsing modifier blocks</li>
         <li>🗹 add expression evaluation</li>
+        <li>🗹 user comments in block titles</li>
         <h2>todo</h2>
         <ul>
           <li>☐ tooltips</li>
-          <li>☐ user comments in blocks</li>
           <li>☐ make a showcase video</li>
           <li>☐ make this into a symbiote</li>
         </ul>
@@ -75,7 +75,7 @@ export default function App() {
             <ul>
               <li>☐ drop to nearest surface <small><i>(?)</i></small>
                 <ul>
-                  <li>option to drop the whole slab</li>
+                  <li>☐ option to drop the whole slab</li>
                 </ul>
               </li>
               <li>☐ filter random / by id and apply sub-modifiers
@@ -88,10 +88,10 @@ export default function App() {
           </li>
           <li>☐ better error handling</li>
           <li>☐ drag and drop modifier order</li>
+          <li>☐ disabling modifier blocks</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
           <li>☐ saving state to json <i><small>(?)</small></i></li>
-          <li>☐ disabling modifier blocks</li>
-          <li>☐ terrain generation</li>
+          <li>☐ terrain generation <i><small>(?)</small></i></li>
         </ul>
       </div>
     </div>

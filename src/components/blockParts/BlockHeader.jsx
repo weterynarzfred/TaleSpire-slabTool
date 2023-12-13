@@ -1,10 +1,10 @@
 import { useUpdate } from '../StateProvider';
+import BlockTextInput from './BlockTextInput';
 
 export default function BlockHeader({ block }) {
   const dispatch = useUpdate();
 
   function handleBlockHeaderClick(event) {
-    if (event.isFromButton) return;
     dispatch({
       type: "SET_BLOCK_PROPERTY",
       path: block.path,
@@ -14,7 +14,6 @@ export default function BlockHeader({ block }) {
   }
 
   function handleBlockDeleteButton(event) {
-    event.isFromButton = true;
     dispatch({
       type: "DELETE_BLOCK",
       path: block.path,
@@ -22,7 +21,6 @@ export default function BlockHeader({ block }) {
   }
 
   function handleBlockMove(event, direction) {
-    event.isFromButton = true;
     dispatch({
       type: "MOVE_BLOCK",
       direction,
@@ -31,20 +29,20 @@ export default function BlockHeader({ block }) {
   }
 
   const hasSubBlocks = block.blocks && Object.keys(block.blocks).length;
-  return <div className="BlockHeader" onClick={handleBlockHeaderClick}>
+  return <div className="BlockHeader">
     <svg className="BlockDeleteButton" viewBox="0 0 100 100" onClick={handleBlockDeleteButton}>
       <path d="M30 30L70 70" />
       <path d="M30 70L70 30" />
     </svg>
     <div className="block__title-bar">
       <div className="block__move">
-        <div className="block__move-up" onClick={event => handleBlockMove(event, -1)}>up</div>
-        <div className="block__move-down" onClick={event => handleBlockMove(event, 1)}>down</div>
+        <div className="block__move-up" onClick={event => handleBlockMove(event, -1)}>▲</div>
+        <div className="block__move-down" onClick={event => handleBlockMove(event, 1)}>▼</div>
       </div>
-      <div className="block__title">
+      <div className="block__title" onClick={handleBlockHeaderClick}>
         {block.type} {block.isCollapsed && hasSubBlocks ? `(+${Object.keys(block.blocks).length})` : ''}
       </div>
-      {block.isError ? <div className="block__error">({block.error})</div> : null}
+      <BlockTextInput path={block.path} dataPath={["user_comment"]} placeholder="// user comment" />
     </div>
   </div>;
 }
