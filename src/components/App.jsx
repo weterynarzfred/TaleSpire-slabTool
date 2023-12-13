@@ -63,12 +63,18 @@ export default function App() {
         <li>🗹 add expression evaluation</li>
         <li>🗹 user comments in block titles</li>
         <h2>todo</h2>
-        <ul>
-          <li>☐ tooltips</li>
-          <li>☐ make a showcase video</li>
-          <li>☐ make this into a symbiote</li>
-        </ul>
+        <li>☐ tooltips code</li>
+        <li>☐ make this into a symbiote
+          <ul>
+            <li>☐ eyedropper tool</li>
+            <li>☐ read from hand</li>
+            <li>☐ write to hand</li>
+          </ul>
+        </li>
+        <li>☐ tooltips content</li>
+        <li>☐ make a showcase video</li>
         <li>☐ upload this thing somewhere</li>
+
         <h2>do later</h2>
         <ul>
           <li>modifiers
