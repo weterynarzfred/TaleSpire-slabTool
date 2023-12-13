@@ -38,19 +38,24 @@ export default function BlockList({ path = [] }) {
   const blockElements = [];
   if (!parentBlock.isSubListHidden) {
     const subBlocksArray = parentBlock.blocks ? Object.values(parentBlock.blocks).sort((a, b) => a.order - b.order) : [];
-    for (const block of subBlocksArray) {
+    for (let i = 0; i < subBlocksArray.length; i++) {
+      const block = subBlocksArray[i];
+      let className = [];
+      if (i === 0) className.push('block--first');
+      if (i === subBlocksArray.length - 1) className.push('block--last');
+      className = classNames(className);
       if (block.type === 'slab') {
-        blockElements.push(<BlockSlab key={block.id} block={block} />);
+        blockElements.push(<BlockSlab key={block.id} block={block} className={className} />);
       } else if (block.type === 'duplicate') {
-        blockElements.push(<BlockDuplicate key={block.id} block={block} />);
+        blockElements.push(<BlockDuplicate key={block.id} block={block} className={className} />);
       } else if (block.type === 'offset') {
-        blockElements.push(<BlockOffset key={block.id} block={block} />);
+        blockElements.push(<BlockOffset key={block.id} block={block} className={className} />);
       } else if (block.type === 'rotate') {
-        blockElements.push(<BlockRotate key={block.id} block={block} />);
+        blockElements.push(<BlockRotate key={block.id} block={block} className={className} />);
       } else if (block.type === 'scale') {
-        blockElements.push(<BlockScale key={block.id} block={block} />);
+        blockElements.push(<BlockScale key={block.id} block={block} className={className} />);
       } else if (block.type === 'replace') {
-        blockElements.push(<BlockReplace key={block.id} block={block} />);
+        blockElements.push(<BlockReplace key={block.id} block={block} className={className} />);
       }
     }
   }

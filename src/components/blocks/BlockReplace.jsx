@@ -4,7 +4,7 @@ import BlockHeader from '../blockParts/BlockHeader';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
 import BlockTextInput from '../blockParts/BlockTextInput';
 
-export default function BlockReplace({ block }) {
+export default function BlockReplace({ className, block }) {
   const fromOptions = [
     { value: 'all', label: 'Everything' },
     { value: 'uuid', label: 'UUID' },
@@ -14,7 +14,7 @@ export default function BlockReplace({ block }) {
     { value: 'slab', label: 'Slab' },
   ];
 
-  return <div className={classNames(`block block--${block.type}`, {
+  return <div className={classNames(className, `block block--${block.type}`, {
     "block--is-collapsed": block.isCollapsed,
     "block--is-error": block.isError,
   })}>

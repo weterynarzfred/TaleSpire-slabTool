@@ -6,7 +6,7 @@ import BlockCheckboxInput from '../blockParts/BlockCheckboxInput';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
 import BlockInput from '../blockParts/BlockInput';
 
-export default function BlockRotate({ block }) {
+export default function BlockRotate({ className, block }) {
   const axes = [
     { value: 'x', label: 'X' },
     { value: 'y', label: 'Y' },
@@ -18,7 +18,7 @@ export default function BlockRotate({ block }) {
     { value: 'center', label: 'Box center' },
   ];
 
-  return <div className={classNames(`block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
+  return <div className={classNames(className, `block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
     <BlockHeader block={block} />
 
     <BlockContents block={block}>

@@ -4,8 +4,8 @@ import BlockHeader from '../blockParts/BlockHeader';
 import BlockInput from '../blockParts/BlockInput';
 import BlockCheckboxInput from '../blockParts/BlockCheckboxInput';
 
-export default function BlockOffset({ block }) {
-  return <div className={classNames(`block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
+export default function BlockOffset({ className, block }) {
+  return <div className={classNames(className, `block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
     <BlockHeader block={block} />
 
     <BlockContents block={block}>

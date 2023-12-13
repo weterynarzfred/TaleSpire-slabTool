@@ -3,8 +3,8 @@ import BlockContents from '../blockParts/BlockContents';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockInput from '../blockParts/BlockInput';
 
-export default function BlockScale({ block }) {
-  return <div className={classNames(`block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
+export default function BlockScale({ className, block }) {
+  return <div className={classNames(className, `block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
     <BlockHeader block={block} />
 
     <BlockContents block={block}>

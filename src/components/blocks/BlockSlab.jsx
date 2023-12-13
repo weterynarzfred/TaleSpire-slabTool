@@ -10,7 +10,7 @@ import BlockList from '../blockParts/BlockList';
 import BlockContents from '../blockParts/BlockContents';
 import classNames from 'classnames';
 
-export default function BlockSlab({ block }) {
+export default function BlockSlab({ className, block }) {
   const dispatch = useUpdate();
 
   const [base64, setBase64] = useState("");
@@ -89,7 +89,7 @@ export default function BlockSlab({ block }) {
     });
   }
 
-  return <div className={classNames(`block block--${block.type}`, {
+  return <div className={classNames(className, `block block--${block.type}`, {
     "block--is-collapsed": block.isCollapsed,
     "block--is-error": block.isError || isError,
   })}>
