@@ -18,8 +18,6 @@ export default function BlockInput({ path, dataPath, def = 0 }) {
 
   const value = _.get(state.blocks, path.join('.blocks.') + '.data.' + dataPath.join('.'));
 
-  console.log(dataPath, value);
-
   return <div className="BlockInput">
     <label>
       <div className="label">{dataPath.join('.')}: </div>
