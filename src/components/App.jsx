@@ -60,12 +60,13 @@ export default function App() {
         <li>🗹 copy to clipboard buttons</li>
         <li>🗹 display at least some errors in inputs</li>
         <li>🗹 collapsing modifier blocks</li>
+        <li>🗹 add expression evaluation</li>
         <h2>todo</h2>
         <ul>
           <li>☐ tooltips</li>
           <li>☐ user comments in blocks</li>
-          <li>☐ duplication scaling</li>
           <li>☐ make a showcase video</li>
+          <li>☐ make this into a symbiote</li>
         </ul>
         <li>☐ upload this thing somewhere</li>
         <h2>do later</h2>
@@ -85,13 +86,11 @@ export default function App() {
               </li>
             </ul>
           </li>
-          <li>☐ add expression evaluation</li>
           <li>☐ better error handling</li>
           <li>☐ drag and drop modifier order</li>
           <li>☐ saving state to localStorage <i><small>(?)</small></i></li>
           <li>☐ saving state to json <i><small>(?)</small></i></li>
           <li>☐ disabling modifier blocks</li>
-          <li>☐ check if making this into a symbiote is useful</li>
           <li>☐ terrain generation</li>
         </ul>
       </div>
