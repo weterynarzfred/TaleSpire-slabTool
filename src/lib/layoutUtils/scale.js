@@ -9,9 +9,11 @@ Layout.prototype.scale = function (
   },
   scope
 ) {
-  scale.x = parseInput('float', scale.x, 1, scope);
-  scale.y = parseInput('float', scale.y, 1, scope);
-  scale.z = parseInput('float', scale.z, 1, scope);
+  const usedScale = {
+    x: parseInput('float', scale.x, 1, scope),
+    y: parseInput('float', scale.y, 1, scope),
+    z: parseInput('float', scale.z, 1, scope),
+  };
 
   const axisPosition = {
     x: parseInput('float', axis_offset.x, 0, scope),
@@ -43,9 +45,9 @@ Layout.prototype.scale = function (
       this.layouts[i].assets[j].y -= axisPosition.y;
       this.layouts[i].assets[j].z -= axisPosition.z;
 
-      this.layouts[i].assets[j].x = (this.layouts[i].assets[j].x) * scale.x;
-      this.layouts[i].assets[j].y = (this.layouts[i].assets[j].y) * scale.y;
-      this.layouts[i].assets[j].z = (this.layouts[i].assets[j].z) * scale.z;
+      this.layouts[i].assets[j].x = (this.layouts[i].assets[j].x) * usedScale.x;
+      this.layouts[i].assets[j].y = (this.layouts[i].assets[j].y) * usedScale.y;
+      this.layouts[i].assets[j].z = (this.layouts[i].assets[j].z) * usedScale.z;
 
       this.layouts[i].assets[j].x += axisPosition.x;
       this.layouts[i].assets[j].y += axisPosition.y;

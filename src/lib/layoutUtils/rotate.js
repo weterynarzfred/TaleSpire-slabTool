@@ -32,8 +32,8 @@ Layout.prototype.rotate = function (
     z: parseInput('float', axis_offset.z, 0, scope),
   };
 
-  rotation_from = parseInput('float', rotation_from, 0, scope);
-  rotation_to = parseInput('float', rotation_to, 0, scope);
+  const usedRotationFrom = parseInput('float', rotation_from, 0, scope);
+  const usedRotationTo = parseInput('float', rotation_to, 0, scope);
 
   let rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '').split(/[;, ]+/).filter(e => e !== "").map(e => parseFloat(e));
   if (rotationArray.length === 0) rotationArray = [0];
@@ -64,7 +64,7 @@ Layout.prototype.rotate = function (
 
     for (let j = 0; j < this.layouts[i].assets.length; j++) {
       let currentRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
-      currentRotation += Math.random() * (rotation_to - rotation_from) + rotation_from;
+      currentRotation += Math.random() * (usedRotationTo - usedRotationFrom) + usedRotationFrom;
       const rotationRad = -currentRotation / 180 * Math.PI;
       const rotCos = Math.cos(rotationRad);
       const rotSin = Math.sin(rotationRad);

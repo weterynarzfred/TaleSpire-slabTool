@@ -1,7 +1,7 @@
 import { evaluate } from 'mathjs';
 
 export default function parseInput(type, value, def, scope = {}) {
-  value = value === undefined ? '' : value;
+  value = value === undefined ? '' : '' + value;
   switch (type) {
     case 'integer':
       value = evaluate(value, scope);
