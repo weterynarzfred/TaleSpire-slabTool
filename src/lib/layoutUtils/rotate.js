@@ -1,5 +1,6 @@
 import Layout from '../Layout';
 import parsedIndex from '../assetData';
+import parseInput from '../parseInput';
 
 function rotateTheCenter(center, rotation) {
   const rotationRad = -rotation / 180 * Math.PI;
@@ -13,18 +14,15 @@ function rotateTheCenter(center, rotation) {
   };
 }
 
-Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset = {}, rotation_variations = "", rotation_from = 0, rotation_to = 0, elements_only = false }) {
-  const axisPosition = { x: 0, y: 0, z: 0 };
-  _.merge(axisPosition, axis_offset);
-  axisPosition.x = parseFloat(axisPosition.x);
-  axisPosition.x = isNaN(axisPosition.x) ? 0 : axisPosition.x;
-  axisPosition.y = parseFloat(axisPosition.y);
-  axisPosition.y = isNaN(axisPosition.y) ? 0 : axisPosition.y;
-  axisPosition.z = parseFloat(axisPosition.z);
-  axisPosition.z = isNaN(axisPosition.z) ? 0 : axisPosition.z;
+Layout.prototype.rotate = function ({ axis = "y", center = "zero", axis_offset = {}, rotation_variations = "", rotation_from, rotation_to, elements_only = false }) {
+  const axisPosition = {
+    x: parseInput('float', axis_offset.x, 0),
+    y: parseInput('float', axis_offset.y, 0),
+    z: parseInput('float', axis_offset.z, 0),
+  };
 
-  rotation_from = parseFloat(rotation_from);
-  rotation_to = parseFloat(rotation_to);
+  rotation_from = parseInput('float', rotation_from, 0);
+  rotation_to = parseInput('float', rotation_to, 0);
 
   let rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '').split(/[;, ]+/).filter(e => e !== "").map(e => parseFloat(e));
   if (rotationArray.length === 0) rotationArray = [0];

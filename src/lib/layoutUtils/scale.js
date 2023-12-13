@@ -1,37 +1,48 @@
 import Layout from '../Layout';
+import parseInput from '../parseInput';
 
-Layout.prototype.scale = function ({ scale = { x: 1, y: 1, z: 1 } }) {
-  scale.x = parseFloat(scale.x);
-  scale.x = isNaN(scale.x) ? 1 : scale.x;
-  scale.y = parseFloat(scale.y);
-  scale.y = isNaN(scale.y) ? 1 : scale.y;
-  scale.z = parseFloat(scale.z);
-  scale.z = isNaN(scale.z) ? 1 : scale.z;
+Layout.prototype.scale = function ({ scale = {}, center = "zero", axis_offset = {} }) {
+  scale.x = parseInput('float', scale.x, 1);
+  scale.y = parseInput('float', scale.y, 1);
+  scale.z = parseInput('float', scale.z, 1);
 
-  let minimum = { x: Infinity, y: Infinity, z: Infinity };
-  let maximum = { x: -Infinity, y: -Infinity, z: -Infinity };
-
-  for (const layout of this.layouts) {
-    for (const asset of layout.assets) {
-      minimum.x = Math.min(minimum.x, asset['x']);
-      minimum.y = Math.min(minimum.y, asset['y']);
-      minimum.z = Math.min(minimum.z, asset['z']);
-      maximum.x = Math.max(maximum.x, asset['x']);
-      maximum.y = Math.max(maximum.y, asset['y']);
-      maximum.z = Math.max(maximum.z, asset['z']);
-    }
-  }
-  const center = {
-    x: (maximum.x + minimum.x) / 2,
-    y: (maximum.y + minimum.y) / 2,
-    z: (maximum.z + minimum.z) / 2,
+  const axisPosition = {
+    x: parseInput('float', axis_offset.x, 0),
+    y: parseInput('float', axis_offset.y, 0),
+    z: parseInput('float', axis_offset.z, 0),
   };
+
+  if (center === "center") {
+    const minimums = { x: Infinity, y: Infinity, z: Infinity };
+    const maximums = { x: -Infinity, y: -Infinity, z: -Infinity };
+    for (const layout of this.layouts) {
+      for (const asset of layout.assets) {
+        minimums.x = Math.min(minimums.x, asset['x']);
+        minimums.y = Math.min(minimums.y, asset['y']);
+        minimums.z = Math.min(minimums.z, asset['z']);
+        maximums.x = Math.max(maximums.x, asset['x']);
+        maximums.y = Math.max(maximums.y, asset['y']);
+        maximums.z = Math.max(maximums.z, asset['z']);
+      }
+    }
+    axisPosition.x += (minimums.x + maximums.x) / 2;
+    axisPosition.y += (minimums.y + maximums.y) / 2;
+    axisPosition.z += (minimums.z + maximums.z) / 2;
+  }
 
   for (let i = 0; i < this.layouts.length; i++) {
     for (let j = 0; j < this.layouts[i].assets.length; j++) {
-      this.layouts[i].assets[j].x = (this.layouts[i].assets[j].x - center.x) * scale.x + center.x;
-      this.layouts[i].assets[j].y = (this.layouts[i].assets[j].y - center.y) * scale.y + center.y;
-      this.layouts[i].assets[j].z = (this.layouts[i].assets[j].z - center.z) * scale.z + center.z;
+      this.layouts[i].assets[j].x -= axisPosition.x;
+      this.layouts[i].assets[j].y -= axisPosition.y;
+      this.layouts[i].assets[j].z -= axisPosition.z;
+
+      this.layouts[i].assets[j].x = (this.layouts[i].assets[j].x) * scale.x;
+      this.layouts[i].assets[j].y = (this.layouts[i].assets[j].y) * scale.y;
+      this.layouts[i].assets[j].z = (this.layouts[i].assets[j].z) * scale.z;
+
+      this.layouts[i].assets[j].x += axisPosition.x;
+      this.layouts[i].assets[j].y += axisPosition.y;
+      this.layouts[i].assets[j].z += axisPosition.z;
     }
   }
 
