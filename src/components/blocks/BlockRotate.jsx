@@ -18,14 +18,38 @@ export default function BlockRotate({ className, block }) {
     { value: 'center', label: 'Box center' },
   ];
 
+  const type = [
+    { value: 'degree', label: 'Degree' },
+    { value: 'variation', label: 'Variation' },
+    { value: 'random', label: 'Random' },
+  ];
+
   return <div className={classNames(className, `block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
     <BlockHeader block={block} />
 
     <BlockContents block={block}>
       <div className="input-group">
-        <BlockTextInput path={block.path} dataPath={['rotation_variations']} />
-        <BlockInput path={block.path} dataPath={['rotation_from']} />
-        <BlockInput path={block.path} dataPath={['rotation_to']} />
+        <BlockSelectInput
+          path={block.path}
+          dataPath={['type']}
+          options={type}
+          def={type[0]}
+        />
+        {
+          (!block.data.type || block.data.type === 'degree') ?
+            <BlockInput path={block.path} dataPath={['rotation']} /> : null
+        }
+        {
+          (block.data.type === 'variation') ?
+            <BlockTextInput path={block.path} dataPath={['rotation_variations']} /> : null
+        }
+        {
+          (block.data.type === 'random') ?
+            <>
+              <BlockInput path={block.path} dataPath={['rotation_from']} />
+              <BlockInput path={block.path} dataPath={['rotation_to']} />
+            </> : null
+        }
       </div>
 
       <div className="input-group">

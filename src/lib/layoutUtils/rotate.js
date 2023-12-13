@@ -18,7 +18,9 @@ Layout.prototype.rotate = function (
   {
     axis = "y",
     center = "zero",
+    type = "degree",
     axis_offset = {},
+    rotation,
     rotation_variations = "",
     rotation_from,
     rotation_to,
@@ -32,10 +34,16 @@ Layout.prototype.rotate = function (
     z: parseInput('float', axis_offset.z, 0, scope),
   };
 
+  const usedRotation = parseInput('float', rotation, 0, scope);
   const usedRotationFrom = parseInput('float', rotation_from, 0, scope);
   const usedRotationTo = parseInput('float', rotation_to, 0, scope);
 
-  let rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '').split(/[;, ]+/).filter(e => e !== "").map(e => parseFloat(e));
+  let rotationArray = [];
+  if (type === "degree") {
+    rotationArray = [usedRotation];
+  } else if (type === "variation") {
+    rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '').split(/[;, ]+/).filter(e => e !== "").map(e => parseFloat(e));
+  }
   if (rotationArray.length === 0) rotationArray = [0];
 
   if (axis !== 'y') elements_only = false;
