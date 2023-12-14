@@ -1,0 +1,134 @@
+@import 'variables.scss';
+
+.block-controls {
+  display: flex;
+  justify-content: flex-end;
+  padding: .5rem;
+}
+
+.block {
+  .BlockList {
+    position: relative;
+    margin-top: .5rem;
+    margin-right: 1rem;
+    margin-left: 3rem;
+    min-height: 1em;
+
+    .block {
+      border: 2px solid #f7efe3;
+    }
+
+    .block-controls {
+      position: relative;
+      background: none;
+      padding: 0;
+      margin-bottom: .5em;
+      font-size: .8rem;
+    }
+
+    &__hide {
+      position: absolute;
+      top: 0;
+      left: -2.75rem;
+      width: 2.5rem;
+      background: none;
+      border: none;
+      background-color: #135;
+      border: 1px solid #f7efe3;
+      color: #f7efe3;
+      font-size: .6rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      padding: .2em .4em;
+      cursor: pointer;
+
+      &--hidden {
+        width: 9rem;
+      }
+
+      &:hover {
+        background-color: #357;
+      }
+
+      &:active {
+        background-color: #468;
+      }
+    }
+  }
+}
+
+.block-controls {
+  .add-block {
+    min-width: 6em;
+
+    &__control {
+      position: relative;
+      height: 100%;
+      min-height: 0;
+      border-radius: 0;
+      background-color: #f55;
+      padding: .3em .8em;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-weight: 900;
+      font-size: .9em;
+      border: none;
+      cursor: pointer;
+      transition: 0;
+
+      &:hover {
+        background-color: #f66;
+      }
+
+      &--menu-is-open,
+      &--is-focused {
+        box-shadow: none;
+      }
+    }
+
+    &__single-value {
+      color: $inputTextColor;
+    }
+
+    &__indicators {
+      display: none;
+    }
+
+    &__menu {
+      position: absolute;
+      border-radius: 0;
+      background-color: $inputBackgroundColor;
+      color: $inputTextColor;
+      margin-top: 0;
+      border: 1px solid #eee;
+      z-index: 3;
+
+      &-list {
+        padding: .5em 0;
+      }
+    }
+
+    &__option {
+      padding: 0;
+      text-align: center;
+      background-color: #001a20;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-weight: 900;
+      font-size: .8rem;
+
+      >div {
+        padding: 0.5em 1em;
+      }
+
+      &--is-focused {
+        background-color: #123;
+      }
+    }
+
+    &__indicator-separator {
+      display: none;
+    }
+  }
+}

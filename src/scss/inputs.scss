@@ -1,0 +1,185 @@
+@import 'variables';
+
+textarea {
+  display: block;
+  width: 100%;
+  resize: none;
+  background: none;
+  color: inherit;
+  padding: 1em;
+  border: none;
+  font-size: .7rem;
+  font-family: "Fira Code", monospace;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+input {
+  background: none;
+  width: 6em;
+  padding: 0.2em .5em;
+  border: none;
+  font: inherit;
+  font-family: "Fira Code", monospace;
+  color: inherit;
+
+  &[type=text] {
+    width: 12em;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &[type=number]::-webkit-inner-spin-button,
+  &[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.BlockInput {
+  max-width: 100%;
+
+  label {
+    display: flex;
+    align-items: center;
+    padding-left: .5em;
+    height: 2em;
+
+    .label {
+      text-align: right;
+      font-size: .8em;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      flex-shrink: 0;
+    }
+
+    input,
+    .select {
+      height: 100%;
+      border: none;
+      text-align: center;
+      margin-left: .5em;
+    }
+
+
+    .select {
+      min-width: 6em;
+
+      &__control {
+        position: relative;
+        height: 100%;
+        min-height: 0;
+        border-radius: 0;
+        background-color: $inputBackgroundColor;
+        border: none;
+
+        &--menu-is-open,
+        &--is-focused {
+          box-shadow: none;
+        }
+      }
+
+      &__single-value {
+        color: $inputTextColor;
+      }
+
+      &__indicator,
+      &__value-container {
+        padding: 0 .5em;
+      }
+
+      &__menu {
+        border-radius: 0;
+        background-color: $inputBackgroundColor;
+        color: $inputTextColor;
+        margin-top: 0;
+        z-index: 2;
+      }
+
+      &__option {
+        padding: 0.2em .5em;
+
+        &--is-selected {
+          background-color: $inputActiveColor;
+        }
+
+        &--is-focused {
+          background-color: $inputHoverColor;
+        }
+      }
+
+      &__indicator-separator {
+        display: none;
+      }
+    }
+
+    input[type="checkbox"] {
+      display: none;
+
+      +.checkbox-display {
+        width: 1.8rem;
+        height: 1.8rem;
+        padding-bottom: .1em;
+        background-color: $inputBackgroundColor;
+        margin-left: .5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      &:checked+.checkbox-display {
+        box-shadow: 0 0 0 2px $inputActiveColor inset;
+      }
+    }
+  }
+
+  &.input-uuid input {
+    width: 23em;
+  }
+
+  &.input-slab input {
+    width: 30em;
+  }
+}
+
+.block__contents {
+
+  textarea,
+  input {
+    background-color: $inputBackgroundColor;
+    color: $inputTextColor;
+  }
+
+  .BlockInput {
+    &:hover {
+
+      input,
+      .checkbox-display,
+      .select__control {
+        background-color: #444;
+      }
+    }
+
+    &:active {
+
+      input,
+      .checkbox-display,
+      .select__control {
+        background-color: $inputActiveColor;
+      }
+    }
+  }
+}

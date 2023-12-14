@@ -1,0 +1,146 @@
+.BlockHeader {
+  .block__title-bar {
+    position: relative;
+    padding: 0em 2.5em 0em 0em;
+    min-height: 2em;
+    background-color: #f7efe3;
+    display: flex;
+    align-items: center;
+    color: #000;
+  }
+
+  .block__title {
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 900;
+    text-shadow: 0 0 .5px #000;
+    padding: .4em 1em;
+    min-width: 9.5em;
+    flex-shrink: 0;
+
+    @at-root .block:not(.block--results) & {
+      cursor: pointer;
+      user-select: none;
+
+      &:hover {
+        opacity: .6;
+      }
+
+      &::before {
+        content: '⯈';
+        display: inline-flex;
+        width: 1.2em;
+        height: 1.2em;
+        align-items: center;
+        justify-content: center;
+        transition: .2s;
+
+        @at-root .block--is-collapsed & {
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
+
+
+  .block__move {
+    padding-left: .5rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+
+    .block__move-up,
+    .block__move-down {
+      width: 2em;
+      background-color: #222;
+      color: #f7efe3;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: .7em;
+      padding: .4em 0;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #444;
+      }
+
+      &:active {
+        background-color: #555;
+      }
+    }
+  }
+
+  .BlockInput {
+    width: 100%;
+
+    label {
+      height: 1.5em;
+      padding: 0;
+    }
+
+    .label {
+      display: none;
+    }
+
+    input {
+      text-align: left;
+      width: 100%;
+      background-color: #0002;
+      margin: 0;
+
+      &:hover {
+        background-color: #0001;
+      }
+    }
+  }
+
+  .block--results {
+    .block__title-bar {
+      &:hover {
+        background-color: #f7efe3;
+      }
+    }
+
+    .block__title {
+      border-bottom: 1px solid #999;
+      cursor: auto;
+    }
+  }
+
+  .BlockDeleteButton {
+    position: absolute;
+    top: .4em;
+    right: .6em;
+    display: block;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    border: 2px solid #222;
+    cursor: pointer;
+    z-index: 1;
+
+    path {
+      stroke: #222;
+      stroke-width: 10;
+    }
+
+    &:hover {
+      border-color: #f55;
+
+      path {
+        stroke: #f55;
+      }
+    }
+
+    &:active {
+      background-color: #333;
+    }
+  }
+}
+
+.block--is-error {
+  .block__title-bar {
+    background-color: #faa;
+  }
+}
