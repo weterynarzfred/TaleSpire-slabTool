@@ -9,7 +9,7 @@ import { useUpdate } from '../StateProvider';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockList from '../blockParts/BlockList';
 import BlockContents from '../blockParts/BlockContents';
-import tooltips from '../../data/tooltips.json';
+import tooltips from '../../data/tooltips';
 
 export default function BlockSlab({ className, block }) {
   const dispatch = useUpdate();
@@ -101,10 +101,10 @@ export default function BlockSlab({ className, block }) {
         <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>copy</button>
         <div className="byte-count">{bytes(dataLength) ?? '???'}</div>
       </div>
-      <textarea className="json-input" placeholder="data"
-        spellCheck="false" value={json} onChange={handleJsonInput} data-tooltip-id="default-tooltip" data-tooltip-html={tooltips['slab.json']} />
-      <textarea className="base64-input" ref={base64InputRef} placeholder="base64"
-        spellCheck="false" value={base64} onChange={handleBase64Input} data-tooltip-id="default-tooltip" data-tooltip-html={tooltips['slab.base64']} />
+      <textarea className="json-input default-tooltip-anchor" placeholder="data"
+        spellCheck="false" value={json} onChange={handleJsonInput} data-tooltip-key="slab.json" />
+      <textarea className="base64-input default-tooltip-anchor" ref={base64InputRef} placeholder="base64"
+        spellCheck="false" value={base64} onChange={handleBase64Input} data-tooltip-key="slab.base64" />
     </BlockContents>
 
     <BlockList path={block.path} />

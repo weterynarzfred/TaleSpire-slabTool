@@ -3,16 +3,16 @@ import BlockContents from '../blockParts/BlockContents';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
 import BlockTextInput from '../blockParts/BlockTextInput';
-import tooltips from '../../data/tooltips.json';
+import tooltips from '../../data/tooltips';
 
 export default function BlockReplace({ className, block }) {
   const fromOptions = [
-    { value: 'all', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['replace.fromAllOption']}>Everything</div> },
-    { value: 'uuid', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['replace.fromUuidOption']}>UUID</div> },
+    { value: 'all', label: <div data-tooltip-key="replace.fromAllOption">Everything</div> },
+    { value: 'uuid', label: <div data-tooltip-key="replace.fromUuidOption">UUID</div> },
   ];
   const toOptions = [
-    { value: 'uuid', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['replace.toUuidOption']}>UUID</div> },
-    { value: 'slab', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['replace.toSlabOption']}>Slab</div> },
+    { value: 'uuid', label: <div data-tooltip-key="replace.toUuidOption">UUID</div> },
+    { value: 'slab', label: <div data-tooltip-key="replace.toSlabOption">Slab</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, {

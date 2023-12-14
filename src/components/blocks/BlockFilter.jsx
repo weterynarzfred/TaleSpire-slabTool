@@ -15,9 +15,7 @@ export default function BlockFilter({ className, block }) {
 
     <BlockContents block={block}>
       <BlockInput path={block.path} dataPath={['percentage']} def="1" tooltip="filter.percentage" />
-      {/* if not empty, selects only objects with the given uuid */}
       <BlockTextInput className="input-uuid" path={block.path} dataPath={['uuid']} tooltip="filter.uuid" />
-      {/* if above zero, selects only objects closer to each other than the given value */}
       <BlockInput path={block.path} dataPath={['min_distance']} tooltip="filter.minDistance" />
 
       <BlockCheckboxInput path={block.path} dataPath={['delete_selected']} tooltip="filter.deleteSelected" />

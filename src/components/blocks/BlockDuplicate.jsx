@@ -4,12 +4,11 @@ import BlockHeader from '../blockParts/BlockHeader';
 import BlockInput from '../blockParts/BlockInput';
 import BlockList from '../blockParts/BlockList';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
-import tooltips from '../../data/tooltips.json';
 
 export default function BlockDuplicate({ className, block }) {
   const modifierOptions = [
-    { value: 'relative', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['duplicate.modifiersRelativeOption']}>Relative</div> },
-    { value: 'absolute', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['duplicate.modifiersAbsoluteOption']}>Absolute</div> },
+    { value: 'relative', label: <div data-tooltip-key="duplicate.modifiersRelativeOption">Relative</div> },
+    { value: 'absolute', label: <div data-tooltip-key="duplicate.modifiersAbsoluteOption">Absolute</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, {

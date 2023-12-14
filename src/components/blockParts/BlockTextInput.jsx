@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import classNames from 'classnames';
 import { useUpdate, useTrackedState } from '../StateProvider';
-import tooltips from '../../data/tooltips.json';
 
 export default function BlockTextInput(
   {
@@ -32,7 +31,7 @@ export default function BlockTextInput(
   return <div className={classNames("BlockInput BlockTextInput", className)}>
     <label>
       <div className="label">{dataPath.join('.').replace("_", " ")}: </div>
-      <input type="text" value={value ?? def} onChange={handleChange} placeholder={placeholder} data-tooltip-id="default-tooltip" data-tooltip-html={tooltips[tooltip]} />
+      <input type="text" value={value ?? def} onChange={handleChange} placeholder={placeholder} className="default-tooltip-anchor" data-tooltip-key={tooltip} />
     </label>
   </div>;
 }

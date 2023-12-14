@@ -3,12 +3,12 @@ import BlockContents from '../blockParts/BlockContents';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockInput from '../blockParts/BlockInput';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
-import tooltips from '../../data/tooltips.json';
+import tooltips from '../../data/tooltips';
 
 export default function BlockScale({ className, block }) {
   const center = [
-    { value: 'zero', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['scale.centerZeroOption']}>Slab zero</div> },
-    { value: 'center', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['scale.centerCenterOption']}>Box center</div> },
+    { value: 'zero', label: <div data-tooltip-key="scale.centerZeroOption">Slab zero</div> },
+    { value: 'center', label: <div data-tooltip-key="scale.centerCenterOption">Box center</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>

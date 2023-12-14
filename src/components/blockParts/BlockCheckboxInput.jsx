@@ -1,5 +1,4 @@
 import { useTrackedState, useUpdate } from '../StateProvider';
-import tooltips from '../../data/tooltips.json';
 
 export default function BlockCheckboxInput({ dataPath, path, tooltip }) {
   const state = useTrackedState();
@@ -20,7 +19,7 @@ export default function BlockCheckboxInput({ dataPath, path, tooltip }) {
     <label>
       <span className="label">{dataPath.join('.').replace('_', ' ')}:</span>
       <input type="checkbox" checked={value ?? false} onChange={handleCheckbox} />
-      <div className="checkbox-display" data-tooltip-id="default-tooltip" data-tooltip-html={tooltips[tooltip]}>{value ? '✓' : ''}</div>
+      <div className="checkbox-display default-tooltip-anchor" data-tooltip-key={tooltip}>{value ? '✓' : ''}</div>
     </label>
   </div>;
 }

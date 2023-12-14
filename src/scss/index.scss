@@ -295,11 +295,21 @@ body {
 }
 
 #dropdown-tooltip,
-#default-tooltip {
+#default-tooltip,
+#select-tooltip {
   z-index: 2;
   max-width: 20em;
   border-radius: 0;
   background-color: #000;
+  padding-bottom: .7em;
+
+  h3 {
+    margin-bottom: .5em;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
 }
 
 @import url('blockHeader.scss');

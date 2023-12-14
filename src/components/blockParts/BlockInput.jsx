@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { useUpdate, useTrackedState } from '../StateProvider';
-import tooltips from '../../data/tooltips.json';
 
 export default function BlockInput({ path, dataPath, def = 0, tooltip }) {
   const state = useTrackedState();
@@ -22,7 +21,7 @@ export default function BlockInput({ path, dataPath, def = 0, tooltip }) {
   return <div className="BlockInput">
     <label>
       <div className="label">{dataPath.join('.')}: </div>
-      <input type="text" value={value ?? def} onChange={handleChange} data-tooltip-id="default-tooltip" data-tooltip-html={tooltips[tooltip]} />
+      <input type="text" value={value ?? def} onChange={handleChange} className="default-tooltip-anchor" data-tooltip-key={tooltip} />
     </label>
   </div>;
 }
