@@ -16,28 +16,32 @@
     text-shadow: 0 0 .5px #000;
     padding: .4em 1em;
     min-width: 9.5em;
-    cursor: pointer;
-    user-select: none;
     flex-shrink: 0;
 
-    &:hover {
-      opacity: .6;
-    }
+    @at-root .block:not(.block--results) & {
+      cursor: pointer;
+      user-select: none;
 
-    &::before {
-      content: '⯈';
-      display: inline-flex;
-      width: 1.2em;
-      height: 1.2em;
-      align-items: center;
-      justify-content: center;
-      transition: .2s;
+      &:hover {
+        opacity: .6;
+      }
 
-      @at-root .block--is-collapsed & {
-        transform: rotate(90deg);
+      &::before {
+        content: '⯈';
+        display: inline-flex;
+        width: 1.2em;
+        height: 1.2em;
+        align-items: center;
+        justify-content: center;
+        transition: .2s;
+
+        @at-root .block--is-collapsed & {
+          transform: rotate(90deg);
+        }
       }
     }
   }
+
 
   .block__move {
     padding-left: .5rem;

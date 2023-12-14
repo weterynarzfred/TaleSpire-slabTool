@@ -5,23 +5,24 @@ import BlockTextInput from '../blockParts/BlockTextInput';
 import BlockCheckboxInput from '../blockParts/BlockCheckboxInput';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
 import BlockInput from '../blockParts/BlockInput';
+import tooltips from '../../data/tooltips.json';
 
 export default function BlockRotate({ className, block }) {
   const axes = [
-    { value: 'x', label: 'X' },
-    { value: 'y', label: 'Y' },
-    { value: 'z', label: 'Z' },
+    { value: 'x', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['rotate.axisXOption']}>X</div> },
+    { value: 'y', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['rotate.axisYOption']}>Y</div> },
+    { value: 'z', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['rotate.axisZOption']}>Z</div> },
   ];
 
   const center = [
-    { value: 'zero', label: 'Slab zero' },
-    { value: 'center', label: 'Box center' },
+    { value: 'zero', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['rotate.centerZeroOption']}>Slab zero</div> },
+    { value: 'center', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['rotate.centerCenterOption']}>Box center</div> },
   ];
 
   const type = [
-    { value: 'degree', label: 'Degree' },
-    { value: 'variation', label: 'Variation' },
-    { value: 'random', label: 'Random' },
+    { value: 'degree', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['rotate.typeDegreeOption']}>Degree</div> },
+    { value: 'variation', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['rotate.typeVariationOption']}>Variation</div> },
+    { value: 'random', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['rotate.typeRandomOption']}>Random</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>
@@ -34,20 +35,21 @@ export default function BlockRotate({ className, block }) {
           dataPath={['type']}
           options={type}
           def={type[0]}
+          tooltip="rotate.type"
         />
         {
           (!block.data.type || block.data.type === 'degree') ?
-            <BlockInput path={block.path} dataPath={['rotation']} /> : null
+            <BlockInput path={block.path} dataPath={['rotation']} tooltip="rotate.rotation" /> : null
         }
         {
           (block.data.type === 'variation') ?
-            <BlockTextInput path={block.path} dataPath={['rotation_variations']} /> : null
+            <BlockTextInput path={block.path} dataPath={['rotation_variations']} tooltip="rotate.rotationVariations" /> : null
         }
         {
           (block.data.type === 'random') ?
             <>
-              <BlockInput path={block.path} dataPath={['rotation_from']} />
-              <BlockInput path={block.path} dataPath={['rotation_to']} />
+              <BlockInput path={block.path} dataPath={['rotation_from']} tooltip="rotate.rotationFrom" />
+              <BlockInput path={block.path} dataPath={['rotation_to']} tooltip="rotate.rotationTo" />
             </> : null
         }
       </div>
@@ -58,10 +60,11 @@ export default function BlockRotate({ className, block }) {
           dataPath={['axis']}
           options={axes}
           def={axes[1]}
+          tooltip="rotate.axis"
         />
         {
           (!block.data.axis || block.data.axis === 'y') ?
-            <BlockCheckboxInput path={block.path} dataPath={['elements_only']} /> :
+            <BlockCheckboxInput path={block.path} dataPath={['elements_only']} tooltip="rotate.elementsOnly" /> :
             null
         }
         {
@@ -71,19 +74,20 @@ export default function BlockRotate({ className, block }) {
             options={center}
             def={center[0]}
             key="center"
+            tooltip="rotate.center"
           /> : null
         }
         {
           (!block.data.elements_only || (block.data.axis && block.data.axis !== 'y')) ?
             [
               (block.data.axis !== 'x') ?
-                <BlockInput path={block.path} dataPath={['axis_offset', 'x']} key="offset.x" /> :
+                <BlockInput path={block.path} dataPath={['axis_offset', 'x']} key="offset.x" tooltip="rotate.offset.x" /> :
                 null,
               (block.data.axis !== undefined && block.data.axis !== 'y') ?
-                <BlockInput path={block.path} dataPath={['axis_offset', 'y']} key="offset.y" /> :
+                <BlockInput path={block.path} dataPath={['axis_offset', 'y']} key="offset.y" tooltip="rotate.offset.y" /> :
                 null,
               (block.data.axis !== 'z') ?
-                <BlockInput path={block.path} dataPath={['axis_offset', 'z']} key="offset.z" /> :
+                <BlockInput path={block.path} dataPath={['axis_offset', 'z']} key="offset.z" tooltip="rotate.offset.z" /> :
                 null
             ] : null
         }

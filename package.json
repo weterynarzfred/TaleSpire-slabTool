@@ -22,6 +22,7 @@
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
+    "react-tooltip": "^5.25.0",
     "react-tracked": "^1.7.11"
   },
   "devDependencies": {

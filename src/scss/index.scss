@@ -1,3 +1,5 @@
+@import 'variables';
+
 @font-face {
   font-family: "Lato";
   src: url('../media/Lato-Light.ttf');
@@ -138,7 +140,7 @@ body {
 .block {
   position: relative;
   background-color: #333;
-  margin-bottom: .8rem;
+  margin-bottom: .5rem;
   padding-bottom: .2rem;
 
   &--first>.BlockHeader>.block__title-bar>.block__move>.block__move-up {
@@ -260,62 +262,6 @@ body {
     }
   }
 
-  .BlockList {
-    position: relative;
-    margin-top: .5rem;
-    margin-right: 1rem;
-    margin-left: 3rem;
-    min-height: 1em;
-
-    .block {
-      border: 2px solid #f7efe3;
-    }
-
-    .block-controls {
-      position: relative;
-      background: none;
-      padding: 0;
-      margin-bottom: 0;
-      font-size: .8rem;
-      z-index: 1;
-
-      .add-block-button {
-        padding-top: .5em;
-        padding-bottom: .5em;
-      }
-    }
-
-    &__hide {
-      position: absolute;
-      top: 0;
-      left: -2.75rem;
-      width: 2.5rem;
-      background: none;
-      border: none;
-      background-color: #135;
-      border: 1px solid #f7efe3;
-      color: #f7efe3;
-      font-size: .6rem;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      padding: .2em .4em;
-      cursor: pointer;
-
-      &--hidden {
-        width: 9rem;
-      }
-
-      &:hover {
-        background-color: #357;
-      }
-
-      &:active {
-        background-color: #468;
-      }
-    }
-  }
-
   .block__error {
     width: 100%;
     color: #fff;
@@ -338,23 +284,24 @@ body {
   }
 }
 
-.block-controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
-  background-color: #f7efe3;
-  padding: .5rem;
-  margin-bottom: .8rem;
-  gap: .5rem;
-
-  .add-block-button {
-    padding-top: .75em;
-    padding-bottom: .75em;
-  }
-}
-
 #foot.text {
   margin-top: 6rem;
 }
 
+body {
+  --rt-opacity: 1;
+  --rt-transition-show-delay: 1ms;
+  --rt-transition-closing-delay: 1ms;
+}
+
+#dropdown-tooltip,
+#default-tooltip {
+  z-index: 2;
+  max-width: 20em;
+  border-radius: 0;
+  background-color: #000;
+}
+
 @import url('blockHeader.scss');
 @import url('inputs.scss');
+@import url('blockList.scss');

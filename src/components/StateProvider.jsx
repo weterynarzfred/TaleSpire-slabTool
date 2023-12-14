@@ -27,7 +27,6 @@ initialState.blocks[initialId] = {
       assets: [{}],
     }],
   },
-  isSubListHidden: true,
 };
 
 recalculateLayout(initialState);

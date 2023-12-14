@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { jsonrepair } from 'jsonrepair';
 import bytes from 'bytes';
+import classNames from 'classnames';
 import Layout from '../../lib/Layout';
 import { decodeSlab } from '../../lib/encoding';
 import readSlab from '../../lib/readSlab';
@@ -8,7 +9,7 @@ import { useUpdate } from '../StateProvider';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockList from '../blockParts/BlockList';
 import BlockContents from '../blockParts/BlockContents';
-import classNames from 'classnames';
+import tooltips from '../../data/tooltips.json';
 
 export default function BlockSlab({ className, block }) {
   const dispatch = useUpdate();
@@ -101,9 +102,9 @@ export default function BlockSlab({ className, block }) {
         <div className="byte-count">{bytes(dataLength) ?? '???'}</div>
       </div>
       <textarea className="json-input" placeholder="data"
-        spellCheck="false" value={json} onChange={handleJsonInput} />
+        spellCheck="false" value={json} onChange={handleJsonInput} data-tooltip-id="default-tooltip" data-tooltip-html={tooltips['slab.json']} />
       <textarea className="base64-input" ref={base64InputRef} placeholder="base64"
-        spellCheck="false" value={base64} onChange={handleBase64Input} />
+        spellCheck="false" value={base64} onChange={handleBase64Input} data-tooltip-id="default-tooltip" data-tooltip-html={tooltips['slab.base64']} />
     </BlockContents>
 
     <BlockList path={block.path} />

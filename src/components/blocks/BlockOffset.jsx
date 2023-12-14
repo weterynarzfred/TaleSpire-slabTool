@@ -9,15 +9,10 @@ export default function BlockOffset({ className, block }) {
     <BlockHeader block={block} />
 
     <BlockContents block={block}>
-      <BlockInput path={block.path} dataPath={['offset', 'x']} />
-      <BlockInput path={block.path} dataPath={['offset', 'y']} />
-      <BlockInput path={block.path} dataPath={['offset', 'z']} />
-      <BlockCheckboxInput path={block.path} dataPath={['is_random']} />
+      <BlockInput path={block.path} dataPath={['offset', 'x']} tooltip="offset.x" />
+      <BlockInput path={block.path} dataPath={['offset', 'y']} tooltip="offset.y" />
+      <BlockInput path={block.path} dataPath={['offset', 'z']} tooltip="offset.z" />
+      <BlockCheckboxInput path={block.path} dataPath={['is_random']} tooltip="offset.isRandom" />
     </BlockContents>
-
-    <div className="block__sub-blocks">
-      <div className="sub-block-list"></div>
-      <div className="sub-block-controls"></div>
-    </div>
   </div>;
 }

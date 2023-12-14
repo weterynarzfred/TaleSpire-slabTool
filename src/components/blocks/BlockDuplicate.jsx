@@ -4,11 +4,12 @@ import BlockHeader from '../blockParts/BlockHeader';
 import BlockInput from '../blockParts/BlockInput';
 import BlockList from '../blockParts/BlockList';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
+import tooltips from '../../data/tooltips.json';
 
 export default function BlockDuplicate({ className, block }) {
   const modifierOptions = [
-    { value: 'relative', label: 'Relative' },
-    { value: 'absolute', label: 'Absolute' },
+    { value: 'relative', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['duplicate.modifiersRelativeOption']}>Relative</div> },
+    { value: 'absolute', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['duplicate.modifiersAbsoluteOption']}>Absolute</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, {
@@ -18,12 +19,13 @@ export default function BlockDuplicate({ className, block }) {
     <BlockHeader block={block} />
 
     <BlockContents block={block}>
-      <BlockInput path={block.path} dataPath={['count']} def="1" />
+      <BlockInput path={block.path} dataPath={['count']} def="1" tooltip="duplicate.count" />
       <BlockSelectInput
         path={block.path}
         dataPath={['modifiers']}
         options={modifierOptions}
         def={modifierOptions[0]}
+        tooltip="duplicate.modifiers"
       />
     </BlockContents>
 

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Results from './Results';
 import StateProvider from './StateProvider';
 import BlockList from './blockParts/BlockList';
+import { Tooltip } from 'react-tooltip';
 
 export default function App() {
 
@@ -69,11 +70,11 @@ export default function App() {
           <li>🗹 collapsing modifier blocks</li>
           <li>🗹 add expression evaluation</li>
           <li>🗹 user comments in block titles</li>
+          <li>🗹 tooltips code</li>
         </ul>
 
         <h2>todo</h2>
         <ul>
-          <li>☐ tooltips code</li>
           <li>☐ make this into a symbiote
             <ul>
               <li>☐ eyedropper tool</li>
@@ -107,5 +108,7 @@ export default function App() {
         </ul>
       </div>
     </div>
+    <Tooltip id="dropdown-tooltip" place="left-start" border="1px solid #eee" />
+    <Tooltip id="default-tooltip" delayShow="500" border="1px solid #eee" />
   </StateProvider>;
 }

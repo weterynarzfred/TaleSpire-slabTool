@@ -1,8 +1,9 @@
 import Select from 'react-select';
 import _ from 'lodash';
 import { useUpdate, useTrackedState } from '../StateProvider';
+import tooltips from '../../data/tooltips.json';
 
-export default function BlockSelectInput({ path, dataPath, options, def = "" }) {
+export default function BlockSelectInput({ path, dataPath, options, def = "", tooltip }) {
   const state = useTrackedState();
   const dispatch = useUpdate();
 
@@ -20,14 +21,18 @@ export default function BlockSelectInput({ path, dataPath, options, def = "" }) 
   return <div className="BlockInput BlockSelectInput">
     <label>
       <div className="label">{dataPath.join('.').replace("_", " ")}: </div>
-      <Select
-        className='select'
-        classNamePrefix="select"
-        isSearchable={false}
-        defaultValue={value ?? def}
-        options={options}
-        onChange={handleChange}
-      />
+      <div
+        data-tooltip-id="default-tooltip"
+        data-tooltip-html={tooltips[tooltip]}>
+        <Select
+          className='select'
+          classNamePrefix="select"
+          isSearchable={false}
+          defaultValue={value ?? def}
+          options={options}
+          onChange={handleChange}
+        />
+      </div>
     </label>
   </div>;
 }

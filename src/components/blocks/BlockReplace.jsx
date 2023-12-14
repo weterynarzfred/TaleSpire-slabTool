@@ -3,15 +3,16 @@ import BlockContents from '../blockParts/BlockContents';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
 import BlockTextInput from '../blockParts/BlockTextInput';
+import tooltips from '../../data/tooltips.json';
 
 export default function BlockReplace({ className, block }) {
   const fromOptions = [
-    { value: 'all', label: 'Everything' },
-    { value: 'uuid', label: 'UUID' },
+    { value: 'all', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['replace.fromAllOption']}>Everything</div> },
+    { value: 'uuid', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['replace.fromUuidOption']}>UUID</div> },
   ];
   const toOptions = [
-    { value: 'uuid', label: 'UUID' },
-    { value: 'slab', label: 'Slab' },
+    { value: 'uuid', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['replace.toUuidOption']}>UUID</div> },
+    { value: 'slab', label: <div data-tooltip-id="dropdown-tooltip" data-tooltip-html={tooltips['replace.toSlabOption']}>Slab</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, {
@@ -21,19 +22,19 @@ export default function BlockReplace({ className, block }) {
     <BlockHeader block={block} />
 
     <BlockContents block={block}>
-      <BlockSelectInput path={block.path} dataPath={['from']} options={fromOptions} def={fromOptions[0]} />
+      <BlockSelectInput path={block.path} dataPath={['from']} options={fromOptions} def={fromOptions[0]} tooltip="replace.from" />
       {
         block.data.from === 'uuid' ?
-          <BlockTextInput className="input-uuid" path={block.path} dataPath={['from_uuid']} /> : null
+          <BlockTextInput className="input-uuid" path={block.path} dataPath={['from_uuid']} tooltip="replace.fromUuid" /> : null
       }
-      <BlockSelectInput path={block.path} dataPath={['to']} options={toOptions} def={toOptions[0]} />
+      <BlockSelectInput path={block.path} dataPath={['to']} options={toOptions} def={toOptions[0]} tooltip="replace.to" />
       {
         (!block.data.to || block.data.to === 'uuid') ?
-          <BlockTextInput className="input-uuid" path={block.path} dataPath={['to_uuid']} /> : null
+          <BlockTextInput className="input-uuid" path={block.path} dataPath={['to_uuid']} tooltip="replace.toUuid" /> : null
       }
       {
         block.data.to === 'slab' ?
-          <BlockTextInput className="input-slab" path={block.path} dataPath={['to_slab']} /> : null
+          <BlockTextInput className="input-slab" path={block.path} dataPath={['to_slab']} tooltip="replace.toSlab" /> : null
       }
     </BlockContents>
   </div>;

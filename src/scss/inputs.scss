@@ -1,7 +1,4 @@
-$inputBackgroundColor: #151515;
-$inputHoverColor: #444;
-$inputActiveColor: #555;
-$inputTextColor: #eee;
+@import 'variables';
 
 textarea {
   display: block;
@@ -184,6 +181,5 @@ input {
         background-color: $inputActiveColor;
       }
     }
-
   }
 }
