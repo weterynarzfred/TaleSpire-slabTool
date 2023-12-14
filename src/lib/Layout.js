@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { encodeSlab } from './encoding';
 import writeSlab from './writeSlab';
 
@@ -12,6 +13,18 @@ export default class Layout {
   add(addedLayout) {
     this.layouts = this.layouts.concat(addedLayout.layouts);
     return this.cleanup();
+  }
+
+  addAsset(uuid, position) {
+    this.layouts.push({ uuid, assets: [position] });
+    return this.cleanup();
+  }
+
+  removeAsset(uuid, assetIndex) {
+    for (let i = 0; i < this.layouts.length; i++) {
+      if (this.layouts[i].uuid !== uuid) continue;
+      return this.layouts[i].assets.splice(assetIndex, 1)[0];
+    }
   }
 
   clone() {

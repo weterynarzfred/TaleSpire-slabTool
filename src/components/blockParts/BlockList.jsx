@@ -8,13 +8,15 @@ import { getBlockAtPath } from '../../lib/reducer/utils';
 import BlockScale from '../blocks/BlockScale';
 import BlockReplace from '../blocks/BlockReplace';
 import classNames from 'classnames';
+import BlockFilter from '../blocks/BlockFilter';
 
-function isChildOfDuplicate(state, path) {
+function isChildOf(type, state, path) {
+  type = Array.isArray(type) ? type : [type];
   let currentPath = [];
   for (let i = 0; i < path.length; i++) {
     currentPath.push(path[i]);
     const currentBlock = getBlockAtPath(state, currentPath);
-    if (currentBlock.type === 'duplicate') return true;
+    if (type.includes(currentBlock.type)) return true;
   }
 
   return false;
@@ -56,6 +58,8 @@ export default function BlockList({ path = [] }) {
         blockElements.push(<BlockScale key={block.id} block={block} className={className} />);
       } else if (block.type === 'replace') {
         blockElements.push(<BlockReplace key={block.id} block={block} className={className} />);
+      } else if (block.type === 'filter') {
+        blockElements.push(<BlockFilter key={block.id} block={block} className={className} />);
       }
     }
   }
@@ -66,19 +70,23 @@ export default function BlockList({ path = [] }) {
         {blockElements}
         <div className="block-controls">
           {
-            isChildOfDuplicate(state, path) ? null :
+            isChildOf(['duplicate', 'filter'], state, path) ? null :
               <button className="add-block-button" onClick={() => handleAddSlab('slab')}>add slab</button>
           }
           {
-            isChildOfDuplicate(state, path) ? null :
+            isChildOf('duplicate', state, path) ? null :
               <button className="add-block-button" onClick={() => handleAddSlab('duplicate')}>add duplicate</button>
           }
           <button className="add-block-button" onClick={() => handleAddSlab('offset')}>add offset</button>
           <button className="add-block-button" onClick={() => handleAddSlab('rotate')}>add rotate</button>
           <button className="add-block-button" onClick={() => handleAddSlab('scale')}>add scale</button>
           {
-            isChildOfDuplicate(state, path) ? null :
+            isChildOf('duplicate', state, path) ? null :
               <button className="add-block-button" onClick={() => handleAddSlab('replace')}>add replace</button>
+          }
+          {
+            isChildOf('duplicate', state, path) ? null :
+              <button className="add-block-button" onClick={() => handleAddSlab('filter')}>add filter</button>
           }
         </div>
       </>

@@ -243,7 +243,8 @@ body {
   &--offset,
   &--rotate,
   &--scale,
-  &--replace {
+  &--replace,
+  &--filter {
     >.block__contents {
       display: flex;
       flex-wrap: wrap;

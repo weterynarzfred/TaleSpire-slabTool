@@ -22,13 +22,15 @@ function applyBlock(layout, block, scope = {}) {
     } else if (block.type === 'scale') {
       layout.scale(block.data, scope);
     } else if (block.type === 'replace') {
-
-      layout.replace(block.data);
+      layout.replace(block.data, scope);
+    } else if (block.type === 'filter') {
+      layout.filter(block.data, block.blocks, scope);
     }
     block.isError = false;
   } catch (e) {
     block.isError = true;
     block.error = e.message;
+    console.error(e);
   }
 }
 
