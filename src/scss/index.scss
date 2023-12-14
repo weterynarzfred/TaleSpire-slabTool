@@ -284,8 +284,12 @@ body {
   }
 }
 
-#foot.text {
+#foot {
   margin-top: 6rem;
+
+  .text {
+    margin-bottom: 0;
+  }
 }
 
 body {
