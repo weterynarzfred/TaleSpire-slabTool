@@ -146,8 +146,14 @@ input {
     }
   }
 
-  &.BlockUuidInput input {
-    width: 23em;
+  &.BlockUuidInput {
+    input {
+      width: 23em;
+    }
+
+    .eyedropper-button {
+      border: none;
+    }
   }
 
   &.input-slab input {

@@ -132,15 +132,15 @@ export default function BlockSlab({ className, block }) {
 
     <BlockContents block={block}>
       <div className="controls">
-        <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>grab</button>
+        <button className="copy-button default-tooltip-anchor" data-tooltip-key="slab_copyButton" ref={copyButtonRef} onClick={handleCopyButton}>grab</button>
         {/* <button className="read-button" onClick={handleReadButton}>read</button> */}
-        <button className="eyedropper-button" onClick={handleEyedropperButton}></button>
+        <button className="eyedropper-button default-tooltip-anchor" data-tooltip-key="slab_eyedropperButton" onClick={handleEyedropperButton}></button>
         <div className="byte-count">{bytes(dataLength) ?? '???'}</div>
       </div>
       <textarea className="json-input default-tooltip-anchor" placeholder="data"
-        spellCheck="false" value={json} onChange={handleJsonInput} data-tooltip-key="slab.json" />
+        spellCheck="false" value={json} onChange={handleJsonInput} data-tooltip-key="slab_json" />
       <textarea className="base64-input default-tooltip-anchor" ref={base64InputRef} placeholder="base64"
-        spellCheck="false" value={base64} onChange={handleBase64Input} data-tooltip-key="slab.base64" />
+        spellCheck="false" value={base64} onChange={handleBase64Input} data-tooltip-key="slab_base64" />
     </BlockContents>
 
     <BlockList path={block.path} />

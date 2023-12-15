@@ -14,11 +14,11 @@ export default function BlockFilter({ className, block }) {
     <BlockHeader block={block} />
 
     <BlockContents block={block}>
-      <BlockInput path={block.path} dataPath={['percentage']} def="1" tooltip="filter.percentage" />
-      <BlockUuidInput path={block.path} dataPath={['uuid']} tooltip="filter.uuid" />
-      <BlockInput path={block.path} dataPath={['min_distance']} tooltip="filter.minDistance" />
+      <BlockInput path={block.path} dataPath={['percentage']} def="1" tooltip="filter_percentage" />
+      <BlockUuidInput path={block.path} dataPath={['uuid']} tooltip="filter_uuid" />
+      <BlockInput path={block.path} dataPath={['min_distance']} tooltip="filter_minDistance" />
 
-      <BlockCheckboxInput path={block.path} dataPath={['delete_selected']} tooltip="filter.deleteSelected" />
+      <BlockCheckboxInput path={block.path} dataPath={['delete_selected']} tooltip="filter_deleteSelected" />
     </BlockContents>
 
     {block.data.delete_selected === true ? null :

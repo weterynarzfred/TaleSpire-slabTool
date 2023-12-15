@@ -18,18 +18,13 @@ export default function App() {
   return <StateProvider>
     <div id="content">
       <div className="text">
-        <h1>TaleSpire – SlabTools</h1>
-        <p>This is a simple work in progress tool for editing slabs from <a href="https://talespire.com/" target="_blank" rel="noopener noreferrer">TaleSpire</a>. Don't expect much from it.</p>
+        <h1>SlabTool</h1>
       </div>
 
       <BlockList />
       <Results />
 
-      <div id="foot">
-        <div className="text">
-          you can check the code on <a href="https://github.com/weterynarzfred/TaleSpire-slabTool" target="_blank" rel="noopener noreferrer">github</a>
-        </div>
-      </div>
+      <div id="foot"></div>
     </div>
     <Tooltip
       id="dropdown-tooltip"
