@@ -4,9 +4,9 @@ import StateProvider from './StateProvider';
 import BlockList from './blockParts/BlockList';
 import { Tooltip } from 'react-tooltip';
 import tooltips from '../data/tooltips';
+import TemplateSaving from './TemplateSaving';
 
 export default function App() {
-
   useEffect(() => {
     document.addEventListener("wheel", function (event) {
       if (document.activeElement.type !== "number") return;
@@ -23,6 +23,7 @@ export default function App() {
 
       <BlockList />
       <Results />
+      <TemplateSaving />
 
       <div id="foot"></div>
     </div>

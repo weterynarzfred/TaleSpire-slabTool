@@ -340,6 +340,15 @@ body {
   }
 }
 
+.TemplateSaving {
+  padding: 0 .5rem;
+
+  textarea {
+    background-color: #333;
+    height: 20em;
+  }
+}
+
 @import url('blockHeader.scss');
 @import url('inputs.scss');
 @import url('blockList.scss');

@@ -52,6 +52,14 @@ const reducer = produce((state, action) => {
       const block = getBlockAtPath(state, action.path);
       block[action.key] = action.value;
       break;
+    case "REPLACE_BLOCKS":
+      try {
+        state.blocks = JSON.parse(action.value);
+        recalculateLayout(state);
+      } catch (e) {
+        console.error(e);
+      }
+      break;
     default:
       throw "unrecognized action type";
   }

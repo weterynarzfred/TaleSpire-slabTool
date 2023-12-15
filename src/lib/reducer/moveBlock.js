@@ -14,6 +14,5 @@ export default function moveBlock(state, action) {
   blockArray.sort((a, b) => a.order - b.order);
   blockArray.forEach((block, index) => block.order = index);
 
-
   recalculateLayout(state);
 }
