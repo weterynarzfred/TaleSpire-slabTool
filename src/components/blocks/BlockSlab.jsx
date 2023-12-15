@@ -103,15 +103,16 @@ export default function BlockSlab({ className, block }) {
   function handleEyedropperButton() {
     if (typeof TS === 'undefined') return;
     TS.picking.startPicking();
-    window.onPickingEvent = function (event) {
-      if (event.kind !== 'pickingCompleted') return;
+
+    document.addEventListener('onPickingEvent', event => {
+      if (event.detail.kind !== 'pickingCompleted') return;
       const json = JSON.stringify([{
-        uuid: event.payload.idOfPicked,
+        uuid: event.detail.payload.idOfPicked,
         assets: [{ x: 0, y: 0, z: 0, rotation: 0 }]
       }], null, 2);
       setJson(json);
       parseJson(json);
-    };
+    }, { once: true });
   }
 
   // disabled until talespire bug is fixed

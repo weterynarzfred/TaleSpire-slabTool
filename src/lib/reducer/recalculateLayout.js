@@ -30,7 +30,7 @@ function applyBlock(layout, block, scope = {}) {
   } catch (e) {
     block.isError = true;
     block.error = e.message;
-    console.error(e);
+    // console.error(e);
   }
 }
 

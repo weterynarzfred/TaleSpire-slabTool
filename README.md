@@ -4,7 +4,7 @@ This is a simple work in progress tool for editing slabs from [TaleSpire](https:
 
 ## todo
 - [ ] test a lot
-- [ ] eyedropper
+- [ ] figure out why it is displayed as if emulating a touch screen
 - [ ] write tooltips and descriptions
 - [ ] create a showcase video
 - [ ] upload this thing somewhere
@@ -21,6 +21,7 @@ This is a simple work in progress tool for editing slabs from [TaleSpire](https:
 - [x] tooltips (mostly placeholders for now)
 - [x] make this into a symbiote
 - [x] put results into the hand
+- [x] eyedropper tool
 
 ## ideas for later
 - read slab from hand (not possible for now)

@@ -3,7 +3,7 @@ import BlockContents from '../blockParts/BlockContents';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
 import BlockTextInput from '../blockParts/BlockTextInput';
-import tooltips from '../../data/tooltips';
+import BlockUuidInput from '../blockParts/BlockUuidInput';
 
 export default function BlockReplace({ className, block }) {
   const fromOptions = [
@@ -25,12 +25,12 @@ export default function BlockReplace({ className, block }) {
       <BlockSelectInput path={block.path} dataPath={['from']} options={fromOptions} def={fromOptions[0]} tooltip="replace.from" />
       {
         block.data.from === 'uuid' ?
-          <BlockTextInput className="input-uuid" path={block.path} dataPath={['from_uuid']} tooltip="replace.fromUuid" /> : null
+          <BlockUuidInput path={block.path} dataPath={['from_uuid']} tooltip="replace.fromUuid" /> : null
       }
       <BlockSelectInput path={block.path} dataPath={['to']} options={toOptions} def={toOptions[0]} tooltip="replace.to" />
       {
         (!block.data.to || block.data.to === 'uuid') ?
-          <BlockTextInput className="input-uuid" path={block.path} dataPath={['to_uuid']} tooltip="replace.toUuid" /> : null
+          <BlockUuidInput path={block.path} dataPath={['to_uuid']} tooltip="replace.toUuid" /> : null
       }
       {
         block.data.to === 'slab' ?
