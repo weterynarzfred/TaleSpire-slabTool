@@ -9,7 +9,6 @@ import { useUpdate } from '../StateProvider';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockList from '../blockParts/BlockList';
 import BlockContents from '../blockParts/BlockContents';
-import tooltips from '../../data/tooltips';
 
 export default function BlockSlab({ className, block }) {
   const dispatch = useUpdate();
@@ -47,9 +46,13 @@ export default function BlockSlab({ className, block }) {
 
   function handleJsonInput(event) {
     setJson(event.currentTarget.value);
+    parseJson(event.currentTarget.value);
+  }
 
+  function parseJson(json) {
     try {
-      const cleanedJson = jsonrepair(event.currentTarget.value);
+      console.log(json);
+      const cleanedJson = jsonrepair(json);
       const layoutsObject = JSON.parse(cleanedJson);
       const newLayout = new Layout(layoutsObject);
       const binaryData = newLayout.binaryData;
@@ -57,7 +60,8 @@ export default function BlockSlab({ className, block }) {
       setDataLength(binaryData.dataLength);
       saveLayout(newLayout);
       setIsError(false);
-    } catch {
+    } catch (e) {
+      console.error(e);
       setBase64("something is bRoKeN;");
       setIsError(true);
       setDataLength("");
@@ -79,7 +83,8 @@ export default function BlockSlab({ className, block }) {
       setDataLength(binaryData.dataLength);
       saveLayout(newLayout);
       setIsError(false);
-    } catch {
+    } catch (e) {
+      console.error(e);
       setJson("something is bRoKeN;");
       setIsError(true);
       setDataLength("");
@@ -94,6 +99,20 @@ export default function BlockSlab({ className, block }) {
     });
     if (typeof TS === 'undefined') return;
     TS.slabs.sendSlabToHand(slab);
+  }
+
+  function handleEyedropperButton() {
+    if (typeof TS === 'undefined') return;
+    TS.picking.startPicking();
+    window.onPickingEvent = function (event) {
+      if (event.kind !== 'pickingCompleted') return;
+      const json = JSON.stringify([{
+        uuid: event.payload.idOfPicked,
+        assets: [{ x: 0, y: 0, z: 0, rotation: 0 }]
+      }], null, 2);
+      setJson(json);
+      parseJson(json);
+    };
   }
 
   // disabled until talespire bug is fixed
@@ -115,6 +134,7 @@ export default function BlockSlab({ className, block }) {
       <div className="controls">
         <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>grab</button>
         {/* <button className="read-button" onClick={handleReadButton}>read</button> */}
+        <button className="eyedropper-button" onClick={handleEyedropperButton}></button>
         <div className="byte-count">{bytes(dataLength) ?? '???'}</div>
       </div>
       <textarea className="json-input default-tooltip-anchor" placeholder="data"

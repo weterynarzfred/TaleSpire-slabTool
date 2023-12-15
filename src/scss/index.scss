@@ -105,7 +105,8 @@ body {
 
 .add-block-button,
 .copy-button,
-.read-button {
+.read-button,
+.eyedropper-button {
   display: block;
   height: 100%;
   background: none;
@@ -127,6 +128,14 @@ body {
   &:active {
     background-color: #444;
   }
+}
+
+.eyedropper-button {
+  min-width: 2em;
+  background-image: url('../media/icon-eyedropper.svg');
+  background-size: 80%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .controls {
