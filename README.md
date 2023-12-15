@@ -4,7 +4,6 @@ This is a simple work in progress tool for editing slabs from [TaleSpire](https:
 
 ## todo
 - [ ] test a lot
-- [ ] figure out why it is displayed as if emulating a touch screen
 - [ ] write tooltips and descriptions
 - [ ] create a showcase video
 - [ ] upload this thing somewhere
@@ -25,6 +24,8 @@ This is a simple work in progress tool for editing slabs from [TaleSpire](https:
 
 ## ideas for later
 - read slab from hand (not possible for now)
+- expanding input fields for larger formulas
+- init field for declaring variables
 - drop to nearest surface
 - filter by position
 - drag and drop modifier order

@@ -1,9 +1,11 @@
+@import 'variables';
+
 .BlockHeader {
   .block__title-bar {
     position: relative;
     padding: 0em 2.5em 0em 0em;
     min-height: 2em;
-    background-color: #f7efe3;
+    background-color: $contentColor;
     display: flex;
     align-items: center;
     color: #000;
@@ -14,9 +16,10 @@
     letter-spacing: .1em;
     font-weight: 900;
     text-shadow: 0 0 .5px #000;
-    padding: .4em 1em;
-    min-width: 9.5em;
+    padding: .4em;
+    min-width: 8.5em;
     flex-shrink: 0;
+    font-size: .8em;
 
     @at-root .block:not(.block--results) & {
       cursor: pointer;
@@ -34,11 +37,11 @@
         align-items: center;
         justify-content: center;
         transition: .2s;
-
-        @at-root .block--is-collapsed & {
-          transform: rotate(90deg);
-        }
       }
+    }
+
+    @at-root .block--is-collapsed &::before {
+      transform: rotate(90deg);
     }
   }
 
@@ -48,17 +51,20 @@
     height: 100%;
     display: flex;
     align-items: center;
-    gap: .5rem;
+    gap: .2rem;
 
     .block__move-up,
     .block__move-down {
-      width: 2em;
+      width: 1.4em;
+      height: 1.4em;
       background-color: #222;
-      color: #f7efe3;
-      text-align: center;
+      color: $contentColor;
       text-transform: uppercase;
-      font-size: .7em;
-      padding: .4em 0;
+      font-size: .7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       cursor: pointer;
 
       &:hover {
@@ -71,7 +77,7 @@
     }
   }
 
-  .BlockInput {
+  .BlockInput.user-comment {
     width: 100%;
 
     label {
@@ -83,14 +89,27 @@
       display: none;
     }
 
+
     input {
       text-align: left;
       width: 100%;
-      background-color: #0002;
+      background-color: #00000017;
       margin: 0;
+      font-size: .8rem;
 
       &:hover {
-        background-color: #0001;
+        background-color: #00000025;
+      }
+    }
+
+    ::placeholder {
+      opacity: 0.75;
+    }
+
+    &--filled {
+      input {
+        background-color: #0000;
+        font-weight: 700;
       }
     }
   }
@@ -98,7 +117,7 @@
   .block--results {
     .block__title-bar {
       &:hover {
-        background-color: #f7efe3;
+        background-color: $contentColor;
       }
     }
 

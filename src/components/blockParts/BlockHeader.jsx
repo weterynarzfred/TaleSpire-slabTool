@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useUpdate } from '../StateProvider';
 import BlockTextInput from './BlockTextInput';
 
@@ -42,7 +43,7 @@ export default function BlockHeader({ block }) {
       <div className="block__title" onClick={handleBlockHeaderClick}>
         {block.type} {block.isCollapsed && hasSubBlocks ? `(+${Object.keys(block.blocks).length})` : ''}
       </div>
-      <BlockTextInput path={block.path} dataPath={["user_comment"]} placeholder="// user comment" />
+      <BlockTextInput className={classNames("user-comment", { "user-comment--filled": block.data.user_comment })} path={block.path} dataPath={["user_comment"]} placeholder="// user comment" />
     </div>
   </div>;
 }

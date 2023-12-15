@@ -20,7 +20,7 @@ export default function BlockInput({ path, dataPath, def = 0, tooltip }) {
 
   return <div className="BlockInput">
     <label>
-      <div className="label">{dataPath.join('.')}: </div>
+      <div className="label">{dataPath.join('.').replace('_', ' ')}: </div>
       <input type="text" value={value ?? def} onChange={handleChange} className="default-tooltip-anchor" data-tooltip-key={tooltip} />
     </label>
   </div>;

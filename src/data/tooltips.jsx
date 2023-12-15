@@ -1,11 +1,11 @@
 export default {
-  addSlab: <><h3>slab</h3></>,
-  addDuplicate: <>placeholder tooltip</>,
-  addOffset: <>placeholder tooltip</>,
-  addRotate: <>placeholder tooltip</>,
-  addScale: <>placeholder tooltip</>,
-  addReplace: <>placeholder tooltip</>,
-  addFilter: <>placeholder tooltip</>,
+  addSlab: <><h3>add a slab</h3><p>Adds a slab to the existing layout.</p></>,
+  addDuplicate: <><h3>duplicate layout</h3><p>Duplicates the existing layout a set number of times, applying modifiers to each copy.</p></>,
+  addOffset: <><h3>offset layout</h3><p>Offsets the existing layout by the specified amount. Keep in mind that the end result is always normalized to have only positive position values.</p></>,
+  addRotate: <><h3>rotate layout</h3><p>placeholder tooltip</p></>,
+  addScale: <><h3>scale layout</h3><p>Scales <strong>the relative positions of</strong> the objects. The objects themselves cannot be scaled.</p></>,
+  addReplace: <><h3>replace assets</h3><p>replaces the specified assets with a different asset or a slab.</p></>,
+  addFilter: <><h3>filter assets</h3><p>Filters the specified assets and either deletes them or applies the sub-modifiers to them.</p></>,
 
   duplicate_count: <>placeholder tooltip</>,
   duplicate_modifiers: "",

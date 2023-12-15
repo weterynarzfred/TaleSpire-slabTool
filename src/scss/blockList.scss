@@ -15,7 +15,7 @@
     min-height: 1em;
 
     .block {
-      border: 2px solid #f7efe3;
+      border: 2px solid $contentColor;
     }
 
     .block-controls {
@@ -24,36 +24,6 @@
       padding: 0;
       margin-bottom: .5em;
       font-size: .8rem;
-    }
-
-    &__hide {
-      position: absolute;
-      top: 0;
-      left: -2.75rem;
-      width: 2.5rem;
-      background: none;
-      border: none;
-      background-color: #135;
-      border: 1px solid #f7efe3;
-      color: #f7efe3;
-      font-size: .6rem;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      padding: .2em .4em;
-      cursor: pointer;
-
-      &--hidden {
-        width: 9rem;
-      }
-
-      &:hover {
-        background-color: #357;
-      }
-
-      &:active {
-        background-color: #468;
-      }
     }
   }
 }
@@ -112,7 +82,7 @@
     &__option {
       padding: 0;
       text-align: center;
-      background-color: #001a20;
+      background-color: $backgroundColor;
       text-transform: uppercase;
       letter-spacing: .1em;
       font-weight: 900;
