@@ -32,7 +32,7 @@ input {
   color: inherit;
 
   &[type=text] {
-    width: 12em;
+    width: 11em;
   }
 
   &:focus {
@@ -60,7 +60,7 @@ input {
       text-transform: uppercase;
       letter-spacing: .1em;
       flex-shrink: 0;
-      min-width: 9em;
+      min-width: 8em;
     }
 
     input,

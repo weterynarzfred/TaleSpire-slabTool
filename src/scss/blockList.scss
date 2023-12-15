@@ -9,13 +9,13 @@
 .block {
   .BlockList {
     position: relative;
-    margin-top: .5rem;
-    margin-right: 1rem;
-    margin-left: 3rem;
+    margin-top: .4rem;
+    margin-left: 1rem;
     min-height: 1em;
 
     .block {
       border: 2px solid $contentColor;
+      border-right: none;
     }
 
     .block-controls {
