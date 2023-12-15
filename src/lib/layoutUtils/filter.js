@@ -25,10 +25,11 @@ Layout.prototype.filter = function (
     min_distance,
     delete_selected = false
   },
-  blocks = {}
+  blocks = {},
+  scope
 ) {
-  const usedPercentage = parseInput('float', percentage, 1);
-  const usedMinDistance = parseInput('float', min_distance, 0);
+  const usedPercentage = parseInput('float', percentage, 1, scope);
+  const usedMinDistance = parseInput('float', min_distance, 0, scope);
 
   if (uuid && !uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/))
     throw new Error('incorrect uuid format');
@@ -97,7 +98,7 @@ Layout.prototype.filter = function (
   }
 
   if (!delete_selected) {
-    for (const id in blocks) applyBlock(filteredLayout, blocks[id]);
+    for (const id in blocks) applyBlock(filteredLayout, blocks[id], scope);
     this.add(filteredLayout);
   }
 

@@ -119,11 +119,10 @@ export default function BlockList({ path = [] }) {
       value: 'replace',
       label: <div data-tooltip-key="addReplace">Replace</div>
     });
-  if (!isChildOf('duplicate', state, path))
-    blockOptions.push({
-      value: 'filter',
-      label: <div data-tooltip-key="addFilter">Filter</div>
-    });
+  blockOptions.push({
+    value: 'filter',
+    label: <div data-tooltip-key="addFilter">Filter</div>
+  });
 
   return <div className="BlockList">
     {blockElements}
@@ -139,3 +138,7 @@ export default function BlockList({ path = [] }) {
     </div>
   </div>;
 }
+
+export {
+  isChildOf,
+};
