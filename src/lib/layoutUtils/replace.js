@@ -48,7 +48,7 @@ Layout.prototype.replace = function (
     for (const asset of assetsToReplace) {
       const slabClone = slabLayout.clone()
         .offset({ offset: asset })
-        .rotate({ rotation_variations: '' + asset.rotation, center: 'center' })
+        .rotate({ rotation: '' + asset.rotation, center: 'center' })
         .cleanup();
       testLayout.add(slabClone);
     }
