@@ -4,10 +4,7 @@ This is a simple work in progress tool for editing slabs from [TaleSpire](https:
 
 ## todo
 - [ ] test a lot
-- [ ] make this into a symbiote
 - [ ] eyedropper
-- [ ] read slap from hand
-- [ ] put results into hand
 - [ ] write tooltips and descriptions
 - [ ] create a showcase video
 - [ ] upload this thing somewhere
@@ -22,8 +19,11 @@ This is a simple work in progress tool for editing slabs from [TaleSpire](https:
 - [x] math expression evaluation
 - [x] user comments
 - [x] tooltips (mostly placeholders for now)
+- [x] make this into a symbiote
+- [x] put results into the hand
 
 ## ideas for later
+- read slab from hand (not possible for now)
 - drop to nearest surface
 - filter by position
 - drag and drop modifier order

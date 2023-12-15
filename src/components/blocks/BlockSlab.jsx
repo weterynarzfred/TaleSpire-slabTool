@@ -66,9 +66,12 @@ export default function BlockSlab({ className, block }) {
 
   function handleBase64Input(event) {
     setBase64(event.currentTarget.value);
+    parseBase64(event.currentTarget.value);
+  }
 
+  function parseBase64(base64) {
     try {
-      const decodedSlab = decodeSlab(event.currentTarget.value);
+      const decodedSlab = decodeSlab(base64);
       const layoutsObject = readSlab(decodedSlab);
       const newLayout = new Layout(layoutsObject);
       setJson(newLayout.json);
@@ -84,11 +87,23 @@ export default function BlockSlab({ className, block }) {
   }
 
   function handleCopyButton() {
-    navigator.clipboard.writeText(base64InputRef.current.value).then(() => {
+    const slab = base64InputRef.current.value;
+    navigator.clipboard.writeText(slab).then(() => {
       copyButtonRef.current.innerText = 'copied';
-      setTimeout(() => copyButtonRef.current.innerText = 'copy', 500);
+      setTimeout(() => copyButtonRef.current.innerText = 'grab', 500);
     });
+    if (typeof TS === 'undefined') return;
+    TS.slabs.sendSlabToHand(slab);
   }
+
+  // disabled until talespire bug is fixed
+  // function handleReadButton() {
+  //   TS.slabs.getSlabInActiveSelection().then(() => {
+  //     console.log();
+  //     setBase64(result);
+  //     parseBase64(result);
+  //   });
+  // }
 
   return <div className={classNames(className, `block block--${block.type}`, {
     "block--is-collapsed": block.isCollapsed,
@@ -98,7 +113,8 @@ export default function BlockSlab({ className, block }) {
 
     <BlockContents block={block}>
       <div className="controls">
-        <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>copy</button>
+        <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>grab</button>
+        {/* <button className="read-button" onClick={handleReadButton}>read</button> */}
         <div className="byte-count">{bytes(dataLength) ?? '???'}</div>
       </div>
       <textarea className="json-input default-tooltip-anchor" placeholder="data"

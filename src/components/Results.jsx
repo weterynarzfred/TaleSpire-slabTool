@@ -1,6 +1,6 @@
 import bytes from 'bytes';
 import { useTrackedState } from './StateProvider';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Results() {
   const state = useTrackedState();
@@ -10,11 +10,33 @@ export default function Results() {
   const base64InputRef = useRef(null);
 
   function handleCopyButton() {
-    navigator.clipboard.writeText(base64InputRef.current.value).then(() => {
+    const slab = base64InputRef.current.value;
+    navigator.clipboard.writeText(slab).then(() => {
       copyButtonRef.current.innerText = 'copied';
-      setTimeout(() => copyButtonRef.current.innerText = 'copy result', 500);
+      setTimeout(() => copyButtonRef.current.innerText = 'grab result', 500);
     });
+    if (typeof TS === 'undefined') return;
+    TS.slabs.sendSlabToHand(slab);
   }
+
+  const [dataSize, setDataSize] = useState(0);
+  const [maxDataSize, setMaxDataSize] = useState(0);
+  useEffect(() => {
+    if (typeof TS === 'undefined') return;
+    TS.slabs.getDataSize(state.layout.base64).then(result => {
+      const size = result;
+      console.log(size, data.dataLength);
+      setDataSize(size);
+    });
+  }, [state.layout.base64]);
+  useEffect(() => {
+    if (typeof TS === 'undefined') return;
+    TS.slabs.getMaxSlabSizeInBytes().then(result => {
+      const size = result;
+      setMaxDataSize(size);
+    });
+  }, []);
+
 
   return <div className="block block--results">
     <div className="BlockHeader">
@@ -24,8 +46,8 @@ export default function Results() {
     </div>
     <div className="block__contents">
       <div className="controls">
-        <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>copy result</button>
-        <div className="byte-count">{bytes(data.dataLength)}</div>
+        <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>grab result</button>
+        <div className="byte-count">{bytes(dataSize)} / {bytes(maxDataSize)}</div>
       </div>
       <textarea className="json-input" readOnly value={state.layout.json} />
       <textarea className="base64-input" ref={base64InputRef} readOnly value={data.base64} />
