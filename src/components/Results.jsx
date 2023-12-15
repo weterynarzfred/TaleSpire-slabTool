@@ -25,7 +25,6 @@ export default function Results() {
     if (typeof TS === 'undefined') return;
     TS.slabs.getDataSize(state.layout.base64).then(result => {
       const size = result;
-      console.log(size, data.dataLength);
       setDataSize(size);
     });
   }, [state.layout.base64]);
@@ -36,7 +35,6 @@ export default function Results() {
       setMaxDataSize(size);
     });
   }, []);
-
 
   return <div className="block block--results">
     <div className="BlockHeader">

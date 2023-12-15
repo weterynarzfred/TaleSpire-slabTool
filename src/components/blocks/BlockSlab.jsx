@@ -51,7 +51,6 @@ export default function BlockSlab({ className, block }) {
 
   function parseJson(json) {
     try {
-      console.log(json);
       const cleanedJson = jsonrepair(json);
       const layoutsObject = JSON.parse(cleanedJson);
       const newLayout = new Layout(layoutsObject);
@@ -118,7 +117,7 @@ export default function BlockSlab({ className, block }) {
   // disabled until talespire bug is fixed
   // function handleReadButton() {
   //   TS.slabs.getSlabInActiveSelection().then(() => {
-  //     console.log();
+  //     console.log(result);
   //     setBase64(result);
   //     parseBase64(result);
   //   });
