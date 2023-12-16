@@ -4,7 +4,6 @@ This is a simple work in progress tool for editing slabs from [TaleSpire](https:
 
 ## todo
 - [ ] test a lot
-- [ ] write tooltips and descriptions
 - [ ] create a showcase video
 - [ ] upload this thing somewhere
 
@@ -21,6 +20,7 @@ This is a simple work in progress tool for editing slabs from [TaleSpire](https:
 - [x] make this into a symbiote
 - [x] put results into the hand
 - [x] eyedropper tool
+- [x] write tooltips and descriptions
 
 ## ideas for later
 - read slab from hand (not possible for now)
