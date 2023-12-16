@@ -7,10 +7,10 @@ export default {
   addReplace: <><h3>Replace assets</h3><p>Replaces the specified assets with a different asset or a slab.</p></>,
   addFilter: <><h3>Filter assets</h3><p>Filters the specified assets and either deletes them or applies the sub-modifiers to them.</p></>,
 
-  duplicate_count: <><h3>Duplicates count</h3><p>Amount of times the above layout is duplicated by.</p></>,
+  duplicate_count: <><h3>Duplicates count</h3><p>Amount of times the layout above is duplicated.</p></>,
   duplicate_modifiers: "",
-  duplicate_modifiersRelativeOption: <><h3>Relative</h3><p>Adds all selected modifiers to each next duplicate.</p><p><i style={{ color: "#dff" }}>For example, if used with Rotate modifier specified as <b style={{ color: "#f55" }}>15</b> degrees it will rotate first duplicate by <b>15</b> degrees, second duplicate by <b>30</b> degrees and so on.</i></p></>,
-  duplicate_modifiersAbsoluteOption: <><h3>Absolute</h3><p>Sets all selected modifiers to every duplicate object as specified.</p><p><i style={{ color: "#dff" }}>For example, if used with Rotate modifier specified as <b style={{ color: "#f55" }}>15</b> degrees it will rotate every duplicate by <b>15</b> degrees.</i></p></>,
+  duplicate_modifiersRelativeOption: <><h3>Relative</h3><p>Applies the sub-modifiers relative to the previous iteration.</p><p><i style={{ color: "#dff" }}>For example, if used with the Rotate modifier set to <b style={{ color: "#f55" }}>15</b> degrees, it will rotate the first duplicate by <b>15</b> degrees, second one by <b>30</b> degrees, and so on.</i></p></>,
+  duplicate_modifiersAbsoluteOption: <><h3>Absolute</h3><p>Every copy will be modified exactly the same way by the sub-modifiers.</p><p><i style={{ color: "#dff" }}>For example, if used with the Rotate modifier set to <b style={{ color: "#f55" }}>15</b> degrees, it will rotate every duplicated object by <b>15</b> degrees.</i></p></>,
 
   filter_fraction: <><h3>Filter fraction</h3><p>A fraction of selected object (prop or tile) in the UUID below that will be changed.</p></>,
   filter_uuid: <>If not empty, selects only objects with the specified UUID.</>,
@@ -41,7 +41,7 @@ export default {
   rotate_centerCenterOption: <>placeholder tooltip</>,
   rotate_type: "",
   rotate_typeDegreeOption: <><h3>Degree</h3>Rotate by specified amount of degrees.</>,
-  rotate_typeVariationOption: <><h3>Variation</h3><p>Input all rotation variations from which the tool will randomly select the option to rotate the object by.</p><p><i style={{ color: "#dff" }}>For example if given option <b style={{ color: "#f55" }}>15 30 45</b> it will randomly rotate the object either by <b>15</b> degrees, <b>30</b> degrees or <b>45</b> degrees.</i></p></>,
+  rotate_typeVariationOption: <><h3>Variation</h3><p>Input a list of values, from which the tool will randomly select one option to rotate each object by.</p><p><i style={{ color: "#dff" }}>For example if given option <b style={{ color: "#f55" }}>15 30 45</b> it will select one of the values and rotate the object by either <b>15</b>, <b>30</b>, or <b>45</b> degrees.</i></p></>,
   rotate_typeRandomOption: <><h3>Random</h3>Rotate by a random amount of degrees between two specified values.</>,
   rotate_rotation: <>Specify amount of degrees to rotate by.</>,
   rotate_rotationVariations: <><p>Specify variation of degrees to rotate by.</p><p><i>Recognised separators: <b style={{ color: "#f55" }}>&nbsp;&nbsp;space &nbsp;&nbsp;&nbsp;, &nbsp;&nbsp;&nbsp;;</b></i></p></>,
@@ -62,7 +62,7 @@ export default {
   scale_offset_y: <><h3>Offset Y</h3><p>Offsets the layout by specified value in vertical axis (up or down).</p><p><i style={{ color: "#dff" }}>For example, if given value <b style={{ color: "#f55" }}>2</b> it will raise the objects by <b>2</b>.</i></p></>,
   scale_offset_z: <><h3>Offset Z</h3><p>Offsets the layout by specified value in depth axis (forward or backward).</p><p><i style={{ color: "#dff" }}>For example, if given value <b style={{ color: "#f55" }}>2</b> it will offset the objects forward by <b>2</b>.</i></p></>,
 
-  slab_json: <><p>Breakdown of the Base64 code on the left for easier visualisation of all components.</p><p>Can be edited directly in the field to change object UUID, it's position and rotation.</p><p><i><b style={{ color: "#f55" }}>Needs to have a specified structure.</b></i></p></>,
+  slab_json: <><p>Breakdown of the Base64 code on the left for easier visualisation of all components.</p><p>Can be edited directly in the field to change object UUID, it's position and rotation.</p><p><i><b style={{ color: "#f55" }}>Needs to have a mostly correct json structure.</b></i></p></>,
   slab_base64: <><p>Base64 code that Talespire uses for it's building blocks.</p><p>You can copy from and paste to this field directly.</p></>,
   slab_copyButton: <><p>Place the slab from the field below in your hand. It will also be copied to clipboard so you can paste it later on if you wish.</p><p><i><b style={{ color: "#f55" }}>It will clear any other things that have been copied or cut previously.</b></i></p></>,
   slab_eyedropperButton: <><h3>Eyedropper Tool</h3><p>Select the object (prop or tile) in Talespire to automatically get the UUID of the object in the field below.</p><p><i>Only works if used in a Symbiote version of the tool inside Talespire.</i></p><p><i><b style={{ color: "#f55" }}>It will break if a mini is selected.</b></i></p></>,
