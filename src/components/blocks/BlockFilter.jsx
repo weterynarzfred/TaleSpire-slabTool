@@ -17,10 +17,10 @@ export default function BlockFilter({ className, block }) {
     <BlockHeader block={block} />
 
     <BlockContents block={block}>
-      <BlockInput path={block.path} dataPath={['percentage']} def="1" tooltip="filter_percentage" />
+      <BlockInput path={block.path} dataPath={['fraction']} def="1" tooltip="filter_fraction" />
       <BlockUuidInput path={block.path} dataPath={['uuid']} tooltip="filter_uuid" />
       {isChildOf('duplicate', state, block.path) ? null :
-        <BlockInput path={block.path} dataPath={['min_distance']} tooltip="filter_minDistance" />
+        <BlockInput path={block.path} dataPath={['min_dist']} tooltip="filter_minDistance" />
       }
 
       <BlockCheckboxInput path={block.path} dataPath={['delete_selected']} tooltip="filter_deleteSelected" />

@@ -95,13 +95,13 @@ export default function BlockSlab({ className, block }) {
     if (typeof TS === 'undefined') {
       navigator.clipboard.writeText(slab).then(() => {
         copyButtonRef.current.innerText = 'copied';
-        setTimeout(() => copyButtonRef.current.innerText = 'grab result', 500);
+        setTimeout(() => copyButtonRef.current.innerText = 'grab from this slab', 500);
       });
     } else {
       TS.system.clipboard.setText(slab);
       TS.slabs.sendSlabToHand(slab);
       copyButtonRef.current.innerText = 'copied';
-      setTimeout(() => copyButtonRef.current.innerText = 'grab result', 500);
+      setTimeout(() => copyButtonRef.current.innerText = 'grab from this slab', 500);
     }
   }
 
@@ -137,10 +137,10 @@ export default function BlockSlab({ className, block }) {
 
     <BlockContents block={block}>
       <div className="controls">
-        <button className="copy-button default-tooltip-anchor" data-tooltip-key="slab_copyButton" ref={copyButtonRef} onClick={handleCopyButton}>grab</button>
         {/* <button className="read-button" onClick={handleReadButton}>read</button> */}
         <button className="eyedropper-button default-tooltip-anchor" data-tooltip-key="slab_eyedropperButton" onClick={handleEyedropperButton}></button>
         <div className="byte-count">{bytes(dataLength) ?? '???'}</div>
+        <button className="copy-button default-tooltip-anchor" data-tooltip-key="slab_copyButton" ref={copyButtonRef} onClick={handleCopyButton}>grab from this slab</button>
       </div>
       <textarea className="json-input default-tooltip-anchor" placeholder="data"
         spellCheck="false" value={json} onChange={handleJsonInput} data-tooltip-key="slab_json" />

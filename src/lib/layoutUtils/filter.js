@@ -20,16 +20,16 @@ function countNeighbors(assetArray, assetIndex, minDistance) {
 
 Layout.prototype.filter = function (
   {
-    percentage,
+    fraction,
     uuid = "",
-    min_distance,
+    min_dist,
     delete_selected = false
   },
   blocks = {},
   scope
 ) {
-  const usedPercentage = parseInput('float', percentage, 1, scope);
-  const usedMinDistance = parseInput('float', min_distance, 0, scope);
+  const usedFraction = parseInput('float', fraction, 1, scope);
+  const usedMinDist = parseInput('float', min_dist, 0, scope);
 
   if (uuid && !uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/))
     throw new Error('incorrect uuid format');
@@ -42,7 +42,7 @@ Layout.prototype.filter = function (
     let movedCount = 0;
     const initialAssetCount = this.layouts[i].assets.length;
     for (let j = 0; j < initialAssetCount; j++) {
-      if (Math.random() >= usedPercentage) continue;
+      if (Math.random() >= usedFraction) continue;
 
       filteredLayout.addAsset(
         this.layouts[i].uuid,
@@ -53,7 +53,7 @@ Layout.prototype.filter = function (
   }
 
   // move the items that are too far back into the original layout
-  if (usedMinDistance > 0) {
+  if (usedMinDist > 0) {
     const assetArray = [];
     for (let i = 0; i < filteredLayout.layouts.length; i++) {
       for (let j = 0; j < filteredLayout.layouts[i].assets.length; j++) {
@@ -63,7 +63,7 @@ Layout.prototype.filter = function (
       }
     }
     for (let assetIndex = 0; assetIndex < assetArray.length; assetIndex++) {
-      assetArray[assetIndex].neighbors = countNeighbors(assetArray, assetIndex, usedMinDistance);
+      assetArray[assetIndex].neighbors = countNeighbors(assetArray, assetIndex, usedMinDist);
     }
     assetArray.sort((a, b) => a.neighbors.length - b.neighbors.length);
     let neighborCount = assetArray.reduce((sum, element) => sum + element.neighbors.length, 0);

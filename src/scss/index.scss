@@ -141,6 +141,10 @@ body {
   display: flex;
   align-items: center;
   gap: .5rem;
+
+  .byte-count {
+    margin-left: auto;
+  }
 }
 
 .block {
@@ -213,13 +217,46 @@ body {
       .controls {
         position: fixed;
         z-index: 21;
-        bottom: 0;
+        top: 0;
         left: 0;
         width: 100%;
         background-color: $backgroundColor;
-        padding: .5em 1em;
-        border: solid $contentColor;
-        border-width: 2px 0 0 0;
+        padding: .5em .5em .5em 1em;
+        border-bottom: 2px solid $contentColor;
+        font-size: 1rem;
+
+        .title {
+          font-weight: 900;
+          color: #fff;
+
+          span {
+            position: relative;
+            display: inline-block;
+
+            &:nth-child(1) {
+              letter-spacing: 0;
+              opacity: .4;
+              font-weight: 400;
+            }
+
+            &:nth-child(2) {
+              color: #f55;
+              letter-spacing: 0;
+              margin-left: -2px;
+
+              &::before {
+                content: "";
+                display: block;
+                position: absolute;
+                background-color: #fff;
+                width: 26.4px;
+                height: 2px;
+                bottom: 2px;
+                left: -4.12px;
+              }
+            }
+          }
+        }
       }
 
       .json-input {
@@ -289,14 +326,6 @@ body {
       line-height: 1.1;
       box-sizing: border-box;
     }
-  }
-}
-
-#foot {
-  margin-top: 6rem;
-
-  .text {
-    margin-bottom: 2em;
   }
 }
 
