@@ -14,9 +14,9 @@ export default function Results() {
     navigator.clipboard.writeText(slab).then(() => {
       copyButtonRef.current.innerText = 'copied';
       setTimeout(() => copyButtonRef.current.innerText = 'grab result', 500);
+      if (typeof TS === 'undefined') return;
+      TS.slabs.sendSlabToHand(slab);
     });
-    if (typeof TS === 'undefined') return;
-    TS.slabs.sendSlabToHand(slab);
   }
 
   const [dataSize, setDataSize] = useState(0);

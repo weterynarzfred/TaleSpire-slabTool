@@ -95,9 +95,9 @@ export default function BlockSlab({ className, block }) {
     navigator.clipboard.writeText(slab).then(() => {
       copyButtonRef.current.innerText = 'copied';
       setTimeout(() => copyButtonRef.current.innerText = 'grab', 500);
+      if (typeof TS === 'undefined') return;
+      TS.slabs.sendSlabToHand(slab);
     });
-    if (typeof TS === 'undefined') return;
-    TS.slabs.sendSlabToHand(slab);
   }
 
   function handleEyedropperButton() {
