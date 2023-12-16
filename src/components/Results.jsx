@@ -51,7 +51,7 @@ export default function Results() {
       <div className="controls">
         <div className="title">S<span>lab</span>T<span>oo</span>l</div>
         <div className="byte-count">{bytes(dataSize)} / {bytes(maxDataSize)}</div>
-        <button className="copy-button" ref={copyButtonRef} onClick={handleCopyButton}>grab result</button>
+        <button className="copy-button default-tooltip-anchor" data-tooltip-key="copyButton" ref={copyButtonRef} onClick={handleCopyButton}>grab result</button>
       </div>
       <textarea className="json-input" readOnly value={state.layout.json} />
       <textarea className="base64-input" ref={base64InputRef} readOnly value={data.base64} />

@@ -66,4 +66,6 @@ export default {
   slab_base64: <><p>Base64 code that Talespire uses for it's building blocks.</p><p>You can copy from and paste to this field directly.</p></>,
   slab_copyButton: <><p>Place the slab from the field below in your hand. It will also be copied to clipboard so you can paste it later on if you wish.</p><p><i><b style={{ color: "#f55" }}>It will clear any other things that have been copied or cut previously.</b></i></p></>,
   slab_eyedropperButton: <><h3>Eyedropper Tool</h3><p>Select the object (prop or tile) in Talespire to automatically get the UUID of the object in the field below.</p><p><i>Only works if used in a Symbiote version of the tool inside Talespire.</i></p><p><i><b style={{ color: "#f55" }}>It will break if a mini is selected.</b></i></p></>,
+
+  copyButton: <>nooooooo</>,
 };
