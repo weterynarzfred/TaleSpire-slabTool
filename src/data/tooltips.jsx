@@ -1,6 +1,6 @@
 export default {
   addSlab: <><h3>Add a slab</h3><p>Adds a slab to the existing layout.</p></>,
-  addDuplicate: <><h3>Duplicate layout</h3><p>Duplicates the existing layout a set number of times, applying modifiers to each copy.</p></>,
+  addDuplicate: <><h3>Duplicate layout</h3><p>Duplicates the existing layout a set number of times, applying modifiers to each copy.</p><p><i style={{ color: "#dff" }}>You can use variable <b style={{ color: "#f55" }}>iter</b> which is the number of the current iteration.</i></p></>,
   addOffset: <><h3>Offset layout</h3><p>Offsets the existing layout by the specified amount. Keep in mind that the end result is always normalized to have only positive position values.</p></>,
   addRotate: <><h3>Rotate layout</h3><p>Rotates the existing layout by the specified amount.</p></>,
   addScale: <><h3>Scale layout</h3><p>Scales <strong>the relative positions of</strong> the objects. The objects themselves cannot be scaled.</p></>,
