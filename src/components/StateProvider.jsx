@@ -23,7 +23,7 @@ initialState.blocks[initialId] = {
   type: 'slab',
   data: {
     layouts: [{
-      uuid: 'fa309f05-6efc-41ec-91a7-1157fb7029f3',
+      uuid: '123c7881-2d35-4e0e-92db-bb2069242181',
       assets: [{}],
     }],
   },
