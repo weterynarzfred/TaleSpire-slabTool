@@ -11,12 +11,17 @@ export default function Results() {
 
   function handleCopyButton() {
     const slab = base64InputRef.current.value;
-    navigator.clipboard.writeText(slab).then(() => {
+    if (typeof TS === 'undefined') {
+      navigator.clipboard.writeText(slab).then(() => {
+        copyButtonRef.current.innerText = 'copied';
+        setTimeout(() => copyButtonRef.current.innerText = 'grab result', 500);
+      });
+    } else {
+      TS.system.clipboard.setText(slab);
+      TS.slabs.sendSlabToHand(slab);
       copyButtonRef.current.innerText = 'copied';
       setTimeout(() => copyButtonRef.current.innerText = 'grab result', 500);
-      if (typeof TS === 'undefined') return;
-      TS.slabs.sendSlabToHand(slab);
-    });
+    }
   }
 
   const [dataSize, setDataSize] = useState(0);
