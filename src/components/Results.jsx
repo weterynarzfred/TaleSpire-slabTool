@@ -35,10 +35,12 @@ export default function Results() {
   }, [state.layout.base64]);
   useEffect(() => {
     if (typeof TS === 'undefined') return;
-    TS.slabs.getMaxSlabSizeInBytes().then(result => {
-      const size = result;
-      setMaxDataSize(size);
-    });
+    setTimeout(() => {
+      TS.slabs.getMaxSlabSizeInBytes().then(result => {
+        const size = result;
+        setMaxDataSize(size);
+      });
+    }, 100);
   }, []);
 
   return <div className="block block--results">
