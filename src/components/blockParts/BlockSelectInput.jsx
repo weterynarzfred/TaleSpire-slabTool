@@ -17,21 +17,19 @@ export default function BlockSelectInput({ path, dataPath, options, def = "", to
 
   const value = _.get(state.blocks, path.join('.blocks.') + '.data.' + dataPath.join('.'));
 
+  const radioOptions = options.map((option) => {
+    return <label>
+      <input value={option.value} type='radio' key={option.value} name={path.join('.blocks.') + '.data.' + dataPath.join('.')}></input>
+      {option.label}
+    </label>;
+  });
+
   return <div className="BlockInput BlockSelectInput">
-    <label>
-      <div className="label">{dataPath.join('.').replace("_", " ")}: </div>
-      <div
-        className="default-tooltip-anchor"
-        data-tooltip-key={tooltip}>
-        <Select
-          className='select'
-          classNamePrefix="select"
-          isSearchable={false}
-          defaultValue={value ?? def}
-          options={options}
-          onChange={handleChange}
-        />
-      </div>
-    </label>
+    <div className="label">{dataPath.join('.').replace("_", " ")}: </div>
+    <div
+      className="default-tooltip-anchor"
+      data-tooltip-key={tooltip}>
+      {radioOptions}
+    </div>
   </div>;
 }
