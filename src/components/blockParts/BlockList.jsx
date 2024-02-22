@@ -29,10 +29,10 @@ export default function BlockList({ path = [] }) {
   const parentBlock = getBlockAtPath(state, path);
   if (parentBlock.isCollapsed) return null;
 
-  function handleAddSlab(option) {
+  function handleAddBlock(blockType) {
     dispatch({
       type: "ADD_BLOCK",
-      blockType: option.value,
+      blockType,
       path,
     });
   }
@@ -93,48 +93,33 @@ export default function BlockList({ path = [] }) {
 
   const blockOptions = [];
   if (!isChildOf(['duplicate', 'filter'], state, path))
-    blockOptions.push({
-      value: 'slab',
-      label: <div data-tooltip-key="addSlab">Slab</div>
-    });
+    blockOptions.push(
+      <button key='slab' data-tooltip-key="addSlab" onClick={() => handleAddBlock('slab')}>Slab</button>
+    );
   if (!isChildOf('duplicate', state, path))
-    blockOptions.push({
-      value: 'duplicate',
-      label: <div data-tooltip-key="addDuplicate">Duplicate</div>
-    });
-  blockOptions.push({
-    value: 'offset',
-    label: <div data-tooltip-key="addOffset">Offset</div>
-  });
-  blockOptions.push({
-    value: 'rotate',
-    label: <div data-tooltip-key="addRotate">Rotate</div>
-  });
-  blockOptions.push({
-    value: 'scale',
-    label: <div data-tooltip-key="addScale">Scale</div>
-  });
-  if (!isChildOf('duplicate', state, path))
-    blockOptions.push({
-      value: 'replace',
-      label: <div data-tooltip-key="addReplace">Replace</div>
-    });
-  blockOptions.push({
-    value: 'filter',
-    label: <div data-tooltip-key="addFilter">Filter</div>
-  });
+    blockOptions.push(
+      < button key='duplicate' data-tooltip-key="addDuplicate" onClick={() => handleAddBlock('duplicate')}> Duplicate</button >
+    );
+  blockOptions.push(
+    < button key='offset' data-tooltip-key="addOffset" onClick={() => handleAddBlock('offset')}> Offset</button >
+  );
+  blockOptions.push(
+    < button key='rotate' data-tooltip-key="addRotate" onClick={() => handleAddBlock('rotate')}> Rotate</button >
+  );
+  blockOptions.push(
+    < button key='scale' data-tooltip-key="addScale" onClick={() => handleAddBlock('scale')}> Scale</button >
+  );
+  blockOptions.push(
+    < button key='replace' data-tooltip-key="addReplace" onClick={() => handleAddBlock('replace')}> Replace</button >
+  );
+  blockOptions.push(
+    < button key='filter' data-tooltip-key="addFilter" onClick={() => handleAddBlock('filter')}> Filter</button >
+  );
 
   return <div className="BlockList">
     {blockElements}
     <div className="block-controls">
-      <Select
-        className='add-block'
-        classNamePrefix='add-block'
-        options={blockOptions}
-        isSearchable={false}
-        value={{ label: 'Add Modifier' }}
-        onChange={handleAddSlab}
-      />
+      {blockOptions}
     </div>
   </div>;
 }
