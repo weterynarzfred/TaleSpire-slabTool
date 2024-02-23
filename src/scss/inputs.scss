@@ -55,73 +55,13 @@ input {
     padding-left: .5em;
     height: $inputHeight;
 
-    .label {
-      font-size: .8em;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      flex-shrink: 0;
-      min-width: 8em;
-    }
+    
 
-    input,
-    .select {
+    input{
       height: 100%;
       border: none;
       text-align: center;
       margin-left: .5em;
-    }
-
-
-    .select {
-      min-width: 8em;
-      height: $inputHeight;
-
-      &__control {
-        position: relative;
-        min-height: 0;
-        height: $inputHeight;
-        border-radius: 0;
-        background-color: $inputBackgroundColor;
-        border: none;
-
-        &--menu-is-open,
-        &--is-focused {
-          box-shadow: none;
-        }
-      }
-
-      &__single-value {
-        color: $inputTextColor;
-      }
-
-      &__indicator,
-      &__value-container {
-        padding: 0 .5em;
-      }
-
-      &__menu {
-        border-radius: 0;
-        background-color: $inputBackgroundColor;
-        color: $inputTextColor;
-        margin-top: 0;
-        z-index: 2;
-      }
-
-      &__option {
-        padding: 0.2em .5em;
-
-        &--is-selected {
-          background-color: $inputActiveColor;
-        }
-
-        &--is-focused {
-          background-color: $inputHoverColor;
-        }
-      }
-
-      &__indicator-separator {
-        display: none;
-      }
     }
 
     input[type="checkbox"] {
@@ -145,15 +85,61 @@ input {
         box-shadow: 0 0 0 2px $inputActiveColor inset;
       }
     }
+
+    .radioOption[type="radio"] {
+      display: none;
+
+      +div {
+        min-width: $inputHeight;
+        height: $inputHeight;
+        padding: 0 0.5rem;
+        background-color: $inputBackgroundColor;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      &:checked+div {
+        background-color: #f55;
+      }
+    }
   }
 
-  &.BlockUuidInput {
+  .label {
+    font-size: .8em;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    flex-shrink: 0;
+    min-width: 9em;
+  }
+
+  &.BlockUuidInput  {
     input {
       width: 23em;
     }
 
     .eyedropper-button {
       border: none;
+    }
+  }
+
+  &.BlockSelectInput{
+    display: flex;
+    align-items: center;
+
+    padding-left: .5em;
+
+    label {
+      padding-left: 0;
+    }
+
+    .default-tooltip-anchor{
+      display: flex;
+      margin-left: .5em;
+      gap: 2px;
     }
   }
 
@@ -174,8 +160,7 @@ input {
     &:hover {
 
       input,
-      .checkbox-display,
-      .select__control {
+      .checkbox-display{
         background-color: #444;
       }
     }
@@ -183,8 +168,7 @@ input {
     &:active {
 
       input,
-      .checkbox-display,
-      .select__control {
+      .checkbox-display{
         background-color: $inputActiveColor;
       }
     }

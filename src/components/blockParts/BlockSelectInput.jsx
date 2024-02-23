@@ -5,21 +5,29 @@ export default function BlockSelectInput({ path, dataPath, options, def = "", to
   const state = useTrackedState();
   const dispatch = useUpdate();
 
-  function handleChange(selected) {
+  function handleChange(event) {
     dispatch({
       type: "CHANGE_DATA",
       path,
       dataPath,
-      value: selected.value,
+      value: event.currentTarget.value,
     });
   }
 
-  const value = _.get(state.blocks, path.join('.blocks.') + '.data.' + dataPath.join('.'));
+  const value = _.get(state.blocks, path.join('.blocks.') + '.data.' + dataPath.join('.')) ?? def.value;
 
   const radioOptions = options.map((option) => {
-    return <label>
-      <input value={option.value} type='radio' key={option.value} name={path.join('.blocks.') + '.data.' + dataPath.join('.')}></input>
-      {option.label}
+    return <label key={option.value}>
+      <input
+        className="radioOption"
+        value={option.value}
+        checked={value === option.value}
+        type='radio'
+        name={path.join('.blocks.') + '.data.' + dataPath.join('.')}
+        onChange={handleChange}
+      >
+      </input>
+      <div>{option.label}</div>
     </label>;
   });
 
