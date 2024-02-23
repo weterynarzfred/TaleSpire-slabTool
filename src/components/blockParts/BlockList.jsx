@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Select from 'react-select';
 import classNames from 'classnames';
 import { useTrackedState, useUpdate } from '../StateProvider';
 import BlockDuplicate from '../blocks/BlockDuplicate';
@@ -92,28 +91,28 @@ export default function BlockList({ path = [] }) {
   }
 
   const blockOptions = [];
-  if (!isChildOf(['duplicate', 'filter'], state, path))
+  if (!isChildOf(['duplicate', 'filter', 'slab'], state, path))
     blockOptions.push(
-      <button key='slab' data-tooltip-key="addSlab" onClick={() => handleAddBlock('slab')}>Slab</button>
+      <button className="add-block" key='slab' data-tooltip-key="addSlab" onClick={() => handleAddBlock('slab')}>Slab</button>
     );
   if (!isChildOf('duplicate', state, path))
     blockOptions.push(
-      < button key='duplicate' data-tooltip-key="addDuplicate" onClick={() => handleAddBlock('duplicate')}> Duplicate</button >
+      < button className="add-block" key='duplicate' data-tooltip-key="addDuplicate" onClick={() => handleAddBlock('duplicate')}> Duplicate</button >
     );
   blockOptions.push(
-    < button key='offset' data-tooltip-key="addOffset" onClick={() => handleAddBlock('offset')}> Offset</button >
+    < button className="add-block" key='offset' data-tooltip-key="addOffset" onClick={() => handleAddBlock('offset')}> Offset</button >
   );
   blockOptions.push(
-    < button key='rotate' data-tooltip-key="addRotate" onClick={() => handleAddBlock('rotate')}> Rotate</button >
+    < button className="add-block" key='rotate' data-tooltip-key="addRotate" onClick={() => handleAddBlock('rotate')}> Rotate</button >
   );
   blockOptions.push(
-    < button key='scale' data-tooltip-key="addScale" onClick={() => handleAddBlock('scale')}> Scale</button >
+    < button className="add-block" key='scale' data-tooltip-key="addScale" onClick={() => handleAddBlock('scale')}> Scale</button >
   );
   blockOptions.push(
-    < button key='replace' data-tooltip-key="addReplace" onClick={() => handleAddBlock('replace')}> Replace</button >
+    < button className="add-block" key='replace' data-tooltip-key="addReplace" onClick={() => handleAddBlock('replace')}> Replace</button >
   );
   blockOptions.push(
-    < button key='filter' data-tooltip-key="addFilter" onClick={() => handleAddBlock('filter')}> Filter</button >
+    < button className="add-block" key='filter' data-tooltip-key="addFilter" onClick={() => handleAddBlock('filter')}> Filter</button >
   );
 
   return <div className="BlockList">

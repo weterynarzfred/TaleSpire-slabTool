@@ -29,11 +29,11 @@ export default function App() {
     </div>
     <Tooltip
       id="dropdown-tooltip"
-      place="left-start"
+      place="top-start"
       border="1px solid #eee"
-      anchorSelect=".add-block__menu .add-block__option"
+      anchorSelect=".add-block"
       render={({ activeAnchor }) => {
-        const key = activeAnchor?.querySelector('div')?.getAttribute('data-tooltip-key');
+        const key = activeAnchor?.getAttribute('data-tooltip-key');
         if (key === undefined) return null;
         const content = tooltips[key];
         if (content === undefined || content === "") return null;

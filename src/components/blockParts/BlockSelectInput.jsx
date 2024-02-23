@@ -1,4 +1,3 @@
-import Select from 'react-select';
 import _ from 'lodash';
 import { useUpdate, useTrackedState } from '../StateProvider';
 

@@ -3,7 +3,9 @@
 .block-controls {
   display: flex;
   justify-content: flex-end;
+  
   padding: .5rem;
+  font-size: .8em;
 }
 
 .block {
@@ -11,6 +13,7 @@
     position: relative;
     margin-top: .4rem;
     margin-left: 1rem;
+    margin-right: .5rem;
     min-height: 1em;
 
     .block {
@@ -24,6 +27,15 @@
       padding: 0;
       margin-bottom: .5em;
       font-size: .8rem;
+      .add-block {
+        background: #f55;
+        color: #eee;
+
+        &:hover {
+          background: #323;
+          
+        }
+      }
     }
   }
 }
@@ -32,77 +44,25 @@
   .add-block {
     min-width: 6em;
 
-    &__control {
-      position: relative;
-      height: 100%;
-      min-height: 0;
-      border-radius: 0;
-      background-color: #f55;
-      padding: .3em .8em;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      font-weight: 900;
-      font-size: .9em;
-      border: none;
-      cursor: pointer;
-      transition: 0;
+    margin-left: 2px;
+    position: relative;
+    color: #eee;
+    height: 100%;
+    min-height: 0;
+    border-radius: 0;
+    background: #f55;
+    padding: .3em .8em;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 900;
+    font-size: .9em;
+    border: none;
+    cursor: pointer;
+    transition: 0;
 
-      &:hover {
-        background-color: #f66;
-      }
-
-      &:active {
-        background-color: #f77;
-      }
-
-      &--menu-is-open,
-      &--is-focused {
-        box-shadow: none;
-      }
-    }
-
-    &__single-value {
-      color: $inputTextColor;
-    }
-
-    &__indicators {
-      display: none;
-    }
-
-    &__menu {
-      position: absolute;
-      border-radius: 0;
-      background-color: $inputBackgroundColor;
-      color: $inputTextColor;
-      margin-top: 0;
-      border: 1px solid #eee;
-      z-index: 3;
-
-      &-list {
-        padding: .5em 0;
-      }
-    }
-
-    &__option {
-      padding: 0;
-      text-align: center;
-      background-color: $backgroundColor;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      font-weight: 900;
-      font-size: .8rem;
-
-      >div {
-        padding: 0.5em 1em;
-      }
-
-      &--is-focused {
-        background-color: #123;
-      }
-    }
-
-    &__indicator-separator {
-      display: none;
+    &:hover {
+      background: #323;
+      color: #eee;
     }
   }
 }
