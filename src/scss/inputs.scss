@@ -100,10 +100,18 @@ input {
         font-weight: 700;
         cursor: pointer;
         user-select: none;
+
+        &:hover{
+          background: #444;
+        }
       }
 
       &:checked+div {
         background-color: #f55;
+
+        &:hover{
+          background: #523;
+        }
       }
     }
   }
