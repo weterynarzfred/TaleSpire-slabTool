@@ -29746,7 +29746,7 @@
                     }
                 }
             ],
-            "IsInteractable": true,
+            "IsInteractable": false,
             "ColliderBoundsBound": {
                 "m_Center": {
                     "x": -0.009663403034210205,
