@@ -1,35 +1,23 @@
-import index1 from '../data/index_cyberpunk_sci-fi.json';
-import index2 from '../data/index_medieval_fantasy.json';
-
-
-const indexes = [
-  index1,
-  index2,
-];
+const contentPacks = await TS.contentPacks.getContentPacks();
+const packInfo = await TS.contentPacks.getMoreInfo(contentPacks);
 
 const parsedIndex = {};
-for (const index of indexes) {
+for (const index of packInfo) {
   for (const key in index) {
-    const assetArray = index[key];
-    if (!Array.isArray(assetArray)) continue;
-    if (!['Tiles', 'Props', 'Creatures'].includes(key)) continue;
+    if (!['tiles', 'props', 'creatures'].includes(key)) continue;
+    const assetArray = Object.values(index[key]);
 
     for (const asset of assetArray) {
-      if (asset.Id === undefined) continue;
+      if (asset.id === undefined) continue;
 
       const assetData = {
-        family: index.Name,
         type: key,
-        folder: asset.Folder,
-        group: asset.GroupTag,
-        name: asset.Name,
-        // uuid: asset.Id,
-        // colliderBounds: asset.ColliderBoundsBound,
-        // assets: asset.Assets,
-        center: asset.ColliderBoundsBound?.m_Center,
+        group: asset.groupTag,
+        name: asset.name,
+        center: asset.colliderBoundsBound?.center,
       };
 
-      parsedIndex[asset.Id] = assetData;
+      parsedIndex[asset.id] = assetData;
     }
   }
 }

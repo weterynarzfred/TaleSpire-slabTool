@@ -3,18 +3,13 @@
  * https://github.com/Bouncyrock/DumbSlabStats/blob/master/format.md
  */
 
-import parsedIndex from './assetData';
-
 function readSlab(buffer) {
   let bufferPointer = 0;
 
   // header
   const header = new Uint32Array(buffer.slice(bufferPointer, bufferPointer += 4))[0];
-  // console.log('header: ' + header);
   const version = new Uint16Array(buffer.slice(bufferPointer, bufferPointer += 2))[0];
-  // console.log('version: ' + version);
   const layoutCount = new Uint16Array(buffer.slice(bufferPointer, bufferPointer += 2))[0];
-  // console.log('number of layouts ' + layoutCount);
 
   // skip creature count bytes (not in use)
   bufferPointer += 2;
@@ -47,7 +42,6 @@ function readSlab(buffer) {
       assetCount,
       assets: []
     };
-    // layout.data = parsedIndex[uuid];
     layouts.push(layout);
   }
 
