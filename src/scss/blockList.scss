@@ -1,19 +1,19 @@
-@import 'variables.scss';
+@import "variables.scss";
 
 .block-controls {
   display: flex;
   justify-content: flex-end;
-  
-  padding: .5rem;
-  font-size: .8em;
+
+  padding: 0.5rem;
+  font-size: 0.8em;
 }
 
 .block {
   .BlockList {
     position: relative;
-    margin-top: .4rem;
+    margin-top: 0.4rem;
     margin-left: 1rem;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
     min-height: 1em;
 
     .block {
@@ -25,14 +25,15 @@
       position: relative;
       background: none;
       padding: 0;
-      margin-bottom: .5em;
-      font-size: .8rem;
+      margin-bottom: 0.5em;
+      font-size: 0.8rem;
+
       .add-block {
-        background:$inputBackgroundColor;
+        background: $inputBackgroundColor;
         color: #eee;
 
         &:hover {
-          background: #444;          
+          background: #444;
         }
       }
     }
@@ -50,11 +51,11 @@
     min-height: 0;
     border-radius: 0;
     background: #f55;
-    padding: .3em .8em;
+    padding: 0.3em 0.8em;
     text-transform: uppercase;
-    letter-spacing: .1em;
+    letter-spacing: 0.1em;
     font-weight: 900;
-    font-size: .9em;
+    font-size: 0.75em;
     border: none;
     cursor: pointer;
     transition: 0;

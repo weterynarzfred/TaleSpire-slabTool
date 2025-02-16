@@ -9,6 +9,7 @@ import BlockScale from '../blocks/BlockScale';
 import BlockReplace from '../blocks/BlockReplace';
 import BlockFilter from '../blocks/BlockFilter';
 import { getBlockAtPath } from '../../lib/reducer/utils';
+import BlockGroup from "../blocks/BlockGroup";
 
 function isChildOf(type, state, path) {
   type = Array.isArray(type) ? type : [type];
@@ -45,7 +46,13 @@ export default function BlockList({ path = [] }) {
     if (i === 0) className.push('block--first');
     if (i === subBlocksArray.length - 1) className.push('block--last');
     className = classNames(className);
-    if (block.type === 'slab') {
+    if (block.type === 'group') {
+      blockElements.push(<BlockGroup
+        key={block.id}
+        block={block}
+        className={className}
+      />);
+    } else if (block.type === 'slab') {
       blockElements.push(<BlockSlab
         key={block.id}
         block={block}
@@ -91,10 +98,14 @@ export default function BlockList({ path = [] }) {
   }
 
   const blockOptions = [];
-  if (!isChildOf(['duplicate', 'filter', 'slab'], state, path))
+  if (!isChildOf(['group', 'duplicate', 'filter', 'slab'], state, path)) {
+    blockOptions.push(
+      < button className="add-block" key='group' data-tooltip-key="addGroup" onClick={() => handleAddBlock('group')}> Group</button >
+    );
     blockOptions.push(
       <button className="add-block" key='slab' data-tooltip-key="addSlab" onClick={() => handleAddBlock('slab')}>Slab</button>
     );
+  }
   if (!isChildOf('duplicate', state, path))
     blockOptions.push(
       < button className="add-block" key='duplicate' data-tooltip-key="addDuplicate" onClick={() => handleAddBlock('duplicate')}> Duplicate</button >
