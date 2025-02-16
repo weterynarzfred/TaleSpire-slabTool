@@ -25,7 +25,16 @@ function applyBlock(layout, block, scope = {}) {
       layout.replace(block.data, scope);
     } else if (block.type === 'filter') {
       layout.filter(block.data, block.blocks, scope);
+    } else if (block.type === 'group') {
+      if (block.blocks && Object.keys(block.blocks).length) {
+        const blockArray = Object.values(block.blocks)
+          .sort((a, b) => a.order - b.order);
+        for (const subBlock of blockArray) {
+          applyBlock(layout, subBlock, scope);
+        }
+      }
     }
+
     block.isError = false;
   } catch (e) {
     block.isError = true;

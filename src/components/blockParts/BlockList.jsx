@@ -102,6 +102,8 @@ export default function BlockList({ path = [] }) {
     blockOptions.push(
       < button className="add-block" key='group' data-tooltip-key="addGroup" onClick={() => handleAddBlock('group')}> Group</button >
     );
+  }
+  if (!isChildOf(['duplicate', 'filter', 'slab'], state, path)) {
     blockOptions.push(
       <button className="add-block" key='slab' data-tooltip-key="addSlab" onClick={() => handleAddBlock('slab')}>Slab</button>
     );
