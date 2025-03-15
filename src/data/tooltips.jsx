@@ -6,6 +6,7 @@ export default {
   addScale: <><h3>Scale layout</h3><p>Scales <strong>the relative positions of</strong> the objects. The objects themselves cannot be scaled.</p></>,
   addReplace: <><h3>Replace assets</h3><p>Replaces the specified assets with a different asset or a slab.</p></>,
   addFilter: <><h3>Filter assets</h3><p>Filters the specified assets and either deletes them or applies the sub-modifiers to them.</p></>,
+  addGroup: <><h3>Group block</h3><p>Creates an empty group block to help with organising the layout edits.</p></>,
 
   duplicate_count: <><h3>Duplicates count</h3><p>Amount of times the layout above is duplicated.</p></>,
   duplicate_modifiers: "",
@@ -51,6 +52,7 @@ export default {
   rotate_offset_x: <><h3>Axis offset X</h3><p>Offsets the axis of rotation by specified value in horizontal direction (left or right).</p><p><i style={{ color: "#dff" }}>You can treat it as a radius of the rotation.</i></p></>,
   rotate_offset_y: <><h3>Axis offset Y</h3><p>Offsets the axis of rotation by specified value in vertical direction (up or down).</p><p><i style={{ color: "#dff" }}>You can treat it as a radius of the rotation.</i></p></>,
   rotate_offset_z: <><h3>Axis offset Z</h3><p>Offsets the axis of rotation by specified value in depth direction (forward or backward).</p><p><i style={{ color: "#dff" }}>You can treat it as a radius of the rotation.</i></p></>,
+
   scale_center: "",
   scale_centerZeroOption: <><p>Transforms the slab around the current slab origin <b style={{ color: "#f55" }}><i>(magic)</i></b>.</p> <p><i style={{ color: "#dff" }}>Transforms around the coordinate of the bottom left most object in the current layout.</i></p></>,
   scale_centerCenterOption: <>Transforms the slab around the center of the bounding box.</>,
