@@ -24,7 +24,7 @@ export default function BlockInput({ path, dataPath, def = 0, tooltip }) {
 
   useEffect(() => {
     setInputValue(_.get(state.blocks, path.join('.blocks.') + '.data.' + dataPath.join('.')));
-  }, []);
+  }, [state.stateReplacementIndex]);
 
   return <div className="BlockInput">
     <label>

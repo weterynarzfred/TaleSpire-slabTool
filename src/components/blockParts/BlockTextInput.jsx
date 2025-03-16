@@ -34,7 +34,7 @@ export default function BlockTextInput(
 
   useEffect(() => {
     setInputValue(_.get(state.blocks, path.join('.blocks.') + '.data.' + dataPath.join('.')));
-  }, []);
+  }, [state.stateReplacementIndex]);
 
   return <div className={classNames("BlockInput BlockTextInput", className)}>
     <label>

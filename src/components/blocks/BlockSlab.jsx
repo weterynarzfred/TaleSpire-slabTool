@@ -5,12 +5,13 @@ import classNames from 'classnames';
 import Layout from '../../lib/Layout';
 import { decodeSlab } from '../../lib/encoding';
 import readSlab from '../../lib/readSlab';
-import { useUpdate } from '../StateProvider';
+import { useTrackedState, useUpdate } from '../StateProvider';
 import BlockHeader from '../blockParts/BlockHeader';
 import BlockList from '../blockParts/BlockList';
 import BlockContents from '../blockParts/BlockContents';
 
 export default function BlockSlab({ className, block }) {
+  const state = useTrackedState();
   const dispatch = useUpdate();
 
   const [base64, setBase64] = useState("");
@@ -33,7 +34,7 @@ export default function BlockSlab({ className, block }) {
       setBase64("something is bRoKeN;");
       setDataLength("");
     }
-  }, []);
+  }, [state.stateReplacementIndex]);
 
   function saveLayout(layout) {
     dispatch({

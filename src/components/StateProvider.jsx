@@ -13,6 +13,7 @@ import moveBlock from '../lib/reducer/moveBlock';
 const initialState = {
   blocks: {},
   layout: new Layout(),
+  stateReplacementIndex: 0, // forces refreshing all block inputs on change
 };
 
 const initialId = getId();
@@ -55,6 +56,7 @@ const reducer = produce((state, action) => {
     case "REPLACE_BLOCKS":
       try {
         state.blocks = JSON.parse(action.value);
+        state.stateReplacementIndex++;
         recalculateLayout(state);
       } catch (e) {
         console.error(e);
