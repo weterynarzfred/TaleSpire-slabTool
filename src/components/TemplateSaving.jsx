@@ -34,7 +34,6 @@ export default function TemplateSaving() {
 
   function handleTemplateLoad(event) {
     const template = templates[event.currentTarget.closest('.template-item').dataset['index']];
-    console.log(template);
     dispatch({
       type: 'REPLACE_BLOCKS',
       value: JSON.stringify(template.blocks),
@@ -43,7 +42,6 @@ export default function TemplateSaving() {
 
   useEffect(() => {
     (async () => {
-      console.log('reading local storage');
       const savedTemplates = JSON.parse(await TS.localStorage.global.getBlob() || '[]');
       console.log(savedTemplates);
       setTemplates(savedTemplates);

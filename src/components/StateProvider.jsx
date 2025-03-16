@@ -3,7 +3,7 @@ import { createContainer } from 'react-tracked';
 import { produce } from 'immer';
 import _ from 'lodash';
 import Layout from '../lib/Layout';
-import { getBlockAtPath, getId } from '../lib/reducer/utils';
+import { getBlockAtPath, getId, setLastId } from '../lib/reducer/utils';
 import recalculateLayout from '../lib/reducer/recalculateLayout';
 import addBlock from '../lib/reducer/addBlock';
 import deleteBlock from '../lib/reducer/deleteBlock';
@@ -17,6 +17,7 @@ const initialState = {
 };
 
 const initialId = getId();
+
 initialState.blocks[initialId] = {
   id: initialId,
   path: [initialId],
@@ -29,6 +30,18 @@ initialState.blocks[initialId] = {
     }],
   },
 };
+
+function getMaxId(blocks) {
+  let maxId = 0;
+  for (const blockId in blocks) {
+    maxId = Math.max(maxId, blockId);
+    if (blocks[blockId].blocks && Object.keys(blocks[blockId].blocks).length > 0) {
+      maxId = Math.max(maxId, getMaxId(blocks[blockId].blocks));
+    }
+  }
+
+  return maxId;
+}
 
 recalculateLayout(initialState);
 
@@ -57,6 +70,7 @@ const reducer = produce((state, action) => {
       try {
         state.blocks = JSON.parse(action.value);
         state.stateReplacementIndex++;
+        setLastId(getMaxId(state.blocks));
         recalculateLayout(state);
       } catch (e) {
         console.error(e);

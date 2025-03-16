@@ -8,13 +8,18 @@ function getBlockAtPath(state, path) {
 //   _.set(state.blocks, path.join('.blocks.'), block);
 // }
 
-const getId = (() => {
-  let lastId = 0;
-  return () => lastId++;
-})();
+let lastId = 0;
+function getId() {
+  return ++lastId;
+};
+
+function setLastId(id) {
+  lastId = id;
+};
 
 export {
   getId,
   getBlockAtPath,
-  // setBlockAtPath
+  // setBlockAtPath,
+  setLastId,
 };
