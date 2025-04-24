@@ -16,18 +16,28 @@ const initialState = {
   stateReplacementIndex: 0, // forces refreshing all block inputs on change
 };
 
-const initialId = getId();
+const initialGroupId = getId();
+const initialSlabId = getId();
 
-initialState.blocks[initialId] = {
-  id: initialId,
-  path: [initialId],
+initialState.blocks[initialGroupId] = {
+  id: initialGroupId,
+  path: [initialGroupId],
   order: 0,
-  type: 'slab',
-  data: {
-    layouts: [{
-      uuid: '123c7881-2d35-4e0e-92db-bb2069242181',
-      assets: [{}],
-    }],
+  type: 'group',
+  data: {},
+  blocks: {
+    [initialSlabId]: {
+      id: [initialSlabId],
+      path: [initialGroupId, initialSlabId],
+      order: 0,
+      type: 'slab',
+      data: {
+        layouts: [{
+          uuid: '123c7881-2d35-4e0e-92db-bb2069242181',
+          assets: [{}],
+        }],
+      },
+    }
   },
 };
 
