@@ -1,3 +1,4 @@
+import { evaluate } from "mathjs";
 import Layout from '../Layout';
 
 function applyBlock(layout, block, scope = {}) {
@@ -45,10 +46,13 @@ function applyBlock(layout, block, scope = {}) {
 
 export default function recalculateLayout(state) {
   const layout = new Layout();
+  const scope = {};
+  evaluate(state.templateHeader, scope);
+
   const blockArray = Object.values(state.blocks)
     .sort((a, b) => a.order - b.order);
   for (const block of blockArray) {
-    applyBlock(layout, block);
+    applyBlock(layout, block, scope);
   }
   layout.normalize();
 

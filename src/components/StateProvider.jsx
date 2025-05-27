@@ -11,6 +11,7 @@ import changeData from '../lib/reducer/changeData';
 import moveBlock from '../lib/reducer/moveBlock';
 
 const initialState = {
+  templateHeader: "",
   blocks: {},
   layout: new Layout(),
   stateReplacementIndex: 0, // forces refreshing all block inputs on change
@@ -76,9 +77,18 @@ const reducer = produce((state, action) => {
       const block = getBlockAtPath(state, action.path);
       block[action.key] = action.value;
       break;
+    case "CHANGE_TEMPLATE_HEADER":
+      state.templateHeader = action.value;
+      break;
     case "REPLACE_BLOCKS":
       try {
-        state.blocks = JSON.parse(action.value);
+        const newData = JSON.parse(action.value);
+        if (newData.templateHeader === undefined) {
+          state.blocks = newData;
+        } else {
+          state.blocks = newData.blocks;
+          state.templateHeader = newData.templateHeader;
+        }
         state.stateReplacementIndex++;
         setLastId(getMaxId(state.blocks));
         recalculateLayout(state);

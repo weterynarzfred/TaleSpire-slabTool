@@ -5,6 +5,7 @@ import BlockList from './blockParts/BlockList';
 import { Tooltip } from 'react-tooltip';
 import tooltips from '../data/tooltips';
 import TemplateSaving from './TemplateSaving';
+import TemplateHeader from "./TemplateHeader";
 
 export default function App() {
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function App() {
         <h1>SlabTool</h1>
       </div>
 
+      <TemplateHeader />
       <BlockList />
       <Results />
       <TemplateSaving />

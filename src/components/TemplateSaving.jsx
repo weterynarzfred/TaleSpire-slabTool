@@ -21,6 +21,7 @@ export default function TemplateSaving() {
       {
         name: new Date().getTime(),
         blocks: state.blocks,
+        templateHeader: state.templateHeader,
       }
     ];
     setTemplates(newTemplates);
@@ -38,7 +39,10 @@ export default function TemplateSaving() {
     const template = templates[event.currentTarget.closest('.template-item').dataset['index']];
     dispatch({
       type: 'REPLACE_BLOCKS',
-      value: JSON.stringify(template.blocks),
+      value: JSON.stringify({
+        blocks: template.blocks,
+        templateHeader: template.templateHeader,
+      }),
     });
   }
 
@@ -62,13 +66,12 @@ export default function TemplateSaving() {
   useEffect(() => {
     (async () => {
       const savedTemplates = JSON.parse(await TS.localStorage.global.getBlob() || '[]');
-      console.log(savedTemplates);
       setTemplates(savedTemplates);
     })();
   }, []);
 
   return <div className="TemplateSaving">
-    {renaming === null ? null : <div className="TempalteSaving__rename">
+    {renaming === null ? null : <div className="TemplateSaving__rename">
       <form onSubmit={handleTemplateRenameSubmit}>
         <input type="text" value={templateName} onChange={event => { setTemplateName(event.currentTarget.value); }} />
       </form>
@@ -79,6 +82,9 @@ export default function TemplateSaving() {
       <button onClick={handleTemplateRenameButton}>rename</button>
       <button onClick={handleTemplateDelete}>×</button>
     </div>)}
-    <textarea value={JSON.stringify(state.blocks)} onChange={handleInputChange} spellCheck={false} />
+    <textarea value={JSON.stringify({
+      templateHeader: state.templateHeader,
+      blocks: state.blocks
+    })} onChange={handleInputChange} spellCheck={false} />
   </div>;
 }
