@@ -75,7 +75,7 @@ export default function TemplateSaving() {
     </div>}
     <button className="template-save" onClick={handleTemplateSave}>save current template</button>
     {templates.map((template, index) => <div className="template-item" key={index} data-index={index}>
-      <div className="template-name" onClick={handleTemplateLoad}>{template.name}</div>
+      <button className="template-name" onClick={handleTemplateLoad}>{template.name}</button>
       <button onClick={handleTemplateRenameButton}>rename</button>
       <button onClick={handleTemplateDelete}>×</button>
     </div>)}

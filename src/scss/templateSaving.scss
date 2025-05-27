@@ -3,7 +3,7 @@
     display: flex;
     gap: 5em 0.5em;
     margin: 0.25em 0.2em;
-    padding: 0.1em 0.25em;
+    padding: 0.05em 0.25em;
     background-color: #444;
 
     &:hover {
@@ -16,7 +16,8 @@
       height: 100%;
       background: none;
       color: inherit;
-      border: 2px solid #eee;
+      margin-top: 1px;
+      //border: 2px solid #eee;
       background-color: #222;
       padding: 0.1em 0.5em;
       cursor: pointer;
