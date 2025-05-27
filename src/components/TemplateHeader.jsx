@@ -26,6 +26,7 @@ export default function TemplateHeader() {
   }, [state.stateReplacementIndex]);
 
   return <div className="TemplateHeader">
+    {state.templateHeaderError !== undefined ? <div className="block__error">{state.templateHeaderError}</div> : null}
     <textarea className="template-header-input" value={inputValue ?? ""} onChange={(e) => setInputValue(e.target.value)} />
   </div>;
 }

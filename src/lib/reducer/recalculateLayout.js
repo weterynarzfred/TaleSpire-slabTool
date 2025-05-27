@@ -47,7 +47,12 @@ function applyBlock(layout, block, scope = {}) {
 export default function recalculateLayout(state) {
   const layout = new Layout();
   const scope = {};
-  evaluate(state.templateHeader, scope);
+  try {
+    evaluate(state.templateHeader, scope);
+    state.templateHeaderError = undefined;
+  } catch (e) {
+    state.templateHeaderError = e.message;
+  }
 
   const blockArray = Object.values(state.blocks)
     .sort((a, b) => a.order - b.order);

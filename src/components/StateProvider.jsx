@@ -79,6 +79,7 @@ const reducer = produce((state, action) => {
       break;
     case "CHANGE_TEMPLATE_HEADER":
       state.templateHeader = action.value;
+      recalculateLayout(state);
       break;
     case "REPLACE_BLOCKS":
       try {
