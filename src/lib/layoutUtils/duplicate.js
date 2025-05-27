@@ -7,7 +7,7 @@ Layout.prototype.duplicate = function ({ count = 1, modifiers = "relative" }, bl
   const usedCount = parseInput('integer', count, 1, scope);
   const initialLayout = this.clone();
   let lastLayout = this.clone();
-  for (let i = 1; i < usedCount; i++) {
+  for (let i = modifiers === "relative" ? 1 : 0; i < usedCount; i++) {
     scope.iter = i;
     if (modifiers === 'relative') {
       for (const id in blocks) applyBlock(lastLayout, blocks[id], scope);
