@@ -27,6 +27,11 @@ export default function TemplateHeader() {
 
   return <div className="TemplateHeader">
     {state.templateHeaderError !== undefined ? <div className="block__error">{state.templateHeaderError}</div> : null}
-    <textarea className="template-header-input" value={inputValue ?? ""} onChange={(e) => setInputValue(e.target.value)} />
+    <textarea
+      className="template-header-input"
+      value={inputValue}
+      placeholder={"# Comments\nGlobal variables:\nx = 5\ny = 7"}
+      onChange={(e) => setInputValue(e.target.value)}
+    />
   </div>;
 }

@@ -404,6 +404,14 @@ body {
   }
 }
 
+.TemplateHeader {
+  textarea {
+    background-color: #111;
+    height: 10em;
+    border: 0.7em solid #333;
+  }
+}
+
 .TemplateSaving {
   padding: 0 0.5rem;
 

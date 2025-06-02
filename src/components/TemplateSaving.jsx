@@ -70,17 +70,32 @@ export default function TemplateSaving() {
     })();
   }, []);
 
-  return <div className="TemplateSaving">
-    {renaming === null ? null : <div className="TemplateSaving__rename">
-      <form onSubmit={handleTemplateRenameSubmit}>
-        <input type="text" value={templateName} onChange={event => { setTemplateName(event.currentTarget.value); }} />
-      </form>
+  return <div className="TemplateSaving block--results">
+    <div className="BlockHeader">
+      <div className="block__title-bar">
+        <div className="block__title">templates</div>
+      </div>
+    </div>
+
+    {renaming === null ? null : <div className="TemplateSaving__rename__blur">
+      <div className="TemplateSaving__rename">
+        <form onSubmit={handleTemplateRenameSubmit}>
+          <input type="text" value={templateName} onChange={event => { setTemplateName(event.currentTarget.value); }} />
+        </form>
+      </div>
     </div>}
-    <button className="template-save" onClick={handleTemplateSave}>save current template</button>
+
+    <div className="template-save-wrapper">
+      <div className="template-save-name">
+        <textarea placeholder="Template Name" />
+      </div>
+      <button className="template-save" onClick={handleTemplateSave}>save current template</button>
+    </div>
     {templates.map((template, index) => <div className="template-item" key={index} data-index={index}>
       <button className="template-name" onClick={handleTemplateLoad}>{template.name}</button>
       <button onClick={handleTemplateRenameButton}>rename</button>
-      <button onClick={handleTemplateDelete}>×</button>
+      <button onClick={handleTemplateDelete}>x</button>
+
     </div>)}
     <textarea value={JSON.stringify({
       templateHeader: state.templateHeader,
