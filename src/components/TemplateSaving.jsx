@@ -1,115 +1,198 @@
 import { useEffect, useState, useRef } from "react";
 import { useTrackedState, useUpdate } from './StateProvider';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+function SortableItem({ id, children }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className="sortable-item">
+      <div
+        ref={setActivatorNodeRef}
+        {...listeners}
+        {...attributes}
+        className="drag-handle"
+        style={{ cursor: 'grab', paddingRight: 8 }}
+      >
+        ☰
+      </div>
+      <div style={{ flex: 1 }}>{children}</div>
+    </div>
+  );
+}
 
 export default function TemplateSaving() {
-  const [templates, setTemplates] = useState([]);
-  const [renaming, setRenaming] = useState(null);
-  const [renamePosition, setRenamePosition] = useState({ top: 0, left: 0 });
-  const [templateName, setTemplateName] = useState("");
+  const [items, setItems] = useState([]); // folders and templates
+  const [activeId, setActiveId] = useState(null);
+  const [expandedFolders, setExpandedFolders] = useState(new Set());
+  const [renaming, setRenaming] = useState(null); // id of item being renamed
+  const [editingName, setEditingName] = useState("");
   const [newTemplateName, setNewTemplateName] = useState("");
-  const renameBoxRef = useRef(null);
-  const renameInputRef = useRef(null);
-
   const state = useTrackedState();
   const dispatch = useUpdate();
 
-  function handleInputChange(event) {
-    dispatch({
-      type: 'REPLACE_BLOCKS',
-      value: event.currentTarget.value,
-    });
-  }
+  const renameInputRef = useRef(null);
 
-  function handleTemplateSave() {
-    const nameToSave = newTemplateName.trim() || new Date().getTime();
-    const newTemplates = [
-      ...templates,
-      {
-        name: nameToSave,
-        blocks: state.blocks,
-        templateHeader: state.templateHeader,
-      }
-    ];
-    setTemplates(newTemplates);
-    TS.localStorage.global.setBlob(JSON.stringify(newTemplates));
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const saveItems = (updated) => {
+    setItems(updated);
+    TS.localStorage.global.setBlob(JSON.stringify(updated));
+  };
+
+  const handleInputChange = (e) => {
+    dispatch({ type: 'REPLACE_BLOCKS', value: e.currentTarget.value });
+  };
+
+  const handleTemplateSave = () => {
+    const name = newTemplateName.trim() || `${Date.now()}`;
+    const updated = [...items, {
+      id: crypto.randomUUID(),
+      type: 'template',
+      name,
+      blocks: state.blocks,
+      templateHeader: state.templateHeader,
+    }];
+    saveItems(updated);
     setNewTemplateName("");
-  }
+  };
 
-  function handleTemplateDelete(event) {
-    const template = templates[event.currentTarget.closest('.template-item').dataset['index']];
-    const newTemplates = templates.filter(e => e.name !== template.name);
-    setTemplates(newTemplates);
-    TS.localStorage.global.setBlob(JSON.stringify(newTemplates));
-  }
+  const handleTemplateDelete = (id) => {
+    const updated = items.filter(item => item.id !== id);
+    saveItems(updated);
+  };
 
-  function handleTemplateLoad(event) {
-    const template = templates[event.currentTarget.closest('.template-item').dataset['index']];
+  const handleTemplateLoad = (template) => {
     dispatch({
       type: 'REPLACE_BLOCKS',
-      value: JSON.stringify({
-        blocks: template.blocks,
-        templateHeader: template.templateHeader,
-      }),
+      value: JSON.stringify({ blocks: template.blocks, templateHeader: template.templateHeader })
     });
-  }
+  };
 
-  function handleTemplateRenameButton(event) {
-    const index = event.currentTarget.closest('.template-item').dataset['index'];
-    setRenaming(index);
-    setTemplateName(templates[index].name);
+  const handleTemplateRenameButton = (id) => {
+    setRenaming(id);
+    const item = items.find(i => i.id === id);
+    setEditingName(item ? item.name : "");
+  };
 
-    const rect = event.currentTarget.getBoundingClientRect();
-    const buffer = 40;
-    const boxWidth = 600;
-    const boxHeight = 60;
-
-    const left = Math.max(rect.left - boxWidth - buffer, 10);
-    const top = Math.min(rect.top, window.innerHeight - boxHeight);
-
-    setRenamePosition({ top, left });
-  }
-
-  function handleTemplateRenameSubmit(event) {
-    event.preventDefault();
-    const input = event.currentTarget.querySelector('input');
-    const newTemplates = JSON.parse(JSON.stringify(templates));
-    newTemplates[renaming].name = input.value;
-    setTemplates(newTemplates);
-    TS.localStorage.global.setBlob(JSON.stringify(newTemplates));
+  const handleRenameSubmit = () => {
+    if (!renaming) return;
+    const updated = items.map(item =>
+      item.id === renaming ? { ...item, name: editingName.trim() || item.name } : item
+    );
+    saveItems(updated);
     setRenaming(null);
-  }
+  };
+
+  const handleDragEnd = ({ active, over }) => {
+    if (!over) return;
+    const oldIndex = items.findIndex(item => item.id === active.id);
+    const newIndex = items.findIndex(item => item.id === over.id);
+    if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
+      const updated = arrayMove(items, oldIndex, newIndex);
+      saveItems(updated);
+    }
+    setActiveId(null);
+  };
+
+  const toggleFolder = (id) => {
+    const updated = new Set(expandedFolders);
+    updated.has(id) ? updated.delete(id) : updated.add(id);
+    setExpandedFolders(updated);
+  };
 
   useEffect(() => {
     (async () => {
-      const savedTemplates = JSON.parse(await TS.localStorage.global.getBlob() || '[]');
-      setTemplates(savedTemplates);
+      const saved = JSON.parse(await TS.localStorage.global.getBlob() || '[]');
+      setItems(saved);
     })();
   }, []);
 
+  // Focus and select text when entering rename mode
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        renameBoxRef.current &&
-        !renameBoxRef.current.contains(event.target)
-      ) {
-        setRenaming(null);
-      }
-    }
-
-    if (renaming !== null) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [renaming]);
-
-  useEffect(() => {
-    if (renaming !== null && renameInputRef.current) {
+    if (renaming && renameInputRef.current) {
       renameInputRef.current.focus();
+      renameInputRef.current.select();
     }
   }, [renaming]);
+
+  const renderItems = (items) => (
+    <SortableContext items={items.map(item => item.id)} strategy={verticalListSortingStrategy}>
+      {items.map((item) => (
+        <SortableItem key={item.id} id={item.id}>
+          <div className="template-item">
+            {item.type === 'folder' ? (
+              <>
+                <div onClick={() => toggleFolder(item.id)} style={{ cursor: 'pointer' }}>
+                  ► {item.name}
+                </div>
+                {expandedFolders.has(item.id) && (
+                  <div className="folder-contents" style={{ paddingLeft: '1em' }}>
+                    {renderItems(item.children || [])}
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                {renaming === item.id ? (
+                  <input
+                    ref={renameInputRef}
+                    className="template-name-input"
+                    type="text"
+                    value={editingName}
+                    onChange={(e) => setEditingName(e.target.value)}
+                    onBlur={handleRenameSubmit}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleRenameSubmit();
+                      }
+                      if (e.key === 'Escape') {
+                        setRenaming(null);
+                      }
+                    }}
+                    autoFocus
+                  />
+                ) : (
+                  <button className="template-name" onClick={() => handleTemplateLoad(item)}>
+                    {item.name}
+                  </button>
+                )}
+                <button onClick={() => handleTemplateRenameButton(item.id)}>rename</button>
+                <button onClick={() => handleTemplateDelete(item.id)}>x</button>
+              </>
+            )}
+          </div>
+        </SortableItem>
+      ))}
+    </SortableContext>
+  );
 
   return (
     <div className="TemplateSaving block--results">
@@ -118,29 +201,6 @@ export default function TemplateSaving() {
           <div className="block__title">templates</div>
         </div>
       </div>
-
-      {renaming !== null && (
-        <div className="TemplateSaving__rename__blur">
-          <div
-            className="TemplateSaving__rename"
-            ref={renameBoxRef}
-            style={{
-              top: `${renamePosition.top}px`,
-              left: `${renamePosition.left}px`,
-              position: 'fixed',
-            }}
-          >
-            <form onSubmit={handleTemplateRenameSubmit}>
-              <input
-                ref={renameInputRef}
-                type="text"
-                value={templateName}
-                onChange={(event) => setTemplateName(event.currentTarget.value)}
-              />
-            </form>
-          </div>
-        </div>
-      )}
 
       <div className="template-save-wrapper">
         <div className="template-save-name">
@@ -156,21 +216,20 @@ export default function TemplateSaving() {
         </button>
       </div>
 
-      {templates.map((template, index) => (
-        <div className="template-item" key={index} data-index={index}>
-          <button className="template-name" onClick={handleTemplateLoad}>
-            {template.name}
-          </button>
-          <button onClick={handleTemplateRenameButton}>rename</button>
-          <button onClick={handleTemplateDelete}>x</button>
-        </div>
-      ))}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        onDragStart={({ active }) => setActiveId(active.id)}
+      >
+        {renderItems(items)}
+        <DragOverlay>
+          {activeId ? <div className="template-item drag-overlay">Dragging...</div> : null}
+        </DragOverlay>
+      </DndContext>
 
       <textarea
-        value={JSON.stringify({
-          templateHeader: state.templateHeader,
-          blocks: state.blocks,
-        })}
+        value={JSON.stringify({ templateHeader: state.templateHeader, blocks: state.blocks }, null, 2)}
         onChange={handleInputChange}
         spellCheck={false}
       />
