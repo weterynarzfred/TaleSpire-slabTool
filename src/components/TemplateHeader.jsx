@@ -30,7 +30,7 @@ export default function TemplateHeader() {
     <textarea
       className="template-header-input"
       value={inputValue}
-      placeholder={"# Comments\nGlobal variables:\nx = 5\ny = 7"}
+      placeholder={"# Comments\n\nGlobal variables:\nx = 5\nvariable = 7"}
       onChange={(e) => setInputValue(e.target.value)}
     />
   </div>;
