@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useTrackedState, useUpdate } from '../StateProvider';
 
 export default function BlockCheckboxInput({ dataPath, path, tooltip }) {
