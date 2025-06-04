@@ -48,17 +48,18 @@ function SortableItem({ id, children }) {
 }
 
 export default function TemplateSaving() {
-  const [items, setItems] = useState([]); // folders and templates
+  const [items, setItems] = useState([]);
   const [activeId, setActiveId] = useState(null);
   const [expandedFolders, setExpandedFolders] = useState(new Set());
-  const [renaming, setRenaming] = useState(null); // id of item being renamed
+  const [renaming, setRenaming] = useState(null);
   const [editingName, setEditingName] = useState("");
   const [newTemplateName, setNewTemplateName] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
+
   const state = useTrackedState();
   const dispatch = useUpdate();
 
   const renameInputRef = useRef(null);
-
   const sensors = useSensors(useSensor(PointerSensor));
 
   const saveItems = (updated) => {
@@ -127,6 +128,24 @@ export default function TemplateSaving() {
     setExpandedFolders(updated);
   };
 
+  const truncate = (str, maxLength = 35) => {
+    return str.length > maxLength ? str.slice(0, maxLength - 3) + "..." : str;
+  };
+
+  const handleCopyTemplate = async (template) => {
+    try {
+      const json = JSON.stringify({
+        blocks: template.blocks,
+        templateHeader: template.templateHeader,
+      }, null, 2);
+      await navigator.clipboard.writeText(json);
+      setToastMessage(`Template "${truncate(template.name)}" has been copied!`);
+      setTimeout(() => setToastMessage(""), 2000);
+    } catch (err) {
+      console.error("Failed to copy template JSON:", err);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const saved = JSON.parse(await TS.localStorage.global.getBlob() || '[]');
@@ -134,7 +153,6 @@ export default function TemplateSaving() {
     })();
   }, []);
 
-  // Focus and select text when entering rename mode
   useEffect(() => {
     if (renaming && renameInputRef.current) {
       renameInputRef.current.focus();
@@ -185,6 +203,7 @@ export default function TemplateSaving() {
                   </button>
                 )}
                 <button onClick={() => handleTemplateRenameButton(item.id)}>rename</button>
+                <button onClick={() => handleCopyTemplate(item)}>copy</button>
                 <button onClick={() => handleTemplateDelete(item.id)}>x</button>
               </>
             )}
@@ -193,6 +212,60 @@ export default function TemplateSaving() {
       ))}
     </SortableContext>
   );
+
+  const [importInput, setImportInput] = useState("");
+
+  const handleImportTemplate = () => {
+    let parsed;
+    try {
+      parsed = JSON.parse(importInput);
+    } catch (err) {
+      alert("Invalid JSON.");
+      return;
+    }
+
+    const existingIds = new Set(items.map(i => i.id));
+    const newTemplates = [];
+
+    const normalizeTemplate = (data) => {
+      if (!data.blocks || !data.templateHeader) return null;
+      let newId = crypto.randomUUID();
+      while (existingIds.has(newId)) {
+        newId = crypto.randomUUID();
+      }
+      return {
+        id: newId,
+        type: 'template',
+        name: data.templateHeader?.name?.trim() || `Imported ${Date.now()}`,
+        blocks: data.blocks,
+        templateHeader: data.templateHeader,
+      };
+    };
+
+    if (Array.isArray(parsed)) {
+      for (const entry of parsed) {
+        const tmpl = normalizeTemplate(entry);
+        if (tmpl) newTemplates.push(tmpl);
+      }
+      if (newTemplates.length === 0) {
+        alert("No valid templates found in the array.");
+        return;
+      }
+    } else {
+      const tmpl = normalizeTemplate(parsed);
+      if (!tmpl) {
+        alert("Missing 'blocks' or 'templateHeader' in the JSON.");
+        return;
+      }
+      newTemplates.push(tmpl);
+    }
+
+    const updated = [...items, ...newTemplates];
+    saveItems(updated);
+    setImportInput("");
+    setToastMessage(`${newTemplates.length} template(s) imported!`);
+    setTimeout(() => setToastMessage(""), 2000);
+  };
 
   return (
     <div className="TemplateSaving block--results">
@@ -228,11 +301,45 @@ export default function TemplateSaving() {
         </DragOverlay>
       </DndContext>
 
+      <div className="template-import-wrapper" style={{ marginTop: "1em" }}>
+        <textarea
+          placeholder="Paste template JSON here"
+          value={importInput}
+          onChange={(e) => setImportInput(e.target.value)}
+          rows={6}
+          style={{ width: "100%", fontFamily: "monospace", marginBottom: 8 }}
+          spellCheck={false}
+        />
+        <button onClick={handleImportTemplate}>
+          Import template
+        </button>
+      </div>
+
+      <button onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(JSON.stringify(items, null, 2));
+          setToastMessage("All templates copied!");
+          setTimeout(() => setToastMessage(""), 2000);
+        } catch (err) {
+          alert("Failed to copy templates.");
+        }
+      }}>
+        Copy all templates
+      </button>
+
       <textarea
         value={JSON.stringify({ templateHeader: state.templateHeader, blocks: state.blocks }, null, 2)}
         onChange={handleInputChange}
         spellCheck={false}
       />
+
+
+
+      {toastMessage && (
+        <div className="toast">
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 }
