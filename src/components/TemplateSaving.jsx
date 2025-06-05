@@ -38,7 +38,6 @@ function SortableItem({ id, children }) {
         {...listeners}
         {...attributes}
         className="drag-handle"
-        style={{ cursor: 'grab', paddingRight: 8 }}
       >
         ☰
       </div>
@@ -135,6 +134,7 @@ export default function TemplateSaving() {
   const handleCopyTemplate = async (template) => {
     try {
       const json = JSON.stringify({
+        name: template.name,
         blocks: template.blocks,
         templateHeader: template.templateHeader,
       }, null, 2);
@@ -167,11 +167,11 @@ export default function TemplateSaving() {
           <div className="template-item">
             {item.type === 'folder' ? (
               <>
-                <div onClick={() => toggleFolder(item.id)} style={{ cursor: 'pointer' }}>
+                <div className="template-folder-toggle" onClick={() => toggleFolder(item.id)}>
                   ► {item.name}
                 </div>
                 {expandedFolders.has(item.id) && (
-                  <div className="folder-contents" style={{ paddingLeft: '1em' }}>
+                  <div className="folder-contents">
                     {renderItems(item.children || [])}
                   </div>
                 )}
@@ -225,39 +225,46 @@ export default function TemplateSaving() {
     }
 
     const existingIds = new Set(items.map(i => i.id));
+    const existingNames = new Set(items.map(i => i.name));
     const newTemplates = [];
 
-    const normalizeTemplate = (data) => {
-      if (!data.blocks || !data.templateHeader) return null;
-      let newId = crypto.randomUUID();
-      while (existingIds.has(newId)) {
-        newId = crypto.randomUUID();
+    const normalizeTemplates = (input) => {
+      const array = Array.isArray(input) ? input : [input];
+
+      for (const entry of array) {
+        if (!entry.blocks) continue;
+
+        let newId = crypto.randomUUID();
+        while (existingIds.has(newId)) {
+          newId = crypto.randomUUID();
+        }
+
+        let rawName = entry.name?.trim() || entry.templateHeader?.name?.trim();
+        let baseName = rawName?.replace(/\s+-\s+copy(?:\s+\d+)?$/, '') || `Imported ${Date.now()}`;
+
+        let finalName = baseName;
+        let counter = 1;
+        while (existingNames.has(finalName)) {
+          finalName = `${baseName} - copy${counter > 1 ? ` ${counter}` : ''}`;
+          counter++;
+        }
+        existingNames.add(finalName);
+
+        newTemplates.push({
+          id: newId,
+          type: 'template',
+          name: finalName,
+          blocks: entry.blocks,
+          templateHeader: typeof entry.templateHeader === 'object' ? entry.templateHeader : {},
+        });
       }
-      return {
-        id: newId,
-        type: 'template',
-        name: data.templateHeader?.name?.trim() || `Imported ${Date.now()}`,
-        blocks: data.blocks,
-        templateHeader: data.templateHeader,
-      };
     };
 
-    if (Array.isArray(parsed)) {
-      for (const entry of parsed) {
-        const tmpl = normalizeTemplate(entry);
-        if (tmpl) newTemplates.push(tmpl);
-      }
-      if (newTemplates.length === 0) {
-        alert("No valid templates found in the array.");
-        return;
-      }
-    } else {
-      const tmpl = normalizeTemplate(parsed);
-      if (!tmpl) {
-        alert("Missing 'blocks' or 'templateHeader' in the JSON.");
-        return;
-      }
-      newTemplates.push(tmpl);
+    normalizeTemplates(parsed);
+
+    if (newTemplates.length === 0) {
+      alert("No valid templates found to import.");
+      return;
     }
 
     const updated = [...items, ...newTemplates];
@@ -276,16 +283,14 @@ export default function TemplateSaving() {
       </div>
 
       <div className="template-save-wrapper">
-        <div className="template-save-name">
-          <input
-            type="text"
-            placeholder="Template Name"
-            value={newTemplateName}
-            onChange={(e) => setNewTemplateName(e.target.value)}
-          />
-        </div>
-        <button className="template-save" onClick={handleTemplateSave}>
-          save current template
+        <input
+          type="text"
+          placeholder="Template Name"
+          value={newTemplateName}
+          onChange={(e) => setNewTemplateName(e.target.value)}
+        />
+        <button className="template-menu-button" onClick={handleTemplateSave}>
+          save template
         </button>
       </div>
 
@@ -301,39 +306,39 @@ export default function TemplateSaving() {
         </DragOverlay>
       </DndContext>
 
-      <div className="template-import-wrapper" style={{ marginTop: "1em" }}>
+      <div className="template-import-wrapper">
+        <div className="template-menu">
+          <button className="template-menu-button" onClick={handleImportTemplate}>
+            Import template
+          </button>
+
+          <button className="template-menu-button" onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(JSON.stringify(items, null, 2));
+              setToastMessage("All templates copied!");
+              setTimeout(() => setToastMessage(""), 2000);
+            } catch (err) {
+              alert("Failed to copy templates.");
+            }
+          }}>
+            Copy all templates
+          </button>
+        </div>
         <textarea
+          className="template-import-textarea"
           placeholder="Paste template JSON here"
           value={importInput}
           onChange={(e) => setImportInput(e.target.value)}
           rows={6}
-          style={{ width: "100%", fontFamily: "monospace", marginBottom: 8 }}
           spellCheck={false}
         />
-        <button onClick={handleImportTemplate}>
-          Import template
-        </button>
       </div>
 
-      <button onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(JSON.stringify(items, null, 2));
-          setToastMessage("All templates copied!");
-          setTimeout(() => setToastMessage(""), 2000);
-        } catch (err) {
-          alert("Failed to copy templates.");
-        }
-      }}>
-        Copy all templates
-      </button>
-
-      <textarea
+      {/* <textarea
         value={JSON.stringify({ templateHeader: state.templateHeader, blocks: state.blocks }, null, 2)}
         onChange={handleInputChange}
         spellCheck={false}
-      />
-
-
+      /> */}
 
       {toastMessage && (
         <div className="toast">

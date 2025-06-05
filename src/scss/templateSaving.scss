@@ -1,56 +1,56 @@
 .TemplateSaving {
+  %button-base {
+    display: block;
+    height: 100%;
+    background: #222;
+    color: inherit;
+    margin: 0.25em 0;
+    padding: 0.1em 0.5em;
+    cursor: pointer;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.75em;
+    letter-spacing: 0.1em;
+    min-width: 1em;
+    border: none;
+
+    &:hover {
+      background-color: #555;
+    }
+
+    &:active {
+      background-color: #523;
+    }
+  }
+
   .template-item {
     display: flex;
     gap: 5em 0.5em;
     padding: 0.05em 0.25em;
     background-color: #444;
 
-    .template-name,
-    button {
-      display: block;
-      height: 100%;
-      background: none;
-      color: inherit;
-      margin: .25em 0;
-      background-color: #222;
-      padding: 0.1em 0.5em;
-      cursor: pointer;
-      text-align: left;
-      text-transform: uppercase;
-      font-size: 0.75em;
-      letter-spacing: 0.1em;
-      min-width: 1em;
-      border:none;
-  
-      &:hover {
-        background-color: #555;
-      }
-    
-      &:active {
-        background-color: #523;
-      }
-    }
-    .template-name{
+    .template-name {
+      @extend %button-base;
       flex: 1;
+    }
+
+    button {
+      @extend %button-base;
     }
   }
 
-  .template-save-wrapper {
+  .template-menu {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: flex-end;
-    gap: 0.5em;
-    margin-bottom: .4em;
-    }
+    margin-bottom: 0.4em;
+  }
 
-  .template-save {
+  .template-menu-button {
     min-width: 12em;
     min-height: 2em;
-
     position: relative;
     color: #eee;
-    height: 100%;
-    border-radius: 0;
     background: #f55;
     padding: 0.3em 0.8em;
     text-transform: uppercase;
@@ -59,11 +59,9 @@
     font-size: 0.8em;
     border: none;
     cursor: pointer;
-    transition: 0;
 
     &:hover {
       background: #523;
-      color: #eee;
     }
 
     &:active {
@@ -71,49 +69,53 @@
     }
   }
 
-  .template-save-name {
+  .template-save-wrapper {
     display: flex;
-    justify-content: center;
     align-items: center;
     background-color: #333;
-    padding: 0.1em;
-    height: 100%;
-    flex: 1;
+    padding: 0.2em;
+    gap: 0.5em;
+    margin-bottom: 0.4em;
 
     input {
       background-color: #111;
-      height: 1.5em;
-      width: 100%;
+      height: 2em;
+      flex: 1;
       border: none;
-      margin: 3px;
       font-size: 0.8em;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       padding: 0.2em 0.5em;
       color: white;
     }
+
+    .template-menu-button {
+      height: 2em;
+    }
+  }
+
+  .template-import-wrapper {
+    margin-top: 1em;
+
+    textarea {
+      width: 100%;
+      font-family: monospace;
+      margin-bottom: 8px;
+    }
   }
 
   .template-name-input {
+    @extend %button-base;
     flex: 1;
-    display: block;
     width: 100%;
-    height: 100%;
-    background-color: #222;
-    color: inherit;
-    padding: 0.1em 0.5em;
-    font-size: 0.75em;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: none;
-    margin: 0.25em 0;
     cursor: text;
     box-sizing: border-box;
     outline-offset: 2px;
-  }
-  .template-name-input:focus {
-    background-color: #555;
-    outline: none;
+
+    &:focus {
+      background-color: #555;
+      outline: none;
+    }
   }
 
   .sortable-item {
@@ -123,21 +125,29 @@
 
   .drag-handle {
     user-select: none;
+    cursor: grab;
+    padding-right: 8px;
   }
 
-  textarea{
-    margin: 12px 0px;
+  .folder-contents {
+    padding-left: 1em;
   }
 
-  .toast{
+  textarea {
+    margin: 12px 0;
+  }
+
+  .toast {
     position: fixed;
     bottom: 20px;
     right: 20px;
     background: #333;
     color: #fff;
     padding: 10px 20px;
+    box-shadow: 0 2px 6px #111;
+    border: solid #eee;
+    border-width: 1px 0 0 1px;
     border-radius: 4px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     z-index: 1000;
-}
+  }
 }
