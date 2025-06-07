@@ -53,7 +53,7 @@ function SortableItem({ id, children }) {
       >
         ☰
       </div>
-      <div style={{ flex: 1 }}>{children}</div>
+      <div className="sortable-content">{children}</div>
     </div>
   );
 }

@@ -41,6 +41,10 @@
     padding: 0.05em 0.25em;
     background-color: #444;
 
+    &:hover {
+      background-color: #eee;
+    }
+
     .template-name {
       @extend %button-base;
       @extend %text-style-uppercase;
@@ -55,10 +59,6 @@
       @extend %text-style-uppercase;
       min-width: 1em;
       border: none;
-    }
-
-    &:hover {
-      background-color: #eee;
     }
   }
 
@@ -77,10 +77,11 @@
   }
 
   .drag-overlay {
-    background-color: #444 !important;
+    background-color: #111 !important;
     padding-left: 2em;
     @extend %text-style-uppercase;
     font-size: 0.85em;
+    max-width: 30em;
   }
 
   .template-menu {
@@ -140,9 +141,21 @@
     margin-top: 1em;
   }
 
+  .template-import-textarea {
+    background-color: #333;
+    margin: 1em 0;
+    height: 8em;
+    width: 100%;
+    font-family: monospace;
+  }
+
   .sortable-item {
     display: flex;
     align-items: center;
+  }
+
+  .sortable-content {
+    flex: 1;
   }
 
   .drag-handle {
@@ -167,13 +180,5 @@
     border-width: 1px 0 0 1px;
     border-radius: 4px;
     z-index: 1000;
-  }
-
-  .template-import-textarea {
-    background-color: #333;
-    margin: 1em 0;
-    height: 8em;
-    width: 100%;
-    font-family: monospace;
   }
 }
