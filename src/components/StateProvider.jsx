@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { createContainer } from 'react-tracked';
 import { produce } from 'immer';
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import Layout from '../lib/Layout';
 import { getBlockAtPath, getId, setLastId } from '../lib/reducer/utils';
 import recalculateLayout from '../lib/reducer/recalculateLayout';
@@ -28,7 +28,7 @@ initialState.blocks[initialGroupId] = {
   data: {},
   blocks: {
     [initialSlabId]: {
-      id: [initialSlabId],
+      id: initialSlabId,
       path: [initialGroupId, initialSlabId],
       order: 0,
       type: 'slab',
@@ -50,7 +50,6 @@ function getMaxId(blocks) {
       maxId = Math.max(maxId, getMaxId(blocks[blockId].blocks));
     }
   }
-
   return maxId;
 }
 
@@ -83,13 +82,20 @@ const reducer = produce((state, action) => {
       break;
     case "REPLACE_BLOCKS":
       try {
-        const newData = JSON.parse(action.value);
-        if (newData.templateHeader === undefined) {
-          state.blocks = newData;
+        let newData;
+        if (typeof action.value === "string") {
+          newData = JSON.parse(action.value);
         } else {
-          state.blocks = newData.blocks;
+          newData = action.value;
+        }
+
+        if (newData.templateHeader === undefined) {
+          state.blocks = cloneDeep(newData);
+        } else {
+          state.blocks = cloneDeep(newData.blocks);
           state.templateHeader = newData.templateHeader;
         }
+
         state.stateReplacementIndex++;
         setLastId(getMaxId(state.blocks));
         recalculateLayout(state);
@@ -98,7 +104,7 @@ const reducer = produce((state, action) => {
       }
       break;
     default:
-      throw "unrecognized action type";
+      throw new Error("unrecognized action type");
   }
 });
 
@@ -110,6 +116,6 @@ export default function StateProvider({ children }) {
   return <Provider reducer={reducer} initialState={initialState}>
     {children}
   </Provider>;
-};
+}
 
 export { useTrackedState, useUpdate };

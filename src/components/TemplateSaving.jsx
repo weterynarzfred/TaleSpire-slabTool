@@ -77,7 +77,9 @@ export default function TemplateSaving() {
       type: 'template',
       name,
       blocks: state.blocks,
-      templateHeader: state.templateHeader,
+      templateHeader: typeof state.templateHeader === 'string'
+        ? state.templateHeader
+        : JSON.stringify(state.templateHeader, null, 2),
     }];
     saveItems(updated);
     setNewTemplateName("");
@@ -91,7 +93,7 @@ export default function TemplateSaving() {
   const handleTemplateLoad = (template) => {
     dispatch({
       type: 'REPLACE_BLOCKS',
-      value: JSON.stringify({ blocks: template.blocks, templateHeader: template.templateHeader })
+      value: { blocks: template.blocks, templateHeader: template.templateHeader },
     });
   };
 
@@ -240,7 +242,7 @@ export default function TemplateSaving() {
           newId = crypto.randomUUID();
         }
 
-        let rawName = entry.name?.trim() || entry.templateHeader?.name?.trim();
+        let rawName = entry.name?.trim() || (typeof entry.templateHeader === 'string' ? entry.templateHeader.trim() : undefined);
         let baseName = rawName?.replace(/\s+-\s+copy(?:\s+\d+)?$/, '') || `Imported ${Date.now()}`;
 
         let finalName = baseName;
@@ -256,7 +258,9 @@ export default function TemplateSaving() {
           type: 'template',
           name: finalName,
           blocks: entry.blocks,
-          templateHeader: typeof entry.templateHeader === 'object' ? entry.templateHeader : {},
+          templateHeader: typeof entry.templateHeader === 'string'
+            ? entry.templateHeader
+            : JSON.stringify(entry.templateHeader || {}, null, 2),
         });
       }
     };
