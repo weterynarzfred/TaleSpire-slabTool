@@ -1,40 +1,30 @@
 import { useEffect, useState, useRef } from "react";
-import { useTrackedState, useUpdate } from './StateProvider';
+import { useTrackedState, useUpdate } from "./StateProvider";
 import {
   DndContext,
   closestCenter,
   PointerSensor,
   useSensor,
   useSensors,
-  DragOverlay
-} from '@dnd-kit/core';
+  DragOverlay,
+} from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import pako from "pako";
 
-import pako from 'pako';
+const compressToBase64 = (jsonStr) =>
+  btoa(String.fromCharCode(...pako.deflate(jsonStr)));
 
-function compressToBase64(jsonString) {
-  const compressed = pako.deflate(jsonString);
-  let binary = '';
-  for (let i = 0; i < compressed.length; i++) {
-    binary += String.fromCharCode(compressed[i]);
-  }
-  return btoa(binary);
-}
-
-function decompressFromBase64(base64String) {
-  const binary = atob(base64String);
-  const compressed = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    compressed[i] = binary.charCodeAt(i);
-  }
-  return pako.inflate(compressed, { to: 'string' });
-}
+const decompressFromBase64 = (base64Str) => {
+  const binary = atob(base64Str);
+  const compressed = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  return pako.inflate(compressed, { to: "string" });
+};
 
 function SortableItem({ id, children }) {
   const {
@@ -46,13 +36,15 @@ function SortableItem({ id, children }) {
     transition,
   } = useSortable({ id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
   return (
-    <div ref={setNodeRef} style={style} className="sortable-item">
+    <div
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+      }}
+      className="sortable-item"
+    >
       <div
         ref={setActivatorNodeRef}
         {...listeners}
@@ -66,15 +58,29 @@ function SortableItem({ id, children }) {
   );
 }
 
+function useToast(duration = 1500) {
+  const [message, setMessage] = useState("");
+  const timeoutRef = useRef(null);
+
+  const showToast = (msg) => {
+    setMessage(msg);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setMessage(""), duration);
+  };
+
+  return [message, showToast];
+}
+
 export default function TemplateSaving() {
   const [items, setItems] = useState([]);
   const [activeId, setActiveId] = useState(null);
   const [expandedFolders, setExpandedFolders] = useState(new Set());
-  const [renaming, setRenaming] = useState(null);
+  const [renamingId, setRenamingId] = useState(null);
   const [editingName, setEditingName] = useState("");
   const [newTemplateName, setNewTemplateName] = useState("");
-  const [toastMessage, setToastMessage] = useState("");
-  const toastTimeoutRef = useRef(null);
+  const [importInput, setImportInput] = useState("");
+
+  const [toastMessage, showToast] = useToast();
 
   const state = useTrackedState();
   const dispatch = useUpdate();
@@ -82,75 +88,88 @@ export default function TemplateSaving() {
   const renameInputRef = useRef(null);
   const sensors = useSensors(useSensor(PointerSensor));
 
-  function showToast(message) {
-    setToastMessage(message);
-    if (toastTimeoutRef.current) {
-      clearTimeout(toastTimeoutRef.current);
-    }
-    toastTimeoutRef.current = setTimeout(() => {
-      setToastMessage("");
-      toastTimeoutRef.current = null;
-    }, 1500);
-  }
-
+  // Persist items to localStorage & state
   const saveItems = (updated) => {
     setItems(updated);
     TS.localStorage.global.setBlob(JSON.stringify(updated));
   };
 
-  const handleInputChange = (e) => {
-    dispatch({ type: 'REPLACE_BLOCKS', value: e.currentTarget.value });
-  };
+  useEffect(() => {
+    (async () => {
+      const saved = JSON.parse((await TS.localStorage.global.getBlob()) || "[]");
+      setItems(saved);
+    })();
+  }, []);
+
+  // Focus input when renaming
+  useEffect(() => {
+    if (renamingId && renameInputRef.current) {
+      renameInputRef.current.focus();
+      renameInputRef.current.select();
+    }
+  }, [renamingId]);
+
+  const truncate = (str, maxLen = 35) =>
+    str.length > maxLen ? str.slice(0, maxLen - 3) + "..." : str;
+
+  // Handlers
+
+  const handleInputChange = (e) =>
+    dispatch({ type: "REPLACE_BLOCKS", value: e.currentTarget.value });
 
   const handleTemplateSave = () => {
     const name = newTemplateName.trim() || `${Date.now()}`;
-    const updated = [...items, {
+    const newTemplate = {
       id: crypto.randomUUID(),
-      type: 'template',
+      type: "template",
       name,
       blocks: state.blocks,
-      templateHeader: typeof state.templateHeader === 'string'
-        ? state.templateHeader
-        : JSON.stringify(state.templateHeader, null, 2),
-    }];
-    saveItems(updated);
+      templateHeader:
+        typeof state.templateHeader === "string"
+          ? state.templateHeader
+          : JSON.stringify(state.templateHeader, null, 2),
+    };
+    saveItems([...items, newTemplate]);
     setNewTemplateName("");
   };
 
   const handleTemplateDelete = (id) => {
-    const updated = items.filter(item => item.id !== id);
-    saveItems(updated);
+    saveItems(items.filter((item) => item.id !== id));
   };
 
   const handleTemplateLoad = (template) => {
     dispatch({
-      type: 'REPLACE_BLOCKS',
+      type: "REPLACE_BLOCKS",
       value: { blocks: template.blocks, templateHeader: template.templateHeader },
     });
   };
 
-  const handleTemplateRenameButton = (id) => {
-    setRenaming(id);
-    const item = items.find(i => i.id === id);
-    setEditingName(item ? item.name : "");
+  const handleRenameStart = (id) => {
+    setRenamingId(id);
+    const item = items.find((i) => i.id === id);
+    setEditingName(item?.name || "");
   };
 
   const handleRenameSubmit = () => {
-    if (!renaming) return;
-    const updated = items.map(item =>
-      item.id === renaming ? { ...item, name: editingName.trim() || item.name } : item
+    if (!renamingId) return;
+    const trimmed = editingName.trim();
+    if (!trimmed) {
+      setRenamingId(null);
+      return;
+    }
+    const updated = items.map((item) =>
+      item.id === renamingId ? { ...item, name: trimmed } : item
     );
     saveItems(updated);
-    setRenaming(null);
+    setRenamingId(null);
   };
 
   const handleDragEnd = ({ active, over }) => {
-    if (!over) return;
-    const oldIndex = items.findIndex(item => item.id === active.id);
-    const newIndex = items.findIndex(item => item.id === over.id);
-    if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-      const updated = arrayMove(items, oldIndex, newIndex);
-      saveItems(updated);
+    if (!over) return setActiveId(null);
+    const oldIndex = items.findIndex((i) => i.id === active.id);
+    const newIndex = items.findIndex((i) => i.id === over.id);
+    if (oldIndex !== newIndex && oldIndex !== -1 && newIndex !== -1) {
+      saveItems(arrayMove(items, oldIndex, newIndex));
     }
     setActiveId(null);
   };
@@ -161,98 +180,129 @@ export default function TemplateSaving() {
     setExpandedFolders(updated);
   };
 
-  const truncate = (str, maxLength = 35) => {
-    return str.length > maxLength ? str.slice(0, maxLength - 3) + "..." : str;
-  };
-
-  // COPY SINGLE TEMPLATE (compressed)
   const handleCopyTemplate = async (template) => {
     try {
-      const json = JSON.stringify({
-        name: template.name,
-        blocks: template.blocks,
-        templateHeader: template.templateHeader,
-      });
-
-      const base64 = compressToBase64(json);
-
+      const base64 = compressToBase64(
+        JSON.stringify({
+          name: template.name,
+          blocks: template.blocks,
+          templateHeader: template.templateHeader,
+        })
+      );
       await navigator.clipboard.writeText(base64);
-      showToast(`Template "${truncate(template.name)}" has been copied!`);
-    } catch (err) {
-      console.error("Failed to copy template JSON:", err);
+      showToast(`Template "${truncate(template.name)}" copied!`);
+    } catch (e) {
+      console.error("Copy failed:", e);
     }
   };
 
-  // COPY ALL TEMPLATES (compressed)
   const handleCopyAllTemplates = async () => {
     try {
-      const json = JSON.stringify(items);
-      const base64 = compressToBase64(json);
+      const base64 = compressToBase64(JSON.stringify(items));
       await navigator.clipboard.writeText(base64);
       showToast("All templates copied!");
-    } catch (err) {
+    } catch {
       alert("Failed to copy templates.");
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      const saved = JSON.parse(await TS.localStorage.global.getBlob() || '[]');
-      setItems(saved);
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (renaming && renameInputRef.current) {
-      renameInputRef.current.focus();
-      renameInputRef.current.select();
+  const handleImportTemplate = () => {
+    let parsed;
+    try {
+      parsed = JSON.parse(decompressFromBase64(importInput));
+    } catch {
+      try {
+        parsed = JSON.parse(importInput);
+      } catch {
+        alert("Invalid JSON or compressed data.");
+        return;
+      }
     }
-  }, [renaming]);
 
-  const renderItems = (items) => (
-    <SortableContext items={items.map(item => item.id)} strategy={verticalListSortingStrategy}>
-      {items.map((item) => (
+    const existingIds = new Set(items.map((i) => i.id));
+    const existingNames = new Set(items.map((i) => i.name));
+    const newTemplates = [];
+
+    const normalizeTemplates = (input) => {
+      const arr = Array.isArray(input) ? input : [input];
+      for (const entry of arr) {
+        if (!entry.blocks) continue;
+        let newId = crypto.randomUUID();
+        while (existingIds.has(newId)) newId = crypto.randomUUID();
+
+        let rawName = entry.name?.trim() || (typeof entry.templateHeader === "string" ? entry.templateHeader.trim() : undefined);
+        let baseName = rawName?.replace(/\s+-\s+copy(?:\s+\d+)?$/, "") || `Imported ${Date.now()}`;
+        let finalName = baseName;
+        let counter = 1;
+        while (existingNames.has(finalName)) {
+          finalName = `${baseName} - copy${counter > 1 ? ` ${counter}` : ""}`;
+          counter++;
+        }
+        existingNames.add(finalName);
+
+        newTemplates.push({
+          id: newId,
+          type: "template",
+          name: finalName,
+          blocks: entry.blocks,
+          templateHeader:
+            typeof entry.templateHeader === "string"
+              ? entry.templateHeader
+              : JSON.stringify(entry.templateHeader || {}, null, 2),
+        });
+      }
+    };
+
+    normalizeTemplates(parsed);
+
+    if (!newTemplates.length) {
+      alert("No valid templates found to import.");
+      return;
+    }
+
+    saveItems([...items, ...newTemplates]);
+    setImportInput("");
+    showToast(`${newTemplates.length} template(s) imported!`);
+  };
+
+  const renderItems = (list) => (
+    <SortableContext items={list.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
+      {list.map((item) => (
         <SortableItem key={item.id} id={item.id}>
           <div className="template-item">
-            {item.type === 'folder' ? (
+            {item.type === "folder" ? (
               <>
                 <div className="template-folder-toggle" onClick={() => toggleFolder(item.id)}>
                   ► {item.name}
                 </div>
                 {expandedFolders.has(item.id) && (
-                  <div className="folder-contents">
-                    {renderItems(item.children || [])}
-                  </div>
+                  <div className="folder-contents">{renderItems(item.children || [])}</div>
                 )}
               </>
+            ) : renamingId === item.id ? (
+              <input
+                ref={renameInputRef}
+                className="template-name-input"
+                type="text"
+                spellCheck={false}
+                value={editingName}
+                onChange={(e) => setEditingName(e.target.value)}
+                onBlur={handleRenameSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleRenameSubmit();
+                  }
+                  if (e.key === "Escape") setRenamingId(null);
+                }}
+                autoFocus
+              />
             ) : (
               <>
-                {renaming === item.id ? (
-                  <input
-                    ref={renameInputRef}
-                    className="template-name-input"
-                    type="text"
-                    spellCheck={false}
-                    value={editingName}
-                    onChange={(e) => setEditingName(e.target.value)}
-                    onBlur={handleRenameSubmit}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        handleRenameSubmit();
-                      }
-                      if (e.key === 'Escape') {
-                        setRenaming(null);
-                      }
-                    }}
-                    autoFocus
-                  />
-                ) : (
-                  <button className="template-name" onClick={() => handleTemplateLoad(item)}>
-                    {item.name}
-                  </button>
-                )}
-                <button onClick={() => handleTemplateRenameButton(item.id)}>rename</button>
+                <button className="template-name" onClick={() => handleTemplateLoad(item)}>
+                  {item.name}
+                </button>
+                <button onClick={() => handleRenameStart(item.id)}>rename</button>
                 <button onClick={() => handleCopyTemplate(item)}>copy</button>
                 <button onClick={() => handleTemplateDelete(item.id)}>x</button>
               </>
@@ -262,75 +312,6 @@ export default function TemplateSaving() {
       ))}
     </SortableContext>
   );
-
-  const [importInput, setImportInput] = useState("");
-
-  const handleImportTemplate = () => {
-    let parsed;
-
-    try {
-      // Try decompressing base64 compressed input first
-      parsed = JSON.parse(decompressFromBase64(importInput));
-    } catch {
-      try {
-        // Fallback: try parsing as plain JSON string
-        parsed = JSON.parse(importInput);
-      } catch (err) {
-        alert("Invalid JSON or compressed data.");
-        return;
-      }
-    }
-
-    const existingIds = new Set(items.map(i => i.id));
-    const existingNames = new Set(items.map(i => i.name));
-    const newTemplates = [];
-
-    const normalizeTemplates = (input) => {
-      const array = Array.isArray(input) ? input : [input];
-
-      for (const entry of array) {
-        if (!entry.blocks) continue;
-
-        let newId = crypto.randomUUID();
-        while (existingIds.has(newId)) {
-          newId = crypto.randomUUID();
-        }
-
-        let rawName = entry.name?.trim() || (typeof entry.templateHeader === 'string' ? entry.templateHeader.trim() : undefined);
-        let baseName = rawName?.replace(/\s+-\s+copy(?:\s+\d+)?$/, '') || `Imported ${Date.now()}`;
-
-        let finalName = baseName;
-        let counter = 1;
-        while (existingNames.has(finalName)) {
-          finalName = `${baseName} - copy${counter > 1 ? ` ${counter}` : ''}`;
-          counter++;
-        }
-        existingNames.add(finalName);
-
-        newTemplates.push({
-          id: newId,
-          type: 'template',
-          name: finalName,
-          blocks: entry.blocks,
-          templateHeader: typeof entry.templateHeader === 'string'
-            ? entry.templateHeader
-            : JSON.stringify(entry.templateHeader || {}, null, 2),
-        });
-      }
-    };
-
-    normalizeTemplates(parsed);
-
-    if (newTemplates.length === 0) {
-      alert("No valid templates found to import.");
-      return;
-    }
-
-    const updated = [...items, ...newTemplates];
-    saveItems(updated);
-    setImportInput("");
-    showToast(`${newTemplates.length} template(s) imported!`);
-  };
 
   return (
     <div className="TemplateSaving block--results">
@@ -347,12 +328,7 @@ export default function TemplateSaving() {
           spellCheck={false}
           value={newTemplateName}
           onChange={(e) => setNewTemplateName(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              handleTemplateSave();
-            }
-          }}
+          onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleTemplateSave())}
         />
         <button className="template-menu-button" onClick={handleTemplateSave}>
           save template
@@ -369,7 +345,7 @@ export default function TemplateSaving() {
         <DragOverlay>
           {activeId ? (
             <div className="template-item drag-overlay">
-              {items.find(item => item.id === activeId)?.name || "Dragging..."}
+              {items.find((i) => i.id === activeId)?.name || "Dragging..."}
             </div>
           ) : null}
         </DragOverlay>
@@ -395,11 +371,7 @@ export default function TemplateSaving() {
         />
       </div>
 
-      {toastMessage && (
-        <div className="toast">
-          {toastMessage}
-        </div>
-      )}
+      {toastMessage && <div className="toast">{toastMessage}</div>}
     </div>
   );
 }
