@@ -1,4 +1,6 @@
 .TemplateSaving {
+  padding: 0 0.5rem;
+
   %button-base {
     display: block;
     height: 100%;
@@ -136,12 +138,6 @@
 
   .template-import-wrapper {
     margin-top: 1em;
-
-    textarea {
-      width: 100%;
-      font-family: monospace;
-      margin-bottom: 8px;
-    }
   }
 
   .sortable-item {
@@ -159,10 +155,6 @@
     padding-left: 1em;
   }
 
-  textarea {
-    margin: 12px 0;
-  }
-
   .toast {
     position: fixed;
     bottom: 20px;
@@ -175,5 +167,13 @@
     border-width: 1px 0 0 1px;
     border-radius: 4px;
     z-index: 1000;
+  }
+
+  .template-import-textarea {
+    background-color: #333;
+    margin: 1em 0;
+    height: 8em;
+    width: 100%;
+    font-family: monospace;
   }
 }
