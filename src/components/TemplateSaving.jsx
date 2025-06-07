@@ -183,6 +183,7 @@ export default function TemplateSaving() {
                     ref={renameInputRef}
                     className="template-name-input"
                     type="text"
+                    spellCheck={false}
                     value={editingName}
                     onChange={(e) => setEditingName(e.target.value)}
                     onBlur={handleRenameSubmit}
@@ -286,8 +287,15 @@ export default function TemplateSaving() {
         <input
           type="text"
           placeholder="Template Name"
+          spellCheck={false}
           value={newTemplateName}
           onChange={(e) => setNewTemplateName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleTemplateSave();
+            }
+          }}
         />
         <button className="template-menu-button" onClick={handleTemplateSave}>
           save template
@@ -302,7 +310,11 @@ export default function TemplateSaving() {
       >
         {renderItems(items)}
         <DragOverlay>
-          {activeId ? <div className="template-item drag-overlay">Dragging...</div> : null}
+          {activeId ? (
+            <div className="template-item drag-overlay">
+              {items.find(item => item.id === activeId)?.name || "Dragging..."}
+            </div>
+          ) : null}
         </DragOverlay>
       </DndContext>
 

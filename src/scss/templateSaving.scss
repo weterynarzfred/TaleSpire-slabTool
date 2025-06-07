@@ -13,6 +13,8 @@
     letter-spacing: 0.1em;
     min-width: 1em;
     border: none;
+    font-family: "Lato", sans-serif;
+    box-sizing: border-box;
 
     &:hover {
       background-color: #555;
@@ -23,6 +25,14 @@
     }
   }
 
+  %text-style-uppercase {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.75em;
+    letter-spacing: 0.1em;
+    font-family: "Lato", sans-serif;
+  }
+
   .template-item {
     display: flex;
     gap: 5em 0.5em;
@@ -31,12 +41,44 @@
 
     .template-name {
       @extend %button-base;
+      @extend %text-style-uppercase;
       flex: 1;
     }
 
     button {
       @extend %button-base;
     }
+
+    input {
+      @extend %text-style-uppercase;
+      min-width: 1em;
+      border: none;
+    }
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
+
+  .template-name-input {
+    @extend %button-base;
+    @extend %text-style-uppercase;
+    flex: 1;
+    width: 100%;
+    cursor: text;
+    outline-offset: 2px;
+
+    &:focus {
+      background-color: #555;
+      outline: none;
+    }
+  }
+
+  .drag-overlay {
+    background-color: #444 !important;
+    padding-left: 2em;
+    @extend %text-style-uppercase;
+    font-size: 0.85em;
   }
 
   .template-menu {
@@ -53,8 +95,7 @@
     color: #eee;
     background: #f55;
     padding: 0.3em 0.8em;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    @extend %text-style-uppercase;
     font-weight: 700;
     font-size: 0.8em;
     border: none;
@@ -82,9 +123,8 @@
       height: 2em;
       flex: 1;
       border: none;
+      @extend %text-style-uppercase;
       font-size: 0.8em;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
       padding: 0.2em 0.5em;
       color: white;
     }
@@ -101,20 +141,6 @@
       width: 100%;
       font-family: monospace;
       margin-bottom: 8px;
-    }
-  }
-
-  .template-name-input {
-    @extend %button-base;
-    flex: 1;
-    width: 100%;
-    cursor: text;
-    box-sizing: border-box;
-    outline-offset: 2px;
-
-    &:focus {
-      background-color: #555;
-      outline: none;
     }
   }
 
