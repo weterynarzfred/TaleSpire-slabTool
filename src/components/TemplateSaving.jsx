@@ -16,6 +16,26 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+import pako from 'pako';
+
+function compressToBase64(jsonString) {
+  const compressed = pako.deflate(jsonString);
+  let binary = '';
+  for (let i = 0; i < compressed.length; i++) {
+    binary += String.fromCharCode(compressed[i]);
+  }
+  return btoa(binary);
+}
+
+function decompressFromBase64(base64String) {
+  const binary = atob(base64String);
+  const compressed = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    compressed[i] = binary.charCodeAt(i);
+  }
+  return pako.inflate(compressed, { to: 'string' });
+}
+
 function SortableItem({ id, children }) {
   const {
     attributes,
@@ -54,12 +74,24 @@ export default function TemplateSaving() {
   const [editingName, setEditingName] = useState("");
   const [newTemplateName, setNewTemplateName] = useState("");
   const [toastMessage, setToastMessage] = useState("");
+  const toastTimeoutRef = useRef(null);
 
   const state = useTrackedState();
   const dispatch = useUpdate();
 
   const renameInputRef = useRef(null);
   const sensors = useSensors(useSensor(PointerSensor));
+
+  function showToast(message) {
+    setToastMessage(message);
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+    toastTimeoutRef.current = setTimeout(() => {
+      setToastMessage("");
+      toastTimeoutRef.current = null;
+    }, 1500);
+  }
 
   const saveItems = (updated) => {
     setItems(updated);
@@ -133,18 +165,33 @@ export default function TemplateSaving() {
     return str.length > maxLength ? str.slice(0, maxLength - 3) + "..." : str;
   };
 
+  // COPY SINGLE TEMPLATE (compressed)
   const handleCopyTemplate = async (template) => {
     try {
       const json = JSON.stringify({
         name: template.name,
         blocks: template.blocks,
         templateHeader: template.templateHeader,
-      }, null, 2);
-      await navigator.clipboard.writeText(json);
-      setToastMessage(`Template "${truncate(template.name)}" has been copied!`);
-      setTimeout(() => setToastMessage(""), 2000);
+      });
+
+      const base64 = compressToBase64(json);
+
+      await navigator.clipboard.writeText(base64);
+      showToast(`Template "${truncate(template.name)}" has been copied!`);
     } catch (err) {
       console.error("Failed to copy template JSON:", err);
+    }
+  };
+
+  // COPY ALL TEMPLATES (compressed)
+  const handleCopyAllTemplates = async () => {
+    try {
+      const json = JSON.stringify(items);
+      const base64 = compressToBase64(json);
+      await navigator.clipboard.writeText(base64);
+      showToast("All templates copied!");
+    } catch (err) {
+      alert("Failed to copy templates.");
     }
   };
 
@@ -220,11 +267,18 @@ export default function TemplateSaving() {
 
   const handleImportTemplate = () => {
     let parsed;
+
     try {
-      parsed = JSON.parse(importInput);
-    } catch (err) {
-      alert("Invalid JSON.");
-      return;
+      // Try decompressing base64 compressed input first
+      parsed = JSON.parse(decompressFromBase64(importInput));
+    } catch {
+      try {
+        // Fallback: try parsing as plain JSON string
+        parsed = JSON.parse(importInput);
+      } catch (err) {
+        alert("Invalid JSON or compressed data.");
+        return;
+      }
     }
 
     const existingIds = new Set(items.map(i => i.id));
@@ -275,8 +329,7 @@ export default function TemplateSaving() {
     const updated = [...items, ...newTemplates];
     saveItems(updated);
     setImportInput("");
-    setToastMessage(`${newTemplates.length} template(s) imported!`);
-    setTimeout(() => setToastMessage(""), 2000);
+    showToast(`${newTemplates.length} template(s) imported!`);
   };
 
   return (
@@ -328,33 +381,19 @@ export default function TemplateSaving() {
             Import template
           </button>
 
-          <button className="template-menu-button" onClick={async () => {
-            try {
-              await navigator.clipboard.writeText(JSON.stringify(items, null, 2));
-              setToastMessage("All templates copied!");
-              setTimeout(() => setToastMessage(""), 2000);
-            } catch (err) {
-              alert("Failed to copy templates.");
-            }
-          }}>
+          <button className="template-menu-button" onClick={handleCopyAllTemplates}>
             Copy all templates
           </button>
         </div>
         <textarea
           className="template-import-textarea"
-          placeholder="Paste template JSON here"
+          placeholder="Paste template(s) to be imported here."
           value={importInput}
           onChange={(e) => setImportInput(e.target.value)}
           rows={6}
           spellCheck={false}
         />
       </div>
-
-      {/* <textarea
-        value={JSON.stringify({ templateHeader: state.templateHeader, blocks: state.blocks }, null, 2)}
-        onChange={handleInputChange}
-        spellCheck={false}
-      /> */}
 
       {toastMessage && (
         <div className="toast">
