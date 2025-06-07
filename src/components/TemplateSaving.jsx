@@ -88,7 +88,6 @@ export default function TemplateSaving() {
   const renameInputRef = useRef(null);
   const sensors = useSensors(useSensor(PointerSensor));
 
-  // Persist items to localStorage & state
   const saveItems = (updated) => {
     setItems(updated);
     TS.localStorage.global.setBlob(JSON.stringify(updated));
@@ -101,7 +100,6 @@ export default function TemplateSaving() {
     })();
   }, []);
 
-  // Focus input when renaming
   useEffect(() => {
     if (renamingId && renameInputRef.current) {
       renameInputRef.current.focus();
@@ -112,17 +110,24 @@ export default function TemplateSaving() {
   const truncate = (str, maxLen = 35) =>
     str.length > maxLen ? str.slice(0, maxLen - 3) + "..." : str;
 
-  // Handlers
-
   const handleInputChange = (e) =>
     dispatch({ type: "REPLACE_BLOCKS", value: e.currentTarget.value });
 
   const handleTemplateSave = () => {
-    const name = newTemplateName.trim() || `${Date.now()}`;
+    const existingNames = new Set(items.map((i) => i.name));
+    const inputName = newTemplateName.trim();
+    let baseName = inputName || "New Template";
+    let finalName = baseName;
+    let counter = 1;
+
+    while (existingNames.has(finalName)) {
+      finalName = `${baseName} (${counter++})`;
+    }
+
     const newTemplate = {
       id: crypto.randomUUID(),
       type: "template",
-      name,
+      name: finalName,
       blocks: state.blocks,
       templateHeader:
         typeof state.templateHeader === "string"
@@ -130,8 +135,37 @@ export default function TemplateSaving() {
           : JSON.stringify(state.templateHeader, null, 2),
     };
     saveItems([...items, newTemplate]);
+    showToast(`Template "${finalName}" created!`);
     setNewTemplateName("");
   };
+
+
+  const handleCreateFolder = () => {
+    const existingNames = new Set(items.map((i) => i.name));
+    const inputName = newTemplateName.trim();
+
+    let baseName = inputName || "New Folder";
+    let finalName = baseName;
+    let counter = 1;
+
+    while (existingNames.has(finalName)) {
+      finalName = `${baseName} (${counter++})`;
+    }
+
+    const newFolder = {
+      id: crypto.randomUUID(),
+      type: "folder",
+      name: finalName,
+      children: [],
+    };
+
+    const updated = [...items, newFolder];
+    saveItems(updated);
+    setExpandedFolders((prev) => new Set(prev).add(newFolder.id));
+    showToast(`Folder "${finalName}" created!`);
+    setNewTemplateName("");
+  };
+
 
   const handleTemplateDelete = (id) => {
     saveItems(items.filter((item) => item.id !== id));
@@ -270,16 +304,7 @@ export default function TemplateSaving() {
       {list.map((item) => (
         <SortableItem key={item.id} id={item.id}>
           <div className="template-item">
-            {item.type === "folder" ? (
-              <>
-                <div className="template-folder-toggle" onClick={() => toggleFolder(item.id)}>
-                  ► {item.name}
-                </div>
-                {expandedFolders.has(item.id) && (
-                  <div className="folder-contents">{renderItems(item.children || [])}</div>
-                )}
-              </>
-            ) : renamingId === item.id ? (
+            {renamingId === item.id ? (
               <input
                 ref={renameInputRef}
                 className="template-name-input"
@@ -297,6 +322,21 @@ export default function TemplateSaving() {
                 }}
                 autoFocus
               />
+            ) : item.type === "folder" ? (
+              <>
+                <div
+                  className="template-folder-toggle"
+                  onClick={() => toggleFolder(item.id)}
+                  style={{ display: "inline-block", marginRight: 8 }}
+                >
+                  ► {item.name}
+                </div>
+                <button onClick={() => handleRenameStart(item.id)}>rename</button>
+                <button onClick={() => handleTemplateDelete(item.id)}>x</button>
+                {expandedFolders.has(item.id) && (
+                  <div className="folder-contents">{renderItems(item.children || [])}</div>
+                )}
+              </>
             ) : (
               <>
                 <button className="template-name" onClick={() => handleTemplateLoad(item)}>
@@ -313,6 +353,7 @@ export default function TemplateSaving() {
     </SortableContext>
   );
 
+
   return (
     <div className="TemplateSaving block--results">
       <div className="BlockHeader">
@@ -324,14 +365,16 @@ export default function TemplateSaving() {
       <div className="template-save-wrapper">
         <input
           type="text"
-          placeholder="Template Name"
+          placeholder="Template / Folder   Name"
           spellCheck={false}
           value={newTemplateName}
           onChange={(e) => setNewTemplateName(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleTemplateSave())}
         />
         <button className="template-menu-button" onClick={handleTemplateSave}>
           save template
+        </button>
+        <button className="template-menu-button" onClick={handleCreateFolder}>
+          create folder
         </button>
       </div>
 
@@ -356,7 +399,6 @@ export default function TemplateSaving() {
           <button className="template-menu-button" onClick={handleImportTemplate}>
             Import template
           </button>
-
           <button className="template-menu-button" onClick={handleCopyAllTemplates}>
             Copy all templates
           </button>
