@@ -11,6 +11,7 @@ export default function TemplateList({
   onLoad,
   onDelete,
   onCopy,
+  onOverwrite,
 }) {
   return items.map((item) => (
     <SortableItem key={item.id} id={item.id}>
@@ -39,6 +40,7 @@ export default function TemplateList({
               {item.name}
             </button>
             <button onClick={() => onRenameStart(item.id)}>rename</button>
+            <button onClick={() => onOverwrite(item.id)}>Overwrite</button>
             <button onClick={() => onCopy(item)}>copy</button>
             <button onClick={() => onDelete(item.id)}>x</button>
           </>

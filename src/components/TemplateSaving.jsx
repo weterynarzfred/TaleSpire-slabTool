@@ -52,6 +52,7 @@ export default function TemplateSaving() {
           onLoad={actions.handleTemplateLoad}
           onDelete={actions.handleTemplateDelete}
           onCopy={actions.handleCopyTemplate}
+          onOverwrite={actions.handleOverwriteTemplate}
         />
       </TemplateDndContext>
 

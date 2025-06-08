@@ -89,6 +89,26 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
     }
   };
 
+  const handleOverwriteTemplate = (id) => {
+    const index = items.findIndex((item) => item.id === id);
+    if (index === -1) {
+      alert("Template not found.");
+      return;
+    }
+
+    const updatedItems = [...items];
+    updatedItems[index] = {
+      ...updatedItems[index],
+      blocks: state.blocks,
+      templateHeader: typeof state.templateHeader === "string"
+        ? state.templateHeader
+        : JSON.stringify(state.templateHeader, null, 2),
+    };
+
+    saveItems(updatedItems);
+    showToast(`Template "${truncate(updatedItems[index].name)}" overwritten!`);
+  };
+
   const handleCopyAllTemplates = async () => {
     try {
       const base64 = compressToBase64(JSON.stringify(items));
@@ -186,6 +206,7 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
     handleRenameSubmit,
     handleDragEnd,
     handleCopyTemplate,
+    handleOverwriteTemplate,
     handleCopyAllTemplates,
     handleImportTemplate,
     handleSortTemplates,
