@@ -4,7 +4,7 @@
   %button-base {
     display: block;
     height: 100%;
-    background: #222;
+    background: #111;
     color: inherit;
     margin: 0.25em 0;
     padding: 0.1em 0.5em;
@@ -39,7 +39,7 @@
     display: flex;
     gap: 5em 0.5em;
     padding: 0.05em 0.25em;
-    background-color: #444;
+    background-color: #333;
 
     &:hover {
       background-color: #888;
@@ -92,7 +92,7 @@
   }
 
   .template-menu-button {
-    min-width: 12em;
+    min-width: 8em;
     min-height: 2em;
     position: relative;
     color: #eee;
