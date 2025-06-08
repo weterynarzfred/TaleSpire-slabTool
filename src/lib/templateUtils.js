@@ -9,5 +9,5 @@ export const decompressFromBase64 = (base64Str) => {
   return pako.inflate(compressed, { to: "string" });
 };
 
-export const truncate = (str, maxLen = 35) =>
+export const truncate = (str, maxLen = 30) =>
   str.length > maxLen ? str.slice(0, maxLen - 3) + "..." : str;

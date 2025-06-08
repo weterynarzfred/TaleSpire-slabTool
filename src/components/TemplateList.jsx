@@ -1,4 +1,6 @@
 import SortableItem from "./SortableItem";
+import { truncate } from "../lib/templateUtils";
+import { Pencil, RotateCcw, Copy as CopyIcon, CircleX } from "lucide-react";
 
 export default function TemplateList({
   items,
@@ -22,6 +24,7 @@ export default function TemplateList({
             className="template-name-input"
             type="text"
             spellCheck={false}
+            maxLength={30}
             value={editingName}
             onChange={(e) => onChangeName(e.target.value)}
             onBlur={onRenameSubmit}
@@ -36,13 +39,37 @@ export default function TemplateList({
           />
         ) : (
           <>
-            <button className="template-name" onClick={() => onLoad(item)} title="Load Template">
-              {item.name}
+            <button
+              className="template-name"
+              onClick={() => onLoad(item)}
+              title={item.name}
+            >
+              {truncate(item.name)}
             </button>
-            <button onClick={() => onRenameStart(item.id)}>rename</button>
-            <button onClick={() => onOverwrite(item.id)}>Overwrite</button>
-            <button onClick={() => onCopy(item)}>copy</button>
-            <button onClick={() => onDelete(item.id)}>x</button>
+            <button
+              onClick={() => onRenameStart(item.id)}
+              title="Rename"
+            >
+              <Pencil size={15} />
+            </button>
+            <button
+              onClick={() => onCopy(item)}
+              title="Copy"
+            >
+              <CopyIcon size={15} />
+            </button>
+            <button
+              onClick={() => onOverwrite(item.id)}
+              title="Replace"
+            >
+              <RotateCcw size={15} />
+            </button>
+            <button
+              onClick={() => onDelete(item.id)}
+              title="Delete"
+            >
+              <CircleX size={15} />
+            </button>
           </>
         )}
       </div>

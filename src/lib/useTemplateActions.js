@@ -17,7 +17,7 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
   };
 
   const handleTemplateSave = () => {
-    const baseName = newTemplateName.trim() || "New Template";
+    const baseName = newTemplateName.trim().slice(0, 30) || "New Template";
     const newTemplate = {
       id: crypto.randomUUID(),
       type: "template",
@@ -51,7 +51,7 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
   };
 
   const handleRenameSubmit = () => {
-    const trimmed = editingName.trim();
+    const trimmed = editingName.trim().slice(0, 30);
     if (!trimmed) {
       setRenamingId(null);
       return;

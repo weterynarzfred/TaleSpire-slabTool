@@ -5,6 +5,7 @@ export default function TemplateInputBar({ newTemplateName, setNewTemplateName, 
         type="text"
         placeholder="Template Name"
         spellCheck={false}
+        maxLength={30}
         value={newTemplateName}
         onChange={(e) => setNewTemplateName(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), onSave())}

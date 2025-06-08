@@ -1,5 +1,7 @@
 .TemplateSaving {
   padding: 0 0.5rem;
+  max-width: 100%;
+  overflow-x: auto;
 
   %button-base {
     display: block;
@@ -19,7 +21,8 @@
     box-sizing: border-box;
 
     &:hover {
-      background-color: #555;
+      background-color: #333;
+      color:#f55;
     }
 
     &:active {
@@ -42,23 +45,35 @@
     background-color: #333;
 
     &:hover {
-      background-color: #888;
+      background-color: #555;
     }
 
     .template-name {
       @extend %button-base;
       @extend %text-style-uppercase;
       flex: 1;
+      min-width: 0;
+      overflow: hidden;
     }
 
     button {
       @extend %button-base;
+      display: inline-flex;        // make button a flex container
+      align-items: center;         // vertically center icon/text inside button
+      justify-content: center;     // center horizontally (optional, if you want)
+      gap: 0.25em;                 // small gap between icon and any text if added later
+      padding: 0.1em 0.1em;       // keep padding as needed
     }
 
     input {
       @extend %text-style-uppercase;
-      min-width: 1em;
       border: none;
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -66,9 +81,13 @@
     @extend %button-base;
     @extend %text-style-uppercase;
     flex: 1;
+    min-width: 0;
     width: 100%;
     cursor: text;
     outline-offset: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:focus {
       background-color: #555;
