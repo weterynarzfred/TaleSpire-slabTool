@@ -2,6 +2,10 @@ import { evaluate } from "mathjs";
 import Layout from '../Layout';
 
 function applyBlock(layout, block, scope = {}) {
+  if (block.disabled) {
+    return; // Skip disabled blocks and their children
+  }
+
   try {
     if (block.type === 'slab') {
       const newLayout = new Layout(_.cloneDeep(block.data.layouts));
@@ -40,7 +44,6 @@ function applyBlock(layout, block, scope = {}) {
   } catch (e) {
     block.isError = true;
     block.error = e.message;
-    // console.error(e);
   }
 }
 

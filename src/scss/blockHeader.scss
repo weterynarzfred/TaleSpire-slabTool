@@ -1,9 +1,11 @@
 @import 'variables';
 
 .BlockHeader {
+  position: relative; 
+
   .block__title-bar {
     position: relative;
-    padding: 0em 2.5em 0em 0em;
+    padding: 0em 4em 0em 0em;
     min-height: 2em;
     background-color: $contentColor;
     display: flex;
@@ -143,7 +145,42 @@
       background-color: #333;
     }
   }
+
+  .BlockDisableButton {
+    position: absolute;
+    top: .3em;
+    right: 1.5em;
+    width: 1.2em;
+    display: block;
+    text-align: center;
+    user-select: none;
+    font-feature-settings: "liga" 0;
+    font-family: Arial, sans-serif;
+    font-weight: bolder;
+    font-size: 1.2em;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+    margin: 0 8px;
+    z-index: 1;
+
+      &:hover {
+      border-color: #f55;
+      color: #f55;
+    }
+
+    &:active {
+      background-color: #333;
+    }
+  }
 }
+
+.block--disabled {
+  .block__title-bar {
+    background-color: #999;
+  }
+}
+
 
 .block--is-error {
   .block__title-bar {

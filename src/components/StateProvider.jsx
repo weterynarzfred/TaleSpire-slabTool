@@ -9,6 +9,7 @@ import addBlock from '../lib/reducer/addBlock';
 import deleteBlock from '../lib/reducer/deleteBlock';
 import changeData from '../lib/reducer/changeData';
 import moveBlock from '../lib/reducer/moveBlock';
+import toggleBlockDisabled from '../lib/reducer/toggleBlockDisabled';
 
 const initialState = {
   templateHeader: "",
@@ -68,6 +69,9 @@ const reducer = produce((state, action) => {
       break;
     case "DELETE_BLOCK":
       deleteBlock(state, action);
+      break;
+    case "TOGGLE_BLOCK_DISABLED":
+      toggleBlockDisabled(state, action);
       break;
     case "MOVE_BLOCK":
       moveBlock(state, action);

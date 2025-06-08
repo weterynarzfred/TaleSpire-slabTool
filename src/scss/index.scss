@@ -176,6 +176,10 @@ body {
     padding-bottom: 0;
   }
 
+  &--disabled {
+    background-color: #115;
+  }
+
   &--is-error {
     background-color: #511;
   }
