@@ -38,13 +38,14 @@ export default function BlockHeader({ block }) {
 
   const hasSubBlocks = block.blocks && Object.keys(block.blocks).length;
   return <div className={classNames("BlockHeader", { "block--disabled": block.disabled })}>
-    <svg className="BlockDeleteButton" viewBox="0 0 100 100" onClick={handleBlockDeleteButton}>
+    <svg className="BlockDeleteButton default-tooltip-anchor" data-tooltip-key="blockDelete" viewBox="0 0 100 100" onClick={handleBlockDeleteButton}>
       <path d="M30 30L70 70" />
       <path d="M30 70L70 30" />
     </svg>
 
     <div
-      className="BlockDisableButton"
+      className="BlockDisableButton default-tooltip-anchor"
+      data-tooltip-key="blockToggle"
       onClick={handleToggleDisable}
       title={block.disabled ? "Enable block" : "Disable block"}
     >

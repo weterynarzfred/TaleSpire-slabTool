@@ -1,4 +1,6 @@
 export default {
+  header: <><h3>Template Header</h3><p>Allows for writing comments and setting global variables that can be accessed in all other blocks.</p><p><i style={{ color: "#dff" }}>Each variable must start in a new line and comments start with a <b style={{ color: "#f55" }}>#</b> symbol.</i></p><p><i style={{ color: "#dff" }}>Math is allowed in the header and most input fields.</i></p></>,
+
   addSlab: <><h3>Add a slab</h3><p>Adds a slab to the existing layout.</p></>,
   addDuplicate: <><h3>Duplicate layout</h3><p>Duplicates the existing layout a set number of times, applying modifiers to each copy.</p><p><i style={{ color: "#dff" }}>You can use variable <b style={{ color: "#f55" }}>iter</b> which is the number of the current iteration.</i></p></>,
   addOffset: <><h3>Offset layout</h3><p>Offsets the existing layout by the specified amount. Keep in mind that the end result is always normalized to have only positive position values.</p></>,
@@ -70,15 +72,18 @@ export default {
 
   copyButton: <><p>Place the entire layout in your hand. It will also be copied to clipboard so you can paste it later on if you wish.</p><p><i><b style={{ color: "#f55" }}>It will clear any other things that have been copied or cut previously.</b></i></p></>,
 
-  templateSave: <><h3>Save Template</h3><p>Saves the current template with the specified name. Can also press enter to save.</p></>,
+  blockDelete: <><h3>Delete Block</h3><p><i><b style={{ color: "#f55" }}>Deletes the block and all children.</b></i></p></>,
+  blockToggle: <><h3>Toggle Block</h3><p>Toggles the block and all children on and off.</p><p><i style={{ color: "#dff" }}>This will prevent the objects from being affected by the disabled blocks.</i></p></>,
 
-  templateLoad: <><h3>Load Template</h3><p><i><b style={{ color: "#f55" }}>It will clear any unsaved progress.</b></i></p></>,
-  templateRename: <><h3>Rename Template</h3><p>Limited to 30 characters.</p></>,
-  templateCopy: <><h3>Copy Template</h3><p>Compresses the template JSON and copies it to clipboard.</p></>,
-  templateReplace: <><h3>Replace Template</h3><p>Replaces this template with the current header and all blocks.</p><p><i><b style={{ color: "#f55" }}>It will overwrite all data in this template.</b></i></p></>,
+  templateSave: <><h3>Save Template</h3><p>Saves the current template with the specified name. Can also press enter to save.</p><p><i style={{ color: "#dff" }}>Name limited to 30 characters.</i></p></>,
+
+  templateLoad: <><h3>Load Template</h3><p><i style={{ color: "#dff" }}>It will clear any unsaved progress.</i></p></>,
+  templateRename: <><h3>Rename Template</h3><p><i style={{ color: "#dff" }}>Name limited to 30 characters.</i></p></>,
+  templateCopy: <><h3>Copy Template</h3><p>Copies this template to clipboard.</p></>,
+  templateReplace: <><h3>Replace Template</h3><p>Replaces this template with the current header and blocks.</p><p><i><b style={{ color: "#f55" }}>It will overwrite all data in this template.</b></i></p></>,
   templateDelete: <><h3>Delete Template</h3><p><i><b style={{ color: "#f55" }}>Permanently deletes this template.</b></i></p></>,
 
-  templateImport: <><h3>Import Templates</h3><p>Imports templates from the string in the field below. Can import a single template as well as all exported templates</p></>,
-  templateCopyAll: <><h3>Copy All Templates</h3><p>Compresses all templates and copies them to clipboard.</p></>,
+  templateImport: <><h3>Import Templates</h3><p>Imports templates from the string in the field below.</p><p><i style={{ color: "#dff" }}> Can import a single template as well as all copied templates.</i></p></>,
+  templateCopyAll: <><h3>Copy All Templates</h3><p>Copies all saved templates to clipboard.</p></>,
   templateSort: <><h3>Sort Templates</h3><p>Sorts templates alphabetically.</p></>,
 };

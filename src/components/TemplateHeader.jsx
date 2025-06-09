@@ -25,7 +25,7 @@ export default function TemplateHeader() {
     setInputValue(state.templateHeader);
   }, [state.stateReplacementIndex]);
 
-  return <div className="TemplateHeader">
+  return <div className="TemplateHeader default-tooltip-anchor" data-tooltip-key="header">
     {state.templateHeaderError !== undefined ? <div className="block__error">{state.templateHeaderError}</div> : null}
     <textarea
       className="template-header-input"
