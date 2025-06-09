@@ -1,6 +1,6 @@
 export default function TemplateInputBar({ newTemplateName, setNewTemplateName, onSave }) {
   return (
-    <div className="template-save-wrapper">
+    <div className="template-save-wrapper default-tooltip-anchor" data-tooltip-key="templateSave">
       <input
         type="text"
         placeholder="Template Name"

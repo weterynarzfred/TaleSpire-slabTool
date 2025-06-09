@@ -69,4 +69,16 @@ export default {
   slab_eyedropperButton: <><h3>Eyedropper Tool</h3><p>Select the object (prop or tile) in Talespire to automatically get the UUID of the object in the field below.</p><p><i>Only works if used in a Symbiote version of the tool inside Talespire.</i></p><p><i><b style={{ color: "#f55" }}>It will break if a mini is selected.</b></i></p></>,
 
   copyButton: <><p>Place the entire layout in your hand. It will also be copied to clipboard so you can paste it later on if you wish.</p><p><i><b style={{ color: "#f55" }}>It will clear any other things that have been copied or cut previously.</b></i></p></>,
+
+  templateSave: <><h3>Save Template</h3><p>Saves the current template with the specified name. Can also press enter to save.</p></>,
+
+  templateLoad: <><h3>Load Template</h3><p><i><b style={{ color: "#f55" }}>It will clear any unsaved progress.</b></i></p></>,
+  templateRename: <><h3>Rename Template</h3><p>Limited to 30 characters.</p></>,
+  templateCopy: <><h3>Copy Template</h3><p>Compresses the template JSON and copies it to clipboard.</p></>,
+  templateReplace: <><h3>Replace Template</h3><p>Replaces this template with the current header and all blocks.</p><p><i><b style={{ color: "#f55" }}>It will overwrite all data in this template.</b></i></p></>,
+  templateDelete: <><h3>Delete Template</h3><p><i><b style={{ color: "#f55" }}>Permanently deletes this template.</b></i></p></>,
+
+  templateImport: <><h3>Import Templates</h3><p>Imports templates from the string in the field below. Can import a single template as well as all exported templates</p></>,
+  templateCopyAll: <><h3>Copy All Templates</h3><p>Compresses all templates and copies them to clipboard.</p></>,
+  templateSort: <><h3>Sort Templates</h3><p>Sorts templates alphabetically.</p></>,
 };

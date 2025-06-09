@@ -40,31 +40,40 @@ export default function TemplateList({
         ) : (
           <>
             <button
-              className="template-name"
+              className="template-name default-tooltip-anchor"
+              data-tooltip-key="templateLoad"
               onClick={() => onLoad(item)}
               title={item.name}
             >
               {truncate(item.name)}
             </button>
             <button
+              className="default-tooltip-anchor"
+              data-tooltip-key="templateRename"
               onClick={() => onRenameStart(item.id)}
               title="Rename"
             >
               <Pencil size={15} />
             </button>
             <button
+              className="default-tooltip-anchor"
+              data-tooltip-key="templateCopy"
               onClick={() => onCopy(item)}
               title="Copy"
             >
               <CopyIcon size={15} />
             </button>
             <button
+              className="default-tooltip-anchor"
+              data-tooltip-key="templateReplace"
               onClick={() => onOverwrite(item.id)}
               title="Replace"
             >
               <RotateCcw size={15} />
             </button>
             <button
+              className="default-tooltip-anchor"
+              data-tooltip-key="templateDelete"
               onClick={() => onDelete(item.id)}
               title="Delete"
             >
