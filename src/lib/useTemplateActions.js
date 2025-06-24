@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { compressToBase64, decompressFromBase64, truncate } from "../lib/templateUtils";
 import useToast from "../lib/useToast";
+import { arrayMove } from "@dnd-kit/sortable";
 
 export default function useTemplateActions(items, setItems, state, dispatch) {
   const [activeId, setActiveId] = useState(null);

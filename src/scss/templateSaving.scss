@@ -58,11 +58,11 @@
 
     button {
       @extend %button-base;
-      display: inline-flex;        // make button a flex container
-      align-items: center;         // vertically center icon/text inside button
-      justify-content: center;     // center horizontally (optional, if you want)
-      gap: 0.25em;                 // small gap between icon and any text if added later
-      padding: 0.1em 0.1em;       // keep padding as needed
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25em;
+      padding: 0.1em 0.1em;
     }
 
     input {
@@ -100,7 +100,7 @@
     padding-left: 2em;
     @extend %text-style-uppercase;
     font-size: 0.85em;
-    max-width: 30em;
+    max-width: 35em;
   }
 
   .template-menu {
