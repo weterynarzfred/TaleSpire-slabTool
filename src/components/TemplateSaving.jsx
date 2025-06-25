@@ -8,13 +8,29 @@ import useTemplateActions from "../lib/useTemplateActions";
 
 export default function TemplateSaving() {
   const [items, setItems] = useState([]);
+  const [collapsed, setCollapsed] = useState(new Set());
   const state = useTrackedState();
   const dispatch = useUpdate();
 
   useEffect(() => {
     (async () => {
-      const saved = JSON.parse((await TS.localStorage.global.getBlob()) || "[]");
-      setItems(saved);
+      const savedRaw = await TS.localStorage.global.getBlob();
+      if (!savedRaw) return;
+
+      try {
+        const saved = JSON.parse(savedRaw);
+
+        // Support legacy format (plain array) or new object
+        if (Array.isArray(saved)) {
+          setItems(saved);
+        } else {
+          setItems(saved.items || []);
+          setCollapsed(new Set(saved.collapsed || []));
+        }
+      } catch (e) {
+        console.error("Failed to parse saved templates:", e);
+        setItems([]);
+      }
     })();
   }, []);
 
@@ -39,7 +55,8 @@ export default function TemplateSaving() {
         activeId={actions.activeId}
         setActiveId={actions.setActiveId}
         onDragEnd={actions.handleDragEnd}
-        overlayContent={items.find((i) => i.id === actions.activeId)?.name || "Dragging..."}
+        overlayContent={actions.dragOverlayLabel}
+        setDragOverlayLabel={actions.setDragOverlayLabel}
       >
         <TemplateList
           items={items}
@@ -50,9 +67,15 @@ export default function TemplateSaving() {
           onRenameSubmit={actions.handleRenameSubmit}
           onChangeName={actions.setEditingName}
           onLoad={actions.handleTemplateLoad}
-          onDelete={actions.handleTemplateDelete}
+          onDelete={actions.handleDelete}
           onCopy={actions.handleCopyTemplate}
+          onCopyFolder={actions.handleCopyFolder}
           onOverwrite={actions.handleOverwriteTemplate}
+          collapsedFolders={collapsed}
+          setCollapsedFolders={setCollapsed}
+          onCollapseChange={(collapsedIds) => {
+            actions.saveItems(items, collapsedIds); // Persist collapsed state
+          }}
         />
       </TemplateDndContext>
 
@@ -62,6 +85,7 @@ export default function TemplateSaving() {
         onImport={actions.handleImportTemplate}
         onCopyAll={actions.handleCopyAllTemplates}
         onSort={actions.handleSortTemplates}
+        onCreateFolder={actions.handleFolderCreate}
       />
 
       {actions.toastMessage && <div className="toast">{actions.toastMessage}</div>}

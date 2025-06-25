@@ -9,14 +9,17 @@ export default function SortableItem({ id, children }) {
     setActivatorNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({ id });
 
+  const style = {
+    transform: isDragging ? CSS.Transform.toString(transform) : undefined,
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   return (
-    <div
-      ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
-      className="sortable-item"
-    >
+    <div ref={setNodeRef} style={style} className="sortable-item">
       <div
         ref={setActivatorNodeRef}
         {...listeners}

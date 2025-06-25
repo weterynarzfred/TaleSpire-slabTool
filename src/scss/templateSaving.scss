@@ -200,4 +200,112 @@
     border-radius: 4px;
     z-index: 1000;
   }
+
+    .template-folder {
+    background-color: #2a2a2a;
+    font-weight: bold;
+    border-left: 3px solid #f55;
+    padding: 0.1em 0.25em;
+    border-radius: 2px;
+
+    &:hover {
+      background-color: #444;
+    }
+  }
+
+  .folder-icon {
+    margin-right: 0.4em;
+    color: #f55;
+    flex-shrink: 0;
+  }
+
+.folder-name {
+  @extend %text-style-uppercase;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 0.5em;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.4em;
+
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+  .template-item {
+    &.template-folder {
+      display: flex;
+      align-items: center;
+
+      button {
+        background-color: transparent;
+
+        &:hover {
+          background-color: #f55;
+          color: black;
+        }
+      }
+    }
+  }
+
+  .template-indent {
+    margin-left: 1.5em; // or dynamically adjust inline style via React
+  }
+
+  .drop-zone {
+    height: 1px;
+    margin: 0.15em 0;
+    border: 1px dashed transparent;
+    transition: border-color 0.2s, background-color 0.2s;
+
+    &.drop-zone--active {
+      border-color: #f55;
+      background-color: rgba(255, 85, 85, 0.1);
+    }
+
+    &.drop-zone--outside {
+      border-left: 4px solid #f55;
+      padding-left: 0.5em;
+    }
+
+    &.drop-zone--inside {
+      margin-left: 1.5em;
+      border-left: 4px dashed #888;
+    }
+  }
+
+  .folder-target {
+    transition: background 0.2s ease;
+  }
+
+  .folder-target.highlight {
+    background: rgba(100, 150, 255, 0.2); // light blue overlay
+    border-radius: 4px;
+  }
+
+  .folder-name-inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4em;
+  }
+
+  .folder-toggle-symbol {
+  display: inline-block;
+  transition: transform 0.2s ease;
+
+  &.collapsed {
+    transform: rotate(0deg);
+  }
+
+  &.expanded {
+    transform: rotate(90deg);
+  }
+}
 }

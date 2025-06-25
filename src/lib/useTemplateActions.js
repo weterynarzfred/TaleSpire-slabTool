@@ -11,10 +11,16 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
   const [importInput, setImportInput] = useState("");
   const renameInputRef = useRef(null);
   const [toastMessage, showToast] = useToast();
+  const [dragOverlayLabel, setDragOverlayLabel] = useState("");
 
-  const saveItems = (updated) => {
-    setItems(updated);
-    TS.localStorage.global.setBlob(JSON.stringify(updated));
+  const saveItems = (updatedItems, collapsedIds = null) => {
+    setItems(updatedItems);
+    TS.localStorage.global.setBlob(
+      JSON.stringify({
+        items: updatedItems,
+        collapsed: collapsedIds ?? [],
+      })
+    );
   };
 
   const handleTemplateSave = () => {
@@ -33,8 +39,27 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
   };
 
   const handleTemplateDelete = (id) => {
-    saveItems(items.filter((item) => item.id !== id));
+    const removeById = (list, id) =>
+      list
+        .filter((item) => item.id !== id)
+        .map((item) =>
+          item.type === "folder"
+            ? { ...item, children: removeById(item.children || [], id) }
+            : item
+        );
+
+    const updated = removeById(items, id);
+    saveItems(updated);
+
     if (renamingId === id) setRenamingId(null);
+  };
+
+  const handleDelete = (item) => {
+    if (item.type === "folder") {
+      deleteFolderRecursive(item);
+    } else {
+      handleTemplateDelete(item.id);
+    }
   };
 
   const handleTemplateLoad = (template) => {
@@ -57,20 +82,174 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
       setRenamingId(null);
       return;
     }
-    const updated = items.map((item) =>
-      item.id === renamingId ? { ...item, name: trimmed } : item
-    );
+
+    function updateItemNameById(list, id, newName) {
+      return list.map(item => {
+        if (item.id === id) {
+          return { ...item, name: newName };
+        }
+        if (item.type === "folder" && item.children) {
+          return {
+            ...item,
+            children: updateItemNameById(item.children, id, newName)
+          };
+        }
+        return item;
+      });
+    }
+
+    const updated = updateItemNameById(items, renamingId, trimmed);
     saveItems(updated);
     setRenamingId(null);
   };
 
   const handleDragEnd = ({ active, over }) => {
-    if (!over) return setActiveId(null);
-    const oldIndex = items.findIndex((i) => i.id === active.id);
-    const newIndex = items.findIndex((i) => i.id === over.id);
-    if (oldIndex !== newIndex && oldIndex !== -1 && newIndex !== -1) {
-      saveItems(arrayMove(items, oldIndex, newIndex));
+    if (!over || active.id === over.id) return setActiveId(null);
+
+    // Prevent dropping onto your own before/after zones
+    if (
+      over.id === `before-${active.id}` ||
+      over.id === `after-${active.id}`
+    ) {
+      return setActiveId(null);
     }
+
+    // Determine drop position and targetId
+    let position = "inside";
+    let targetId = over.id;
+
+    if (targetId.startsWith("before-")) {
+      position = "before";
+      targetId = targetId.replace("before-", "");
+    } else if (targetId.startsWith("after-")) {
+      position = "after";
+      targetId = targetId.replace("after-", "");
+    }
+
+    // Flatten tree for easy lookup
+    const flattenItems = (arr, parentId = null) =>
+      arr.flatMap((item) => {
+        if (item.type === "folder") {
+          return [
+            { ...item, parentId },
+            ...flattenItems(item.children || [], item.id),
+          ];
+        }
+        return { ...item, parentId };
+      });
+
+    const flattened = flattenItems(items);
+    const dropTarget = flattened.find((i) => i.id === targetId);
+    if (!dropTarget) return setActiveId(null);
+
+    // Fallback: templates can't receive 'inside' drops
+    if (position === "inside" && dropTarget.type !== "folder") {
+      position = "after";
+    }
+
+    // Remove dragged item and retrieve it
+    const extractItem = (list, id) => {
+      let found = null;
+      const walk = (arr) => {
+        const result = [];
+        for (let item of arr) {
+          if (item.id === id) {
+            found = item;
+            continue;
+          }
+          if (item.type === "folder") {
+            const children = walk(item.children || []);
+            result.push({ ...item, children });
+          } else {
+            result.push(item);
+          }
+        }
+        return result;
+      };
+      const newList = walk(list);
+      return [newList, found];
+    };
+
+    const [updatedItems, draggedItem] = extractItem(items, active.id);
+    if (!draggedItem) return setActiveId(null);
+
+    // Prevent folder from being dropped into its own descendant
+    const isDescendant = (parent, childId) => {
+      if (parent.id === childId) return true;
+      if (!parent.children) return false;
+      return parent.children.some((child) =>
+        child.id === childId ||
+        (child.type === "folder" && isDescendant(child, childId))
+      );
+    };
+
+    if (
+      draggedItem.type === "folder" &&
+      isDescendant(draggedItem, dropTarget.id)
+    ) {
+      return setActiveId(null); // prevent circular nesting
+    }
+
+    // Insert item at appropriate position
+    const insertAtPosition = (list, targetId, insertItem, position) => {
+      const result = [];
+      for (let item of list) {
+        if (item.id === targetId && position === "before") {
+          result.push(insertItem);
+        }
+
+        if (item.type === "folder") {
+          result.push({
+            ...item,
+            children: insertAtPosition(
+              item.children || [],
+              targetId,
+              insertItem,
+              position
+            ),
+          });
+        } else {
+          result.push(item);
+        }
+
+        if (item.id === targetId && position === "after") {
+          result.push(insertItem);
+        }
+      }
+      return result;
+    };
+
+    let finalItems;
+
+    if (position === "inside" && dropTarget.type === "folder") {
+      const insertIntoFolder = (list) =>
+        list.map((item) => {
+          if (item.id === dropTarget.id) {
+            return {
+              ...item,
+              children: [...(item.children || []), draggedItem],
+            };
+          }
+          if (item.type === "folder") {
+            return {
+              ...item,
+              children: insertIntoFolder(item.children || []),
+            };
+          }
+          return item;
+        });
+
+      finalItems = insertIntoFolder(updatedItems);
+    } else {
+      finalItems = insertAtPosition(
+        updatedItems,
+        targetId,
+        draggedItem,
+        position
+      );
+    }
+
+    saveItems(finalItems);
     setActiveId(null);
   };
 
@@ -85,6 +264,16 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
       );
       await navigator.clipboard.writeText(base64);
       showToast(`Template "${truncate(template.name)}" copied!`);
+    } catch (e) {
+      console.error("Copy failed:", e);
+    }
+  };
+
+  const handleCopyFolder = async (folder) => {
+    try {
+      const base64 = compressToBase64(JSON.stringify(folder));
+      await navigator.clipboard.writeText(base64);
+      showToast(`Folder "${truncate(folder.name)}" copied!`);
     } catch (e) {
       console.error("Copy failed:", e);
     }
@@ -139,36 +328,45 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
 
     const normalizeTemplates = (input) => {
       const arr = Array.isArray(input) ? input : [input];
-      for (const entry of arr) {
-        if (!entry.blocks) continue;
-        let newId = crypto.randomUUID();
-        while (existingIds.has(newId)) newId = crypto.randomUUID();
 
-        let rawName =
-          entry.name?.trim() ||
-          (typeof entry.templateHeader === "string"
-            ? entry.templateHeader.trim()
-            : undefined);
-        let baseName = rawName?.replace(/\s+-\s+copy(?:\s+\d+)?$/, "") || `Imported ${Date.now()}`;
-        let finalName = baseName;
-        let counter = 1;
-        while (existingNames.has(finalName)) {
-          finalName = `${baseName} - copy${counter > 1 ? ` ${counter}` : ""}`;
-          counter++;
+      const processItem = (item) => {
+        const newId = crypto.randomUUID();
+        const getUniqueName = (base) => {
+          let finalName = base;
+          let counter = 1;
+          while (existingNames.has(finalName)) {
+            finalName = `${base} - copy${counter > 1 ? ` ${counter}` : ""}`;
+            counter++;
+          }
+          existingNames.add(finalName);
+          return finalName;
+        };
+
+        if (item.type === "folder") {
+          return {
+            id: newId,
+            type: "folder",
+            name: getUniqueName(item.name || "Imported Folder"),
+            children: (item.children || []).map(processItem),
+          };
         }
-        existingNames.add(finalName);
 
-        newTemplates.push({
+        if (!item.blocks) return null;
+
+        return {
           id: newId,
           type: "template",
-          name: finalName,
-          blocks: entry.blocks,
+          name: getUniqueName(item.name || "Imported Template"),
+          blocks: item.blocks,
           templateHeader:
-            typeof entry.templateHeader === "string"
-              ? entry.templateHeader
-              : JSON.stringify(entry.templateHeader || {}, null, 2),
-        });
-      }
+            typeof item.templateHeader === "string"
+              ? item.templateHeader
+              : JSON.stringify(item.templateHeader || {}, null, 2),
+        };
+      };
+
+      const final = arr.map(processItem).filter(Boolean);
+      newTemplates.push(...final);
     };
 
     normalizeTemplates(parsed);
@@ -188,6 +386,85 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
     showToast("Templates sorted A → Z");
   };
 
+  const handleFolderCreate = () => {
+    const baseName = "New Folder";
+    let name = baseName;
+    let count = 1;
+
+    const existingNames = new Set(items.map(i => i.name));
+    while (existingNames.has(name)) {
+      name = `${baseName} ${count++}`;
+    }
+
+    const folder = {
+      id: crypto.randomUUID(),
+      type: "folder",
+      name,
+      children: [],
+    };
+
+    saveItems([...items, folder]);
+  };
+
+  const deleteFolderRecursive = (folder) => {
+    if (!folder || folder.type !== "folder") return;
+
+    const collectIds = (folder) => {
+      const ids = [folder.id];
+      (folder.children || []).forEach((child) => {
+        if (child.type === "folder") {
+          ids.push(...collectIds(child));
+        } else {
+          ids.push(child.id);
+        }
+      });
+      return ids;
+    };
+
+    const idsToDelete = new Set(collectIds(folder));
+
+    const removeByIds = (list) =>
+      list
+        .filter((item) => !idsToDelete.has(item.id))
+        .map((item) =>
+          item.type === "folder"
+            ? { ...item, children: removeByIds(item.children || []) }
+            : item
+        );
+
+    saveItems(removeByIds(items));
+  };
+
+  function handleDropOutside(draggedId) {
+    const removeItem = (list, id) =>
+      list.flatMap((item) => {
+        if (item.type === "folder") {
+          return [{
+            ...item,
+            children: removeItem(item.children || [], id)
+          }];
+        }
+        return item.id === id ? [] : [item];
+      });
+
+    const draggedItem = findItemById(items, draggedId);
+    if (!draggedItem) return;
+
+    const updated = removeItem(items, draggedId);
+    saveItems([...updated, draggedItem]);
+  }
+
+  function findItemById(list, id) {
+    for (const item of list) {
+      if (item.id === id) return item;
+      if (item.type === "folder" && item.children) {
+        const found = findItemById(item.children, id);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
   return {
     activeId,
     renamingId,
@@ -196,20 +473,28 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
     importInput,
     renameInputRef,
     toastMessage,
+    dragOverlayLabel,
+    saveItems,
     setActiveId,
     setEditingName,
     setNewTemplateName,
     setImportInput,
     handleTemplateSave,
     handleTemplateDelete,
+    handleDelete,
     handleTemplateLoad,
     handleRenameStart,
     handleRenameSubmit,
     handleDragEnd,
     handleCopyTemplate,
+    handleCopyFolder,
     handleOverwriteTemplate,
     handleCopyAllTemplates,
     handleImportTemplate,
     handleSortTemplates,
+    handleFolderCreate,
+    deleteFolderRecursive,
+    handleDropOutside,
+    setDragOverlayLabel,
   };
 }
