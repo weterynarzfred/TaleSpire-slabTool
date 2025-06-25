@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { compressToBase64, decompressFromBase64, truncate } from "../lib/templateUtils";
 import useToast from "../lib/useToast";
-import { arrayMove } from "@dnd-kit/sortable";
 
 export default function useTemplateActions(items, setItems, state, dispatch) {
   const [activeId, setActiveId] = useState(null);
@@ -9,9 +8,9 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
   const [editingName, setEditingName] = useState("");
   const [newTemplateName, setNewTemplateName] = useState("");
   const [importInput, setImportInput] = useState("");
+  const [dragOverlayLabel, setDragOverlayLabel] = useState("");
   const renameInputRef = useRef(null);
   const [toastMessage, showToast] = useToast();
-  const [dragOverlayLabel, setDragOverlayLabel] = useState("");
 
   const saveItems = (updatedItems, collapsedIds = null) => {
     setItems(updatedItems);
@@ -23,245 +22,159 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
     );
   };
 
+  const updateItemNameById = (list, id, newName) =>
+    list.map(item => {
+      if (item.id === id) return { ...item, name: newName };
+      if (item.type === "folder" && item.children) {
+        return { ...item, children: updateItemNameById(item.children, id, newName) };
+      }
+      return item;
+    });
+
+  const extractItem = (list, id) => {
+    let found = null;
+    const walk = arr => arr.reduce((result, item) => {
+      if (item.id === id) {
+        found = item;
+        return result;
+      }
+      if (item.type === "folder") {
+        const children = walk(item.children || []);
+        result.push({ ...item, children });
+      } else {
+        result.push(item);
+      }
+      return result;
+    }, []);
+    return [walk(list), found];
+  };
+
+  const insertAtPosition = (list, targetId, insertItem, position) =>
+    list.flatMap(item => {
+      const before = item.id === targetId && position === "before" ? [insertItem] : [];
+      const after = item.id === targetId && position === "after" ? [insertItem] : [];
+      const children = item.type === "folder"
+        ? { ...item, children: insertAtPosition(item.children || [], targetId, insertItem, position) }
+        : item;
+      return [...before, children, ...after];
+    });
+
+  const insertIntoFolder = (list, folderId, insertItem) =>
+    list.map(item => {
+      if (item.id === folderId) {
+        return { ...item, children: [...(item.children || []), insertItem] };
+      }
+      if (item.type === "folder") {
+        return { ...item, children: insertIntoFolder(item.children || [], folderId, insertItem) };
+      }
+      return item;
+    });
+
+  const flattenItems = (arr, parentId = null) =>
+    arr.flatMap(item =>
+      item.type === "folder"
+        ? [{ ...item, parentId }, ...flattenItems(item.children || [], item.id)]
+        : [{ ...item, parentId }]
+    );
+
+  const isDescendant = (parent, childId) => {
+    if (parent.id === childId) return true;
+    return (parent.children || []).some(child =>
+      child.id === childId || (child.type === "folder" && isDescendant(child, childId))
+    );
+  };
+
+  const findItemById = (list, id) => {
+    for (const item of list) {
+      if (item.id === id) return item;
+      if (item.type === "folder") {
+        const found = findItemById(item.children || [], id);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  const removeItem = (list, id) =>
+    list.flatMap(item => {
+      if (item.id === id) return [];
+      if (item.type === "folder") {
+        return [{ ...item, children: removeItem(item.children || [], id) }];
+      }
+      return [item];
+    });
+
   const handleTemplateSave = () => {
-    const baseName = newTemplateName.trim().slice(0, 30) || "New Template";
+    const name = newTemplateName.trim().slice(0, 30) || "New Template";
     const newTemplate = {
       id: crypto.randomUUID(),
       type: "template",
-      name: baseName,
+      name,
       blocks: state.blocks,
-      templateHeader: typeof state.templateHeader === "string"
-        ? state.templateHeader
-        : JSON.stringify(state.templateHeader, null, 2),
+      templateHeader: typeof state.templateHeader === "string" ? state.templateHeader : JSON.stringify(state.templateHeader, null, 2),
     };
     saveItems([...items, newTemplate]);
     setNewTemplateName("");
   };
 
-  const handleTemplateDelete = (id) => {
-    const removeById = (list, id) =>
-      list
-        .filter((item) => item.id !== id)
-        .map((item) =>
-          item.type === "folder"
-            ? { ...item, children: removeById(item.children || [], id) }
-            : item
-        );
-
-    const updated = removeById(items, id);
+  const handleTemplateDelete = id => {
+    const updated = removeItem(items, id);
     saveItems(updated);
-
     if (renamingId === id) setRenamingId(null);
   };
 
-  const handleDelete = (item) => {
-    if (item.type === "folder") {
-      deleteFolderRecursive(item);
-    } else {
-      handleTemplateDelete(item.id);
-    }
-  };
+  const handleDelete = item => item.type === "folder" ? deleteFolderRecursive(item) : handleTemplateDelete(item.id);
 
-  const handleTemplateLoad = (template) => {
+  const handleTemplateLoad = template =>
     dispatch({
       type: "REPLACE_BLOCKS",
       value: { blocks: template.blocks, templateHeader: template.templateHeader },
     });
-  };
 
-  const handleRenameStart = (id) => {
-    const item = items.find((i) => i.id === id);
-    if (!item) return;
-    setRenamingId(id);
-    setEditingName(item.name);
+  const handleRenameStart = id => {
+    const item = findItemById(items, id);
+    if (item) {
+      setRenamingId(id);
+      setEditingName(item.name);
+    }
   };
 
   const handleRenameSubmit = () => {
-    const trimmed = editingName.trim().slice(0, 30);
-    if (!trimmed) {
-      setRenamingId(null);
-      return;
-    }
-
-    function updateItemNameById(list, id, newName) {
-      return list.map(item => {
-        if (item.id === id) {
-          return { ...item, name: newName };
-        }
-        if (item.type === "folder" && item.children) {
-          return {
-            ...item,
-            children: updateItemNameById(item.children, id, newName)
-          };
-        }
-        return item;
-      });
-    }
-
-    const updated = updateItemNameById(items, renamingId, trimmed);
-    saveItems(updated);
+    const name = editingName.trim().slice(0, 30);
+    if (!name) return setRenamingId(null);
+    saveItems(updateItemNameById(items, renamingId, name));
     setRenamingId(null);
   };
 
   const handleDragEnd = ({ active, over }) => {
-    if (!over || active.id === over.id) return setActiveId(null);
-
-    // Prevent dropping onto your own before/after zones
-    if (
-      over.id === `before-${active.id}` ||
-      over.id === `after-${active.id}`
-    ) {
+    if (!over || active.id === over.id || over.id === `before-${active.id}` || over.id === `after-${active.id}`) {
       return setActiveId(null);
     }
 
-    // Determine drop position and targetId
-    let position = "inside";
-    let targetId = over.id;
-
-    if (targetId.startsWith("before-")) {
-      position = "before";
-      targetId = targetId.replace("before-", "");
-    } else if (targetId.startsWith("after-")) {
-      position = "after";
-      targetId = targetId.replace("after-", "");
-    }
-
-    // Flatten tree for easy lookup
-    const flattenItems = (arr, parentId = null) =>
-      arr.flatMap((item) => {
-        if (item.type === "folder") {
-          return [
-            { ...item, parentId },
-            ...flattenItems(item.children || [], item.id),
-          ];
-        }
-        return { ...item, parentId };
-      });
+    let position = over.id.startsWith("before-") ? "before" : over.id.startsWith("after-") ? "after" : "inside";
+    const targetId = over.id.replace(/^(before-|after-)/, "");
 
     const flattened = flattenItems(items);
-    const dropTarget = flattened.find((i) => i.id === targetId);
+    const dropTarget = flattened.find(i => i.id === targetId);
     if (!dropTarget) return setActiveId(null);
 
-    // Fallback: templates can't receive 'inside' drops
-    if (position === "inside" && dropTarget.type !== "folder") {
-      position = "after";
-    }
-
-    // Remove dragged item and retrieve it
-    const extractItem = (list, id) => {
-      let found = null;
-      const walk = (arr) => {
-        const result = [];
-        for (let item of arr) {
-          if (item.id === id) {
-            found = item;
-            continue;
-          }
-          if (item.type === "folder") {
-            const children = walk(item.children || []);
-            result.push({ ...item, children });
-          } else {
-            result.push(item);
-          }
-        }
-        return result;
-      };
-      const newList = walk(list);
-      return [newList, found];
-    };
+    if (position === "inside" && dropTarget.type !== "folder") position = "after";
 
     const [updatedItems, draggedItem] = extractItem(items, active.id);
-    if (!draggedItem) return setActiveId(null);
+    if (!draggedItem || (draggedItem.type === "folder" && isDescendant(draggedItem, dropTarget.id))) return setActiveId(null);
 
-    // Prevent folder from being dropped into its own descendant
-    const isDescendant = (parent, childId) => {
-      if (parent.id === childId) return true;
-      if (!parent.children) return false;
-      return parent.children.some((child) =>
-        child.id === childId ||
-        (child.type === "folder" && isDescendant(child, childId))
-      );
-    };
-
-    if (
-      draggedItem.type === "folder" &&
-      isDescendant(draggedItem, dropTarget.id)
-    ) {
-      return setActiveId(null); // prevent circular nesting
-    }
-
-    // Insert item at appropriate position
-    const insertAtPosition = (list, targetId, insertItem, position) => {
-      const result = [];
-      for (let item of list) {
-        if (item.id === targetId && position === "before") {
-          result.push(insertItem);
-        }
-
-        if (item.type === "folder") {
-          result.push({
-            ...item,
-            children: insertAtPosition(
-              item.children || [],
-              targetId,
-              insertItem,
-              position
-            ),
-          });
-        } else {
-          result.push(item);
-        }
-
-        if (item.id === targetId && position === "after") {
-          result.push(insertItem);
-        }
-      }
-      return result;
-    };
-
-    let finalItems;
-
-    if (position === "inside" && dropTarget.type === "folder") {
-      const insertIntoFolder = (list) =>
-        list.map((item) => {
-          if (item.id === dropTarget.id) {
-            return {
-              ...item,
-              children: [...(item.children || []), draggedItem],
-            };
-          }
-          if (item.type === "folder") {
-            return {
-              ...item,
-              children: insertIntoFolder(item.children || []),
-            };
-          }
-          return item;
-        });
-
-      finalItems = insertIntoFolder(updatedItems);
-    } else {
-      finalItems = insertAtPosition(
-        updatedItems,
-        targetId,
-        draggedItem,
-        position
-      );
-    }
+    const finalItems =
+      position === "inside"
+        ? insertIntoFolder(updatedItems, dropTarget.id, draggedItem)
+        : insertAtPosition(updatedItems, targetId, draggedItem, position);
 
     saveItems(finalItems);
     setActiveId(null);
   };
 
-  const handleCopyTemplate = async (template) => {
+  const handleCopyTemplate = async template => {
     try {
-      const base64 = compressToBase64(
-        JSON.stringify({
-          name: template.name,
-          blocks: template.blocks,
-          templateHeader: template.templateHeader,
-        })
-      );
+      const base64 = compressToBase64(JSON.stringify({ name: template.name, blocks: template.blocks, templateHeader: template.templateHeader }));
       await navigator.clipboard.writeText(base64);
       showToast(`Template "${truncate(template.name)}" copied!`);
     } catch (e) {
@@ -269,7 +182,7 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
     }
   };
 
-  const handleCopyFolder = async (folder) => {
+  const handleCopyFolder = async folder => {
     try {
       const base64 = compressToBase64(JSON.stringify(folder));
       await navigator.clipboard.writeText(base64);
@@ -279,24 +192,19 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
     }
   };
 
-  const handleOverwriteTemplate = (id) => {
-    const index = items.findIndex((item) => item.id === id);
-    if (index === -1) {
-      alert("Template not found.");
-      return;
-    }
+  const handleOverwriteTemplate = id => {
+    const index = items.findIndex(item => item.id === id);
+    if (index === -1) return alert("Template not found.");
 
-    const updatedItems = [...items];
-    updatedItems[index] = {
-      ...updatedItems[index],
+    const updated = [...items];
+    updated[index] = {
+      ...updated[index],
       blocks: state.blocks,
-      templateHeader: typeof state.templateHeader === "string"
-        ? state.templateHeader
-        : JSON.stringify(state.templateHeader, null, 2),
+      templateHeader: typeof state.templateHeader === "string" ? state.templateHeader : JSON.stringify(state.templateHeader, null, 2),
     };
 
-    saveItems(updatedItems);
-    showToast(`Template "${truncate(updatedItems[index].name)}" overwritten!`);
+    saveItems(updated);
+    showToast(`Template "${truncate(updated[index].name)}" overwritten!`);
   };
 
   const handleCopyAllTemplates = async () => {
@@ -317,67 +225,49 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
       try {
         parsed = JSON.parse(importInput);
       } catch {
-        alert("Invalid JSON or compressed data.");
-        return;
+        return alert("Invalid JSON or compressed data.");
       }
     }
 
-    const existingIds = new Set(items.map((i) => i.id));
-    const existingNames = new Set(items.map((i) => i.name));
+    const existingIds = new Set(items.map(i => i.id));
+    const existingNames = new Set(items.map(i => i.name));
     const newTemplates = [];
 
-    const normalizeTemplates = (input) => {
+    const normalizeTemplates = input => {
       const arr = Array.isArray(input) ? input : [input];
 
-      const processItem = (item) => {
-        const newId = crypto.randomUUID();
-        const getUniqueName = (base) => {
-          let finalName = base;
-          let counter = 1;
-          while (existingNames.has(finalName)) {
-            finalName = `${base} - copy${counter > 1 ? ` ${counter}` : ""}`;
-            counter++;
-          }
-          existingNames.add(finalName);
-          return finalName;
-        };
+      const processItem = item => {
+        const id = crypto.randomUUID();
+        const base = item.name || (item.type === "folder" ? "Imported Folder" : "Imported Template");
+        let name = base;
+        let count = 1;
+        while (existingNames.has(name)) name = `${base} - copy${count++ > 1 ? ` ${count - 1}` : ""}`;
+        existingNames.add(name);
 
         if (item.type === "folder") {
-          return {
-            id: newId,
-            type: "folder",
-            name: getUniqueName(item.name || "Imported Folder"),
-            children: (item.children || []).map(processItem),
-          };
+          return { id, type: "folder", name, children: (item.children || []).map(processItem) };
         }
 
         if (!item.blocks) return null;
 
         return {
-          id: newId,
+          id,
           type: "template",
-          name: getUniqueName(item.name || "Imported Template"),
+          name,
           blocks: item.blocks,
-          templateHeader:
-            typeof item.templateHeader === "string"
-              ? item.templateHeader
-              : JSON.stringify(item.templateHeader || {}, null, 2),
+          templateHeader: typeof item.templateHeader === "string" ? item.templateHeader : JSON.stringify(item.templateHeader || {}, null, 2),
         };
       };
 
-      const final = arr.map(processItem).filter(Boolean);
-      newTemplates.push(...final);
+      return arr.map(processItem).filter(Boolean);
     };
 
-    normalizeTemplates(parsed);
-    if (!newTemplates.length) {
-      alert("No valid templates found to import.");
-      return;
-    }
+    const normalized = normalizeTemplates(parsed);
+    if (!normalized.length) return alert("No valid templates found to import.");
 
-    saveItems([...items, ...newTemplates]);
+    saveItems([...items, ...normalized]);
     setImportInput("");
-    showToast(`${newTemplates.length} template(s) imported!`);
+    showToast(`${normalized.length} template(s) imported!`);
   };
 
   const handleSortTemplates = () => {
@@ -387,83 +277,35 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
   };
 
   const handleFolderCreate = () => {
-    const baseName = "New Folder";
-    let name = baseName;
+    const base = "New Folder";
+    let name = base;
     let count = 1;
+    const existing = new Set(items.map(i => i.name));
+    while (existing.has(name)) name = `${base} ${count++}`;
 
-    const existingNames = new Set(items.map(i => i.name));
-    while (existingNames.has(name)) {
-      name = `${baseName} ${count++}`;
-    }
-
-    const folder = {
-      id: crypto.randomUUID(),
-      type: "folder",
-      name,
-      children: [],
-    };
-
+    const folder = { id: crypto.randomUUID(), type: "folder", name, children: [] };
     saveItems([...items, folder]);
   };
 
-  const deleteFolderRecursive = (folder) => {
-    if (!folder || folder.type !== "folder") return;
+  const deleteFolderRecursive = folder => {
+    const collectIds = f => [f.id, ...(f.children || []).flatMap(c => c.type === "folder" ? collectIds(c) : [c.id])];
+    const ids = new Set(collectIds(folder));
 
-    const collectIds = (folder) => {
-      const ids = [folder.id];
-      (folder.children || []).forEach((child) => {
-        if (child.type === "folder") {
-          ids.push(...collectIds(child));
-        } else {
-          ids.push(child.id);
-        }
-      });
-      return ids;
-    };
-
-    const idsToDelete = new Set(collectIds(folder));
-
-    const removeByIds = (list) =>
-      list
-        .filter((item) => !idsToDelete.has(item.id))
-        .map((item) =>
-          item.type === "folder"
-            ? { ...item, children: removeByIds(item.children || []) }
-            : item
-        );
+    const removeByIds = list =>
+      list.filter(item => !ids.has(item.id)).map(item =>
+        item.type === "folder" ? { ...item, children: removeByIds(item.children || []) } : item
+      );
 
     saveItems(removeByIds(items));
   };
 
-  function handleDropOutside(draggedId) {
-    const removeItem = (list, id) =>
-      list.flatMap((item) => {
-        if (item.type === "folder") {
-          return [{
-            ...item,
-            children: removeItem(item.children || [], id)
-          }];
-        }
-        return item.id === id ? [] : [item];
-      });
-
+  const handleDropOutside = draggedId => {
     const draggedItem = findItemById(items, draggedId);
     if (!draggedItem) return;
 
     const updated = removeItem(items, draggedId);
     saveItems([...updated, draggedItem]);
-  }
-
-  function findItemById(list, id) {
-    for (const item of list) {
-      if (item.id === id) return item;
-      if (item.type === "folder" && item.children) {
-        const found = findItemById(item.children, id);
-        if (found) return found;
-      }
-    }
-    return null;
-  }
+  };
 
   return {
     activeId,
