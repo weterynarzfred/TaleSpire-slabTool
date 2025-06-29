@@ -96,6 +96,10 @@
     }
   }
 
+  .template-item.nested-item {
+    padding-left: 8px;
+  }
+
   .template-name-input {
     @extend %button-base;
     @extend %text-style-uppercase;
@@ -189,7 +193,6 @@
   .template-folder {
     background-color: #2a2a2a;
     font-weight: bold;
-    border-left: 3px solid #f55;
     padding: 0.1em 0.25em;
     border-radius: 2px;
 
@@ -205,11 +208,11 @@
   }
 
   .folder-full {
-    fill: currentColor; // or any style to distinguish "full" folders
+    fill: currentColor;
   }
 
   .folder-empty {
-    fill: none; // or a lighter color
+    fill: none;
   }
 
   .folder-name {
@@ -264,6 +267,26 @@
     }
   }
 
+  // ========== Folder Visual Grouping ==========
+  .folder-visual {
+    position: relative;
+    padding-left: 0.5em;
+    margin-left: 0.5em;
+    border-left: 2px solid #aaa;
+    margin-bottom: 0.3em;
+
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 100%;
+      background-color: #aaa;
+    }
+  }
+
   // ========== Drag / Sort ==========
   .sortable-item {
     display: flex;
@@ -290,7 +313,7 @@
 
   .drop-zone {
     height: 1px;
-    margin: 0.15em 0;
+    margin: 0;
     border: 1px dashed transparent;
     transition: border-color 0.2s, background-color 0.2s;
 
@@ -299,15 +322,15 @@
       background-color: rgba(255, 85, 85, 0.1);
     }
 
-    &.drop-zone--outside {
-      border-left: 4px solid #f55;
-      padding-left: 0.5em;
-    }
+    // &.drop-zone--outside {
+    //   border-left: 4px solid #f55;
+    //   padding-left: 0.5em;
+    // }
 
-    &.drop-zone--inside {
-      margin-left: 1.5em;
-      border-left: 4px dashed #888;
-    }
+    // &.drop-zone--inside {
+    //   margin-left: 1.5em;
+    //   border-left: 4px dashed #888;
+    // }
   }
 
   // ========== Toast Notification ==========

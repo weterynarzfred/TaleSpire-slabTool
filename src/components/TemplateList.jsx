@@ -84,36 +84,16 @@ export default function TemplateList({
           {truncate(item.name)}
         </span>
       </button>
-      <button
-        className="default-tooltip-anchor"
-        data-tooltip-key="folderRename"
-        onClick={() => onRenameStart(item.id)}
-        title="Rename Folder"
-      >
+      <button className="default-tooltip-anchor" data-tooltip-key="folderRename" onClick={() => onRenameStart(item.id)} title="Rename Folder">
         <Pencil size={15} />
       </button>
-      <button
-        className="default-tooltip-anchor"
-        data-tooltip-key="folderCopy"
-        onClick={() => onCopyFolder(item)}
-        title="Copy Folder and Contents"
-      >
+      <button className="default-tooltip-anchor" data-tooltip-key="folderCopy" onClick={() => onCopyFolder(item)} title="Copy Folder and Contents">
         <CopyIcon size={15} />
       </button>
-      <button
-        className="default-tooltip-anchor"
-        data-tooltip-key="folderSort"
-        onClick={() => onSortFolder(item.id)}
-        title="Sort Folder Alphabetically"
-      >
-        <ArrowDownAZ   size={15} />
+      <button className="default-tooltip-anchor" data-tooltip-key="folderSort" onClick={() => onSortFolder(item.id)} title="Sort Folder Alphabetically">
+        <ArrowDownAZ size={15} />
       </button>
-      <button
-        className="default-tooltip-anchor"
-        data-tooltip-key="folderDelete"
-        onClick={() => onDelete(item)}
-        title="Delete Folder and Contents"
-      >
+      <button className="default-tooltip-anchor" data-tooltip-key="folderDelete" onClick={() => onDelete(item)} title="Delete Folder and Contents">
         <CircleX size={15} />
       </button>
     </>
@@ -121,52 +101,22 @@ export default function TemplateList({
 
   const renderTemplateButtons = (item) => (
     <>
-      <button
-        className="template-name default-tooltip-anchor"
-        data-tooltip-key="templateLoad"
-        onClick={() => onLoad(item)}
-        title={item.name}
-      >
+      <button className="template-name default-tooltip-anchor" data-tooltip-key="templateLoad" onClick={() => onLoad(item)} title={item.name}>
         {truncate(item.name)}
       </button>
-      <button
-        className="default-tooltip-anchor"
-        data-tooltip-key="templateCopyResult"
-        onClick={() => onCopyResult(item)}
-        title="Copy Template Result"
-      >
+      <button className="default-tooltip-anchor" data-tooltip-key="templateCopyResult" onClick={() => onCopyResult(item)} title="Copy Template Result">
         <ClipboardCopy size={15} />
       </button>
-      <button
-        className="default-tooltip-anchor"
-        data-tooltip-key="templateRename"
-        onClick={() => onRenameStart(item.id)}
-        title="Rename"
-      >
+      <button className="default-tooltip-anchor" data-tooltip-key="templateRename" onClick={() => onRenameStart(item.id)} title="Rename">
         <Pencil size={15} />
       </button>
-      <button
-        className="default-tooltip-anchor"
-        data-tooltip-key="templateCopy"
-        onClick={() => onCopy(item)}
-        title="Copy"
-      >
+      <button className="default-tooltip-anchor" data-tooltip-key="templateCopy" onClick={() => onCopy(item)} title="Copy">
         <CopyIcon size={15} />
       </button>
-      <button
-        className="default-tooltip-anchor"
-        data-tooltip-key="templateReplace"
-        onClick={() => onOverwrite(item.id)}
-        title="Replace"
-      >
+      <button className="default-tooltip-anchor" data-tooltip-key="templateReplace" onClick={() => onOverwrite(item.id)} title="Replace">
         <RotateCcw size={15} />
       </button>
-      <button
-        className="default-tooltip-anchor"
-        data-tooltip-key="templateDelete"
-        onClick={() => onDelete(item)}
-        title="Delete"
-      >
+      <button className="default-tooltip-anchor" data-tooltip-key="templateDelete" onClick={() => onDelete(item)} title="Delete">
         <CircleX size={15} />
       </button>
     </>
@@ -175,16 +125,19 @@ export default function TemplateList({
   const renderItems = (list, level = 0) =>
     list.map((item) => {
       const isFolder = item.type === "folder";
-      const indentStyle = { marginLeft: `${level * 20}px` };
+      const indentStyle = {
+        marginLeft: `${level * 20}px`,
+      };
+      const nestingClass = level > 0 ? "nested-item" : "";
 
-      return (
-        <div key={item.id}>
+      const content = (
+        <>
           <DropZone id={`before-${item.id}`} onDrop={(id) => onDropOutside?.(id)} />
 
           <SortableItem id={item.id}>
             <FolderDropTarget id={item.id}>
               <div
-                className={`template-item ${isFolder ? "template-folder" : ""}`}
+                className={`template-item ${isFolder ? "template-folder" : ""} ${nestingClass}`}
                 style={indentStyle}
               >
                 {renamingId === item.id
@@ -197,11 +150,16 @@ export default function TemplateList({
           </SortableItem>
 
           {isFolder && !isCollapsed(item.id) && item.children?.length > 0 &&
-            renderItems(item.children, level + 1)}
+            <div className="folder-visual">
+              {renderItems(item.children, level + 1)}
+            </div>
+          }
 
           <DropZone id={`after-${item.id}`} onDrop={(id) => onDropOutside?.(id)} />
-        </div>
+        </>
       );
+
+      return <div key={item.id}>{content}</div>;
     });
 
   return <>{renderItems(items)}</>;

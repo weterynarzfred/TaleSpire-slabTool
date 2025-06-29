@@ -89,7 +89,8 @@ export default {
   folderCopy: <><h3>Copy Folder</h3><p>Copies this folder and its contents to clipboard.</p><p><i className="tt-info">Whole folder including it's contents can be imported at once using the import field below.</i></p></>,
   folderDelete: <><h3>Delete Folder</h3><p><i><b className="tt-warn">Permanently deletes this folder and all it's contents.</b></i></p></>,
 
-  templateImport: <><h3>Import Templates</h3><p>Imports templates from the string in the field below.</p><p><i className="tt-info"> Can import a single template as well as all copied templates.</i></p></>,
+  templateImport: <><h3>Import Templates</h3><p>Imports templates from the string in the field below.</p><p><i className="tt-info"> Can import a single template, a folder with all it's contents or all exported templates.</i></p></>,
   templateCopyAll: <><h3>Copy All Templates</h3><p>Copies all saved templates to clipboard.</p></>,
   templateSort: <><h3>Sort Templates</h3><p>Sorts templates alphabetically.</p></>,
+  templateNewFolder: <><h3>New Folder</h3><p>Create a new folder.</p><p><i className="tt-info">Duh...</i></p></>,
 };
