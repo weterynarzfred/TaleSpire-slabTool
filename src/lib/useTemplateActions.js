@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { compressToBase64, decompressFromBase64, truncate } from "../lib/templateUtils";
 import useToast from "../lib/useToast";
+import { computeTemplateResult } from "../lib/computeTemplateResult";
 
 export default function useTemplateActions(items, setItems, state, dispatch, collapsed) {
   const [activeId, setActiveId] = useState(null);
@@ -130,6 +131,33 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
       type: "REPLACE_BLOCKS",
       value: { blocks: template.blocks, templateHeader: template.templateHeader },
     });
+
+
+
+const handleCopyTemplateResult = async (template) => {
+  try {
+    const base64 = await computeTemplateResult({
+      blocks: template.blocks,
+      templateHeader:
+        typeof template.templateHeader === "string"
+          ? template.templateHeader
+          : JSON.stringify(template.templateHeader || {}, null, 2),
+    });
+
+    await navigator.clipboard.writeText(base64);
+
+    if (TS?.slabs?.sendSlabToHand) {
+      TS.slabs.sendSlabToHand(base64);
+    }
+
+    showToast(`Result from "${truncate(template.name)}" copied!`);
+  } catch (e) {
+    console.error("Failed to copy template result:", e);
+    showToast("Failed to copy result.");
+  }
+};
+
+
 
   const handleRenameStart = id => {
     const item = findItemById(items, id);
@@ -276,6 +304,32 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
     showToast("Templates sorted A → Z");
   };
 
+  const handleSortFolder = (folderId) => {
+    const sortRecursively = (list) =>
+      list.map(item => {
+        if (item.type === "folder") {
+          const children = sortRecursively(item.children || []);
+          return { ...item, children: [...children].sort((a, b) => a.name.localeCompare(b.name)) };
+        }
+        return item;
+      });
+
+    const updateFolder = (list) =>
+      list.map(item => {
+        if (item.id === folderId && item.type === "folder") {
+          const sortedChildren = [...(item.children || [])].sort((a, b) => a.name.localeCompare(b.name));
+          return { ...item, children: sortedChildren };
+        } else if (item.type === "folder") {
+          return { ...item, children: updateFolder(item.children || []) };
+        }
+        return item;
+      });
+
+    const newItems = updateFolder(items);
+    saveItems(newItems);
+    showToast("Folder sorted A → Z");
+  };
+
   const handleFolderCreate = () => {
     const base = "New Folder";
     let name = base;
@@ -325,6 +379,7 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
     handleTemplateDelete,
     handleDelete,
     handleTemplateLoad,
+    handleCopyTemplateResult,
     handleRenameStart,
     handleRenameSubmit,
     handleDragEnd,
@@ -334,6 +389,7 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
     handleCopyAllTemplates,
     handleImportTemplate,
     handleSortTemplates,
+    handleSortFolder,
     handleFolderCreate,
     deleteFolderRecursive,
     handleDropOutside,

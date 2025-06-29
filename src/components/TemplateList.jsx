@@ -1,5 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
-import { Pencil, RotateCcw, Copy as CopyIcon, CircleX, Folder } from "lucide-react";
+import { Pencil, RotateCcw, Copy as CopyIcon, CircleX, Folder, ArrowDownAZ, ClipboardCopy } from "lucide-react";
 import SortableItem from "./SortableItem";
 import DropZone from "./DropZone";
 import { truncate } from "../lib/templateUtils";
@@ -22,11 +22,13 @@ export default function TemplateList({
   onRenameSubmit,
   onChangeName,
   onLoad,
+  onCopyResult,
   onDelete,
   onCopy,
   onCopyFolder,
   onOverwrite,
   onDropOutside,
+  onSortFolder,
   collapsedFolders,
   setCollapsedFolders,
   onCollapseChange,
@@ -100,6 +102,14 @@ export default function TemplateList({
       </button>
       <button
         className="default-tooltip-anchor"
+        data-tooltip-key="folderSort"
+        onClick={() => onSortFolder(item.id)}
+        title="Sort Folder Alphabetically"
+      >
+        <ArrowDownAZ   size={15} />
+      </button>
+      <button
+        className="default-tooltip-anchor"
         data-tooltip-key="folderDelete"
         onClick={() => onDelete(item)}
         title="Delete Folder and Contents"
@@ -118,6 +128,14 @@ export default function TemplateList({
         title={item.name}
       >
         {truncate(item.name)}
+      </button>
+      <button
+        className="default-tooltip-anchor"
+        data-tooltip-key="templateCopyResult"
+        onClick={() => onCopyResult(item)}
+        title="Copy Template Result"
+      >
+        <ClipboardCopy size={15} />
       </button>
       <button
         className="default-tooltip-anchor"

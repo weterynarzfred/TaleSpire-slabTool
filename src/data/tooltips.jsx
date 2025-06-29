@@ -84,6 +84,7 @@ export default {
   templateDelete: <><h3>Delete Template</h3><p><i><b className="tt-warn">Permanently deletes this template.</b></i></p></>,
 
   folderRename: <><h3>Rename Folder</h3><p><i className="tt-info">Name limited to 30 characters.</i></p></>,
+  folderSort: <><h3>Sort Folder</h3><p>Will sort the contents of this folder alphabetically.</p></>,
   folderCopy: <><h3>Copy Folder</h3><p>Copies this folder and its contents to clipboard.</p></>,
   folderDelete: <><h3>Delete Folder</h3><p><i><b className="tt-warn">Permanently deletes this folder and all it's contents.</b></i></p></>,
 

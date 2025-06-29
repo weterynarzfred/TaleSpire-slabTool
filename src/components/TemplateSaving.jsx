@@ -67,6 +67,7 @@ export default function TemplateSaving() {
           onRenameSubmit={actions.handleRenameSubmit}
           onChangeName={actions.setEditingName}
           onLoad={actions.handleTemplateLoad}
+          onCopyResult={actions.handleCopyTemplateResult}
           onDelete={actions.handleDelete}
           onCopy={actions.handleCopyTemplate}
           onCopyFolder={actions.handleCopyFolder}
@@ -76,6 +77,7 @@ export default function TemplateSaving() {
           onCollapseChange={(collapsedIds) => {
             actions.saveItems(items, collapsedIds); // Persist collapsed state
           }}
+          onSortFolder={actions.handleSortFolder}
         />
       </TemplateDndContext>
 
