@@ -125,9 +125,6 @@ export default function TemplateList({
   const renderItems = (list, level = 0) =>
     list.map((item) => {
       const isFolder = item.type === "folder";
-      const indentStyle = {
-        marginLeft: `${level * 20}px`,
-      };
       const nestingClass = level > 0 ? "nested-item" : "";
 
       const content = (
@@ -136,10 +133,7 @@ export default function TemplateList({
 
           <SortableItem id={item.id}>
             <FolderDropTarget id={item.id}>
-              <div
-                className={`template-item ${isFolder ? "template-folder" : ""} ${nestingClass}`}
-                style={indentStyle}
-              >
+              <div className={`template-item ${isFolder ? "template-folder" : ""} ${nestingClass}`}>
                 {renamingId === item.id
                   ? renderRenameInput(item)
                   : isFolder
