@@ -7,8 +7,8 @@ import BlockSelectInput from '../blockParts/BlockSelectInput';
 
 export default function BlockDuplicate({ className, block }) {
   const modifierOptions = [
-    { value: 'relative', label: <div data-tooltip-key="duplicate_modifiersRelativeOption">Relative</div> },
-    { value: 'absolute', label: <div data-tooltip-key="duplicate_modifiersAbsoluteOption">Absolute</div> },
+    { value: 'relative', label: <div className="tooltip-option" data-tooltip-key="duplicate_modifiersRelativeOption">Relative</div> },
+    { value: 'absolute', label: <div className="tooltip-option" data-tooltip-key="duplicate_modifiersAbsoluteOption">Absolute</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, {

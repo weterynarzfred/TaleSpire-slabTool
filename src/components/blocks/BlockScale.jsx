@@ -6,8 +6,8 @@ import BlockSelectInput from '../blockParts/BlockSelectInput';
 
 export default function BlockScale({ className, block }) {
   const center = [
-    { value: 'zero', label: <div data-tooltip-key="scale_centerZeroOption">Slab zero</div> },
-    { value: 'center', label: <div data-tooltip-key="scale_centerCenterOption">Box center</div> },
+    { value: 'zero', label: <div className="tooltip-option" data-tooltip-key="scale_centerZeroOption">Slab zero</div> },
+    { value: 'center', label: <div className="tooltip-option" data-tooltip-key="scale_centerCenterOption">Box center</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>

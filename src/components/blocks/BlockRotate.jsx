@@ -8,20 +8,20 @@ import BlockInput from '../blockParts/BlockInput';
 
 export default function BlockRotate({ className, block }) {
   const axes = [
-    { value: 'x', label: <div data-tooltip-key="rotate_axisXOption">X</div> },
-    { value: 'y', label: <div data-tooltip-key="rotate_axisYOption">Y</div> },
-    { value: 'z', label: <div data-tooltip-key="rotate_axisZOption">Z</div> },
+    { value: 'x', label: <div className="tooltip-option" data-tooltip-key="rotate_axisXOption">X</div> },
+    { value: 'y', label: <div className="tooltip-option" data-tooltip-key="rotate_axisYOption">Y</div> },
+    { value: 'z', label: <div className="tooltip-option" data-tooltip-key="rotate_axisZOption">Z</div> },
   ];
 
   const center = [
-    { value: 'zero', label: <div data-tooltip-key="rotate_centerZeroOption">Slab zero</div> },
-    { value: 'center', label: <div data-tooltip-key="rotate_centerCenterOption">Box center</div> },
+    { value: 'zero', label: <div className="tooltip-option" data-tooltip-key="rotate_centerZeroOption">Slab zero</div> },
+    { value: 'center', label: <div className="tooltip-option" data-tooltip-key="rotate_centerCenterOption">Box center</div> },
   ];
 
   const type = [
-    { value: 'degree', label: <div data-tooltip-key="rotate_typeDegreeOption">Degree</div> },
-    { value: 'variation', label: <div data-tooltip-key="rotate_typeVariationOption">Variation</div> },
-    { value: 'random', label: <div data-tooltip-key="rotate_typeRandomOption">Random</div> },
+    { value: 'degree', label: <div className="tooltip-option" data-tooltip-key="rotate_typeDegreeOption">Degree</div> },
+    { value: 'variation', label: <div className="tooltip-option" data-tooltip-key="rotate_typeVariationOption">Variation</div> },
+    { value: 'random', label: <div className="tooltip-option" data-tooltip-key="rotate_typeRandomOption">Random</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, { "block--is-collapsed": block.isCollapsed })}>

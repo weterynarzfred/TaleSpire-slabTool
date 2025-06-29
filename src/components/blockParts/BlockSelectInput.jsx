@@ -32,7 +32,12 @@ export default function BlockSelectInput({ path, dataPath, options, def = "", to
   });
 
   return <div className="BlockInput BlockSelectInput">
-    <div className="label">{dataPath.join('.').replace("_", " ")}: </div>
+    <div
+      className={tooltip ? "label default-tooltip-anchor" : "label"}
+      data-tooltip-key={tooltip}
+    >
+      {dataPath.join('.').replace("_", " ")}:
+    </div>
     <div
       className="default-tooltip-anchor"
       data-tooltip-key={tooltip}>

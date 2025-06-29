@@ -49,9 +49,13 @@ export default function App() {
       anchorSelect=".default-tooltip-anchor"
       render={({ activeAnchor }) => {
         const key = activeAnchor?.getAttribute('data-tooltip-key');
-        if (key === undefined) return null;
+        if (!key) return null;
+
+        // 🔒 Prevent parent from showing tooltip if any nested child also has one
+        if (activeAnchor?.querySelector?.('[data-tooltip-key]')) return null;
+
         const content = tooltips[key];
-        if (content === undefined || content === "") return null;
+        if (!content) return null;
         return <div>{content}</div>;
       }}
     />
@@ -65,6 +69,19 @@ export default function App() {
         if (key === undefined) return null;
         const content = tooltips[key];
         if (content === undefined || content === "") return null;
+        return <div>{content}</div>;
+      }}
+    />
+    <Tooltip
+      id="option-tooltip"
+      delayShow={400}
+      border="1px solid #eee"
+      anchorSelect=".tooltip-option"
+      render={({ activeAnchor }) => {
+        const key = activeAnchor?.getAttribute("data-tooltip-key");
+        if (!key) return null;
+        const content = tooltips[key];
+        if (!content) return null;
         return <div>{content}</div>;
       }}
     />

@@ -18,7 +18,12 @@ export default function BlockCheckboxInput({ dataPath, path, tooltip }) {
 
   return <div className='BlockInput BlockInputCheckbox'>
     <label>
-      <span className="label">{dataPath.join('.').replace('_', ' ')}:</span>
+      <span
+        className={tooltip ? "label default-tooltip-anchor" : "label"}
+        data-tooltip-key={tooltip}
+      >
+        {dataPath.join('.').replace('_', ' ')}:
+      </span>
       <input type="checkbox" checked={value ?? false} onChange={handleCheckbox} />
       <div className="checkbox-display default-tooltip-anchor" data-tooltip-key={tooltip}>{value ? '✓' : ''}</div>
     </label>

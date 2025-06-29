@@ -132,8 +132,6 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
       value: { blocks: template.blocks, templateHeader: template.templateHeader },
     });
 
-
-
 const handleCopyTemplateResult = async (template) => {
   try {
     const base64 = await computeTemplateResult({
@@ -156,8 +154,6 @@ const handleCopyTemplateResult = async (template) => {
     showToast("Failed to copy result.");
   }
 };
-
-
 
   const handleRenameStart = id => {
     const item = findItemById(items, id);

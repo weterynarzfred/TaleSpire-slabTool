@@ -38,7 +38,12 @@ export default function BlockTextInput(
 
   return <div className={classNames("BlockInput BlockTextInput", className)}>
     <label>
-      <div className="label">{dataPath.join('.').replace("_", " ")}: </div>
+      <div
+        className={tooltip ? "label default-tooltip-anchor" : "label"}
+        data-tooltip-key={tooltip}
+      >
+        {dataPath.join('.').replace("_", " ")}:
+      </div>
       <input type="text" value={inputValue ?? def} onChange={(e) => setInputValue(e.target.value)} placeholder={placeholder} className="default-tooltip-anchor" data-tooltip-key={tooltip} />
     </label>
   </div>;

@@ -7,12 +7,12 @@ import BlockUuidInput from '../blockParts/BlockUuidInput';
 
 export default function BlockReplace({ className, block }) {
   const fromOptions = [
-    { value: 'all', label: <div data-tooltip-key="replace_fromAllOption">Everything</div> },
-    { value: 'uuid', label: <div data-tooltip-key="replace_fromUuidOption">UUID</div> },
+    { value: 'all', label: <div className="tooltip-option" data-tooltip-key="replace_fromAllOption">Everything</div> },
+    { value: 'uuid', label: <div className="tooltip-option" data-tooltip-key="replace_fromUuidOption">UUID</div> },
   ];
   const toOptions = [
-    { value: 'uuid', label: <div data-tooltip-key="replace_toUuidOption">UUID</div> },
-    { value: 'slab', label: <div data-tooltip-key="replace_toSlabOption">Slab</div> },
+    { value: 'uuid', label: <div className="tooltip-option" data-tooltip-key="replace_toUuidOption">UUID</div> },
+    { value: 'slab', label: <div className="tooltip-option" data-tooltip-key="replace_toSlabOption">Slab</div> },
   ];
 
   return <div className={classNames(className, `block block--${block.type}`, {

@@ -31,7 +31,12 @@ export default function BlockUuidInput({ path, dataPath, def = "", tooltip }) {
 
   return <div className="BlockInput BlockUuidInput">
     <label>
-      <div className="label">{dataPath.join('.').replace('_', ' ')}: </div>
+      <div
+        className={tooltip ? "label default-tooltip-anchor" : "label"}
+        data-tooltip-key={tooltip}
+      >
+        {dataPath.join('.').replace('_', ' ')}:
+      </div>
       <input type="text" value={value ?? def} onChange={handleChange} className="default-tooltip-anchor" data-tooltip-key={tooltip} />
       <button className="eyedropper-button" onClick={handleEyedropperButton}></button>
     </label>
