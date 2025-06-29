@@ -72,7 +72,10 @@ export default function TemplateList({
         title="Toggle Folder"
       >
         <span className="folder-name-inner">
-          <Folder size={15} className="folder-icon" />
+          <Folder
+            size={15}
+            className={`folder-icon ${item.children?.length ? "folder-full" : "folder-empty"}`}
+          />
           <span className={`folder-toggle-symbol ${isCollapsed(item.id) ? "collapsed" : "expanded"}`}>
             ▶
           </span>
