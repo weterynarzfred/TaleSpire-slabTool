@@ -34,7 +34,7 @@ export default function TemplateSaving() {
     })();
   }, []);
 
-  const actions = useTemplateActions(items, setItems, state, dispatch);
+  const actions = useTemplateActions(items, setItems, state, dispatch, collapsed);
 
   return (
     <div className="TemplateSaving block--results">

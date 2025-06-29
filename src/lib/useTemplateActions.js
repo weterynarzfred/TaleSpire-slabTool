@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { compressToBase64, decompressFromBase64, truncate } from "../lib/templateUtils";
 import useToast from "../lib/useToast";
 
-export default function useTemplateActions(items, setItems, state, dispatch) {
+export default function useTemplateActions(items, setItems, state, dispatch, collapsed) {
   const [activeId, setActiveId] = useState(null);
   const [renamingId, setRenamingId] = useState(null);
   const [editingName, setEditingName] = useState("");
@@ -17,7 +17,7 @@ export default function useTemplateActions(items, setItems, state, dispatch) {
     TS.localStorage.global.setBlob(
       JSON.stringify({
         items: updatedItems,
-        collapsed: collapsedIds ?? [],
+        collapsed: collapsedIds ?? Array.from(collapsed),
       })
     );
   };
