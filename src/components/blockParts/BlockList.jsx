@@ -108,10 +108,9 @@ export default function BlockList({ path = [] }) {
       <button className="add-block" key='slab' data-tooltip-key="addSlab" onClick={() => handleAddBlock('slab')}>Slab</button>
     );
   }
-  if (!isChildOf('duplicate', state, path))
-    blockOptions.push(
-      < button className="add-block" key='duplicate' data-tooltip-key="addDuplicate" onClick={() => handleAddBlock('duplicate')}> Duplicate</button >
-    );
+  blockOptions.push(
+    < button className="add-block" key='duplicate' data-tooltip-key="addDuplicate" onClick={() => handleAddBlock('duplicate')}> Duplicate</button >
+  );
   blockOptions.push(
     < button className="add-block" key='offset' data-tooltip-key="addOffset" onClick={() => handleAddBlock('offset')}> Offset</button >
   );

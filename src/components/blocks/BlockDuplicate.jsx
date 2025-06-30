@@ -4,6 +4,7 @@ import BlockHeader from '../blockParts/BlockHeader';
 import BlockInput from '../blockParts/BlockInput';
 import BlockList from '../blockParts/BlockList';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
+import BlockTextInput from "../blockParts/BlockTextInput";
 
 export default function BlockDuplicate({ className, block }) {
   const modifierOptions = [
@@ -18,6 +19,7 @@ export default function BlockDuplicate({ className, block }) {
     <BlockHeader block={block} />
 
     <BlockContents block={block}>
+      <BlockTextInput path={block.path} dataPath={['iterName']} />
       <BlockInput path={block.path} dataPath={['count']} def="1" tooltip="duplicate_count" />
       <BlockSelectInput
         path={block.path}

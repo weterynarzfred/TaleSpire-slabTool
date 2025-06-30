@@ -10,6 +10,10 @@ export default class Layout {
     this.cleanup();
   }
 
+  empty() {
+    this.layouts = [];
+  }
+
   add(addedLayout) {
     this.layouts = this.layouts.concat(addedLayout.layouts);
     return this.cleanup();
