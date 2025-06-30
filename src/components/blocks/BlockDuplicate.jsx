@@ -6,30 +6,51 @@ import BlockList from '../blockParts/BlockList';
 import BlockSelectInput from '../blockParts/BlockSelectInput';
 import BlockTextInput from "../blockParts/BlockTextInput";
 
-export default function BlockDuplicate({ className, block }) {
+export default function BlockDuplicate({ className, block, scope = {} }) {
   const modifierOptions = [
     { value: 'relative', label: <div className="tooltip-option" data-tooltip-key="duplicate_modifiersRelativeOption">Relative</div> },
     { value: 'absolute', label: <div className="tooltip-option" data-tooltip-key="duplicate_modifiersAbsoluteOption">Absolute</div> },
   ];
 
-  return <div className={classNames(className, `block block--${block.type}`, {
-    "block--is-collapsed": block.isCollapsed,
-    "block--is-error": block.isError,
-  })}>
-    <BlockHeader block={block} />
+  let depth = 0;
+  while (scope[`iter${depth}`] !== undefined) {
+    depth++;
+  }
+  const defaultIterName = `iter${depth}`;
 
-    <BlockContents block={block}>
-      <BlockTextInput path={block.path} dataPath={['iterName']} />
-      <BlockInput path={block.path} dataPath={['count']} def="1" tooltip="duplicate_count" />
-      <BlockSelectInput
-        path={block.path}
-        dataPath={['modifiers']}
-        options={modifierOptions}
-        def={modifierOptions[0]}
-        tooltip="duplicate_modifiers"
-      />
-    </BlockContents>
+  return (
+    <div className={classNames(className, `block block--${block.type}`, {
+      "block--is-collapsed": block.isCollapsed,
+      "block--is-error": block.isError,
+    })}>
+      <BlockHeader block={block} />
 
-    <BlockList path={block.path} />
-  </div>;
-};
+      <BlockContents block={block}>
+        <BlockTextInput
+          path={block.path}
+          dataPath={['iterName']}
+          placeholder={defaultIterName}
+          tooltip="duplicate_iter_name"
+        />
+        <BlockInput
+          path={block.path}
+          dataPath={['count']}
+          def="1"
+          tooltip="duplicate_count"
+        />
+        <BlockSelectInput
+          path={block.path}
+          dataPath={['modifiers']}
+          options={modifierOptions}
+          def={modifierOptions[0]}
+          tooltip="duplicate_modifiers"
+        />
+      </BlockContents>
+
+      <BlockList path={block.path} scope={{
+        ...scope,
+        [`iter${Object.keys(scope).filter(k => k.startsWith("iter")).length}`]: 0
+      }} />
+    </div>
+  );
+}

@@ -23,7 +23,7 @@ function isChildOf(type, state, path) {
   return false;
 };
 
-export default function BlockList({ path = [] }) {
+export default function BlockList({ path = [], scope = {} }) {
   const state = useTrackedState();
   const dispatch = useUpdate();
   const parentBlock = getBlockAtPath(state, path);
@@ -37,6 +37,7 @@ export default function BlockList({ path = [] }) {
     });
   }
 
+  scope = parentBlock.scope || scope;
   const blockElements = [];
   const subBlocksArray = parentBlock.blocks ?
     Object.values(parentBlock.blocks).sort((a, b) => a.order - b.order) : [];
@@ -63,6 +64,7 @@ export default function BlockList({ path = [] }) {
         key={block.id}
         block={block}
         className={className}
+        scope={scope}
       />);
     } else if (block.type === 'offset') {
       blockElements.push(<BlockOffset

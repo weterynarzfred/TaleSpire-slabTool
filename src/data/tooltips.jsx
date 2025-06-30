@@ -2,7 +2,7 @@ export default {
   header: <><h3>Template Header</h3><p>Allows for writing comments and setting global variables that can be accessed in all other blocks.</p><p><i className="tt-info">Each variable must start in a new line and comments start with a <b className="tt-warn">#</b> symbol.</i></p><p><i className="tt-info">Math is allowed in the header and most input fields.</i></p></>,
 
   addSlab: <><h3>Add a slab</h3><p>Adds a slab to the existing layout.</p></>,
-  addDuplicate: <><h3>Duplicate layout</h3><p>Duplicates the existing layout a set number of times, applying modifiers to each copy.</p><p><i className="tt-info">You can use variable <b className="tt-warn">iter</b> which is the number of the current iteration.</i></p></>,
+  addDuplicate: <><h3>Duplicate layout</h3><p>Duplicates the existing layout a set number of times, applying modifiers to each copy.</p></>,
   addOffset: <><h3>Offset layout</h3><p>Offsets the existing layout by the specified amount. Keep in mind that the end result is always normalized to have only positive position values.</p></>,
   addRotate: <><h3>Rotate layout</h3><p>Rotates the existing layout by the specified amount.</p></>,
   addScale: <><h3>Scale layout</h3><p>Scales <strong>the relative positions of</strong> the objects. The objects themselves cannot be scaled.</p></>,
@@ -11,6 +11,7 @@ export default {
   addGroup: <><h3>Group block</h3><p>Creates an empty group block to help with organising the layout edits.</p></>,
 
   duplicate_count: <><h3>Duplicates count</h3><p>Amount of times the layout above is duplicated.</p></>,
+  duplicate_iter_name: <><h3>Iteration Variable Name</h3><p>A name for the variable storing the current iteration of duplication.</p><p><i className="tt-info">Defaults to <b className="tt-warn">iterN</b> where <b className="tt-warn">N</b> is the depth of the duplicate block.</i></p></>,
   duplicate_modifiers: "",
   duplicate_modifiersRelativeOption: <><h3>Relative</h3><p>Applies the sub-modifiers relative to the previous iteration.</p><p><i className="tt-info">For example, if used with the Rotate modifier set to <b className="tt-warn">15</b> degrees, it will rotate the first duplicate by <b>15</b> degrees, second one by <b>30</b> degrees, and so on.</i></p></>,
   duplicate_modifiersAbsoluteOption: <><h3>Absolute</h3><p>Every copy will be modified exactly the same way by the sub-modifiers.</p><p><i className="tt-info">For example, if used with the Rotate modifier set to <b className="tt-warn">15</b> degrees, it will rotate every duplicated object by <b>15</b> degrees.</i></p></>,

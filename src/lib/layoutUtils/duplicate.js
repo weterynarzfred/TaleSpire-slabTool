@@ -12,7 +12,7 @@ Layout.prototype.duplicate = function ({ count = 1, modifiers = "relative", iter
     this.empty();
 
   const initialIter = scope.iter;
-  let depth = 1;
+  let depth = 0;
   while (scope[`iter${depth}`] !== undefined) depth++;
 
   for (let i = modifiers === "relative" ? 1 : 0; i < usedCount; i++) {
@@ -31,7 +31,7 @@ Layout.prototype.duplicate = function ({ count = 1, modifiers = "relative", iter
     }
   }
 
-  if (depth === 1) delete scope.iter;
+  if (depth === 0) delete scope.iter;
   else scope.iter = initialIter;
   delete scope[`iter${depth}`];
 
