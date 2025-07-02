@@ -1,43 +1,77 @@
 import { evaluate } from "mathjs";
 import Layout from '../Layout';
+import _ from 'lodash';
 
-function applyBlock(layout, block, scope = {}) {
-  if (block.disabled) {
-    return; // Skip disabled blocks and their children
+function flattenData(data, prefix = "") {
+  const result = {};
+  for (const key in data) {
+    const val = data[key];
+    const path = prefix ? `${prefix}.${key}` : key;
+    if (typeof val === "object" && val !== null && !Array.isArray(val)) {
+      Object.assign(result, flattenData(val, path));
+    } else {
+      result[path] = val;
+    }
   }
+  return result;
+}
+
+function applyBlock(layout, block, scope) {
+  if (block.disabled) return;
 
   try {
-    if (block.type === 'slab') {
-      const newLayout = new Layout(_.cloneDeep(block.data.layouts));
+    if (block.data) {
+      const flatData = flattenData(block.data);
+      for (const [key, val] of Object.entries(flatData)) {
+        if (typeof val === "string" && val.trim()) {
+          try {
+            const evaluated = evaluate(val, scope);
+            if (evaluated !== undefined) {
+              scope[key] = evaluated;
+            }
+          } catch {
+            // parse/eval errors
+          }
+        }
+      }
+    }
 
-      if (block.blocks && Object.keys(block.blocks).length) {
-        const blockArray = Object.values(block.blocks)
-          .sort((a, b) => a.order - b.order);
-        for (const subBlock of blockArray) {
-          applyBlock(newLayout, subBlock, scope);
-        }
+    const applySubBlocks = (targetLayout, subBlocks) => {
+      const blockArray = Object.values(subBlocks)
+        .sort((a, b) => a.order - b.order);
+      for (const subBlock of blockArray) {
+        applyBlock(targetLayout, subBlock, scope);
       }
-      layout.add(newLayout);
-    } else if (block.type === 'duplicate') {
-      layout.duplicate(block.data, block.blocks, scope);
-    } else if (block.type === 'offset') {
-      layout.offset(block.data, scope);
-    } else if (block.type === 'rotate') {
-      layout.rotate(block.data, scope);
-    } else if (block.type === 'scale') {
-      layout.scale(block.data, scope);
-    } else if (block.type === 'replace') {
-      layout.replace(block.data, scope);
-    } else if (block.type === 'filter') {
-      layout.filter(block.data, block.blocks, scope);
-    } else if (block.type === 'group') {
-      if (block.blocks && Object.keys(block.blocks).length) {
-        const blockArray = Object.values(block.blocks)
-          .sort((a, b) => a.order - b.order);
-        for (const subBlock of blockArray) {
-          applyBlock(layout, subBlock, scope);
-        }
+    };
+
+    switch (block.type) {
+      case 'slab': {
+        const newLayout = new Layout(_.cloneDeep(block.data.layouts));
+        if (block.blocks) applySubBlocks(newLayout, block.blocks);
+        layout.add(newLayout);
+        break;
       }
+      case 'duplicate':
+        layout.duplicate(block.data, block.blocks, scope);
+        break;
+      case 'offset':
+        layout.offset(block.data, scope);
+        break;
+      case 'rotate':
+        layout.rotate(block.data, scope);
+        break;
+      case 'scale':
+        layout.scale(block.data, scope);
+        break;
+      case 'replace':
+        layout.replace(block.data, scope);
+        break;
+      case 'filter':
+        layout.filter(block.data, block.blocks, scope);
+        break;
+      case 'group':
+        if (block.blocks) applySubBlocks(layout, block.blocks);
+        break;
     }
 
     block.isError = false;
@@ -50,6 +84,7 @@ function applyBlock(layout, block, scope = {}) {
 export default function recalculateLayout(state) {
   const layout = new Layout();
   const scope = {};
+
   try {
     evaluate(state.templateHeader, scope);
     state.templateHeaderError = undefined;
@@ -59,9 +94,11 @@ export default function recalculateLayout(state) {
 
   const blockArray = Object.values(state.blocks)
     .sort((a, b) => a.order - b.order);
+
   for (const block of blockArray) {
     applyBlock(layout, block, scope);
   }
+
   layout.normalize();
 
   state.layout = layout.clone();

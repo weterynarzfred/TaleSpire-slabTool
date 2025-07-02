@@ -15,18 +15,20 @@ Layout.prototype.duplicate = function ({ count = 1, modifiers = "relative", iter
   let depth = 0;
   while (scope[`iter${depth}`] !== undefined) depth++;
 
+  const orderedBlockList = Object.values(blocks).sort((a, b) => a.order - b.order);
+
   for (let i = modifiers === "relative" ? 1 : 0; i < usedCount; i++) {
-    scope.iter = i;
-    scope[`iter${depth}`] = i;
-    if (iterName !== "")
-      scope[iterName] = i;
+    const scoped = { ...scope };
+    scoped.iter = i;
+    scoped[`iter${depth}`] = i;
+    if (iterName !== "") scoped[iterName] = i;
 
     if (modifiers === 'relative') {
-      for (const id in blocks) applyBlock(lastLayout, blocks[id], scope);
+      for (const block of orderedBlockList) applyBlock(lastLayout, block, scoped);
       this.add(lastLayout.clone());
     } else if (modifiers === 'absolute') {
       lastLayout = initialLayout.clone();
-      for (const id in blocks) applyBlock(lastLayout, blocks[id], scope);
+      for (const block of orderedBlockList) applyBlock(lastLayout, block, scoped);
       this.add(lastLayout);
     }
   }
