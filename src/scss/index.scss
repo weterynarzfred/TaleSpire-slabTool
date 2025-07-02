@@ -412,8 +412,9 @@ body {
 .TemplateHeader {
   textarea {
     background-color: #111;
-    height: 10em;
+    min-height: 14em;
     border: 0.7em solid #333;
+    resize: vertical;
   }
 }
 
