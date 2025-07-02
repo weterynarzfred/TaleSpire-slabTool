@@ -23,6 +23,15 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
     );
   };
 
+  const updateItemById = (list, id, updater) =>
+    list.map(item => {
+      if (item.id === id) return updater(item);
+      if (item.type === "folder" && item.children) {
+        return { ...item, children: updateItemById(item.children, id, updater) };
+      }
+      return item;
+    });
+
   const updateItemNameById = (list, id, newName) =>
     list.map(item => {
       if (item.id === id) return { ...item, name: newName };
@@ -132,28 +141,25 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
       value: { blocks: template.blocks, templateHeader: template.templateHeader },
     });
 
-const handleCopyTemplateResult = async (template) => {
-  try {
-    const base64 = await computeTemplateResult({
-      blocks: template.blocks,
-      templateHeader:
-        typeof template.templateHeader === "string"
-          ? template.templateHeader
-          : JSON.stringify(template.templateHeader || {}, null, 2),
-    });
-
-    await navigator.clipboard.writeText(base64);
-
-    if (TS?.slabs?.sendSlabToHand) {
-      TS.slabs.sendSlabToHand(base64);
+  const handleCopyTemplateResult = async (template) => {
+    try {
+      const base64 = await computeTemplateResult({
+        blocks: template.blocks,
+        templateHeader:
+          typeof template.templateHeader === "string"
+            ? template.templateHeader
+            : JSON.stringify(template.templateHeader || {}, null, 2),
+      });
+      await navigator.clipboard.writeText(base64);
+      if (TS?.slabs?.sendSlabToHand) {
+        TS.slabs.sendSlabToHand(base64);
+      }
+      showToast(`Result from "${truncate(template.name)}" copied!`);
+    } catch (e) {
+      console.error("Failed to copy template result:", e);
+      showToast("Failed to copy result.");
     }
-
-    showToast(`Result from "${truncate(template.name)}" copied!`);
-  } catch (e) {
-    console.error("Failed to copy template result:", e);
-    showToast("Failed to copy result.");
-  }
-};
+  };
 
   const handleRenameStart = id => {
     const item = findItemById(items, id);
@@ -174,24 +180,18 @@ const handleCopyTemplateResult = async (template) => {
     if (!over || active.id === over.id || over.id === `before-${active.id}` || over.id === `after-${active.id}`) {
       return setActiveId(null);
     }
-
     let position = over.id.startsWith("before-") ? "before" : over.id.startsWith("after-") ? "after" : "inside";
     const targetId = over.id.replace(/^(before-|after-)/, "");
-
     const flattened = flattenItems(items);
     const dropTarget = flattened.find(i => i.id === targetId);
     if (!dropTarget) return setActiveId(null);
-
     if (position === "inside" && dropTarget.type !== "folder") position = "after";
-
     const [updatedItems, draggedItem] = extractItem(items, active.id);
     if (!draggedItem || (draggedItem.type === "folder" && isDescendant(draggedItem, dropTarget.id))) return setActiveId(null);
-
     const finalItems =
       position === "inside"
         ? insertIntoFolder(updatedItems, dropTarget.id, draggedItem)
         : insertAtPosition(updatedItems, targetId, draggedItem, position);
-
     saveItems(finalItems);
     setActiveId(null);
   };
@@ -217,18 +217,23 @@ const handleCopyTemplateResult = async (template) => {
   };
 
   const handleOverwriteTemplate = id => {
-    const index = items.findIndex(item => item.id === id);
-    if (index === -1) return alert("Template not found.");
-
-    const updated = [...items];
-    updated[index] = {
-      ...updated[index],
+    const updated = updateItemById(items, id, old => ({
+      ...old,
       blocks: state.blocks,
-      templateHeader: typeof state.templateHeader === "string" ? state.templateHeader : JSON.stringify(state.templateHeader, null, 2),
-    };
-
+      templateHeader:
+        typeof state.templateHeader === "string"
+          ? state.templateHeader
+          : JSON.stringify(state.templateHeader, null, 2),
+    }));
+    const all = flattenItems(updated);
+    if (!all.find(i => i.id === id)) {
+      console.error(`Failed to overwrite template: ID ${id} not found`);
+      showToast(`Error: Template with ID ${id} not found.`, { type: 'error' });
+      return;
+    }
     saveItems(updated);
-    showToast(`Template "${truncate(updated[index].name)}" overwritten!`);
+    const overwritten = all.find(i => i.id === id);
+    showToast(`Template "${truncate(overwritten.name)}" overwritten!`);
   };
 
   const handleCopyAllTemplates = async () => {
@@ -252,14 +257,10 @@ const handleCopyTemplateResult = async (template) => {
         return alert("Invalid JSON or compressed data.");
       }
     }
-
     const existingIds = new Set(items.map(i => i.id));
     const existingNames = new Set(items.map(i => i.name));
-    const newTemplates = [];
-
     const normalizeTemplates = input => {
       const arr = Array.isArray(input) ? input : [input];
-
       const processItem = item => {
         const id = crypto.randomUUID();
         const base = item.name || (item.type === "folder" ? "Imported Folder" : "Imported Template");
@@ -267,13 +268,10 @@ const handleCopyTemplateResult = async (template) => {
         let count = 1;
         while (existingNames.has(name)) name = `${base} - copy${count++ > 1 ? ` ${count - 1}` : ""}`;
         existingNames.add(name);
-
         if (item.type === "folder") {
           return { id, type: "folder", name, children: (item.children || []).map(processItem) };
         }
-
         if (!item.blocks) return null;
-
         return {
           id,
           type: "template",
@@ -282,20 +280,30 @@ const handleCopyTemplateResult = async (template) => {
           templateHeader: typeof item.templateHeader === "string" ? item.templateHeader : JSON.stringify(item.templateHeader || {}, null, 2),
         };
       };
-
       return arr.map(processItem).filter(Boolean);
     };
-
     const normalized = normalizeTemplates(parsed);
     if (!normalized.length) return alert("No valid templates found to import.");
-
     saveItems([...items, ...normalized]);
     setImportInput("");
     showToast(`${normalized.length} template(s) imported!`);
   };
 
   const handleSortTemplates = () => {
-    const sorted = [...items].sort((a, b) => a.name.localeCompare(b.name));
+    const sortRecursively = list => {
+      const sorted = [...list].sort((a, b) => {
+        if (a.type === "folder" && b.type !== "folder") return -1;
+        if (a.type !== "folder" && b.type === "folder") return 1;
+        return a.name.localeCompare(b.name);
+      });
+      return sorted.map(item =>
+        item.type === "folder"
+          ? { ...item, children: sortRecursively(item.children || []) }
+          : item
+      );
+    };
+
+    const sorted = sortRecursively(items);
     saveItems(sorted);
     showToast("Templates sorted A → Z");
   };
@@ -309,7 +317,6 @@ const handleCopyTemplateResult = async (template) => {
         }
         return item;
       });
-
     const updateFolder = (list) =>
       list.map(item => {
         if (item.id === folderId && item.type === "folder") {
@@ -320,7 +327,6 @@ const handleCopyTemplateResult = async (template) => {
         }
         return item;
       });
-
     const newItems = updateFolder(items);
     saveItems(newItems);
     showToast("Folder sorted A → Z");
@@ -332,7 +338,6 @@ const handleCopyTemplateResult = async (template) => {
     let count = 1;
     const existing = new Set(items.map(i => i.name));
     while (existing.has(name)) name = `${base} ${count++}`;
-
     const folder = { id: crypto.randomUUID(), type: "folder", name, children: [] };
     saveItems([...items, folder]);
   };
@@ -340,19 +345,16 @@ const handleCopyTemplateResult = async (template) => {
   const deleteFolderRecursive = folder => {
     const collectIds = f => [f.id, ...(f.children || []).flatMap(c => c.type === "folder" ? collectIds(c) : [c.id])];
     const ids = new Set(collectIds(folder));
-
     const removeByIds = list =>
       list.filter(item => !ids.has(item.id)).map(item =>
         item.type === "folder" ? { ...item, children: removeByIds(item.children || []) } : item
       );
-
     saveItems(removeByIds(items));
   };
 
   const handleDropOutside = draggedId => {
     const draggedItem = findItemById(items, draggedId);
     if (!draggedItem) return;
-
     const updated = removeItem(items, draggedId);
     saveItems([...updated, draggedItem]);
   };
