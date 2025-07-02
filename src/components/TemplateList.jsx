@@ -3,6 +3,7 @@ import { Pencil, RotateCcw, Copy as CopyIcon, CircleX, Folder, ArrowDownAZ, Clip
 import SortableItem from "./SortableItem";
 import DropZone from "./DropZone";
 import { truncate } from "../lib/templateUtils";
+import { useEffect } from "react";
 
 function FolderDropTarget({ id, children }) {
   const { isOver, setNodeRef } = useDroppable({ id });
@@ -33,6 +34,13 @@ export default function TemplateList({
   setCollapsedFolders,
   onCollapseChange,
 }) {
+  useEffect(() => {
+    if (renamingId && renameInputRef.current) {
+      renameInputRef.current.focus();
+      renameInputRef.current.select();
+    }
+  }, [renamingId]);
+
   const isCollapsed = (id) => collapsedFolders.has(id);
 
   const toggleCollapse = (id) => {
@@ -59,6 +67,7 @@ export default function TemplateList({
           e.preventDefault();
           onRenameSubmit();
         } else if (e.key === "Escape") {
+          e.preventDefault();
           onRenameSubmit(null);
         }
       }}

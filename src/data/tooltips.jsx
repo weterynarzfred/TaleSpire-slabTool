@@ -1,5 +1,5 @@
 export default {
-  header: <><h3>Template Header</h3><p>Allows for writing comments and setting global variables that can be accessed in all other blocks.</p><p><i className="tt-info">Each variable must start in a new line and comments start with a <b className="tt-warn">#</b> symbol.</i></p><p><i className="tt-info">Math is allowed in the header and most input fields.</i></p></>,
+  header: <><h3>Template Header</h3><p>Allows for writing comments and setting global variables that can be accessed in all other blocks.</p><i className="tt-info"><p>Each variable must start in a new line or seperated by a <b className="tt-warn">;</b> symbol.</p><p>Comments start with a <b className="tt-warn">#</b> symbol.</p><p>Math is allowed in the header and most input fields.</p></i></>,
 
   addSlab: <><h3>Add a slab</h3><p>Adds a slab to the existing layout.</p></>,
   addDuplicate: <><h3>Duplicate layout</h3><p>Duplicates the existing layout a set number of times, applying modifiers to each copy.</p></>,

@@ -169,7 +169,11 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
     }
   };
 
-  const handleRenameSubmit = () => {
+  const handleRenameSubmit = (cancel) => {
+    if (cancel === null) {
+      setRenamingId(null);
+      return;
+    }
     const name = editingName.trim().slice(0, 30);
     if (!name) return setRenamingId(null);
     saveItems(updateItemNameById(items, renamingId, name));
@@ -308,29 +312,37 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
     showToast("Templates sorted A → Z");
   };
 
-  const handleSortFolder = (folderId) => {
-    const sortRecursively = (list) =>
-      list.map(item => {
-        if (item.type === "folder") {
-          const children = sortRecursively(item.children || []);
-          return { ...item, children: [...children].sort((a, b) => a.name.localeCompare(b.name)) };
-        }
-        return item;
-      });
-    const updateFolder = (list) =>
-      list.map(item => {
-        if (item.id === folderId && item.type === "folder") {
-          const sortedChildren = [...(item.children || [])].sort((a, b) => a.name.localeCompare(b.name));
-          return { ...item, children: sortedChildren };
-        } else if (item.type === "folder") {
-          return { ...item, children: updateFolder(item.children || []) };
-        }
-        return item;
-      });
-    const newItems = updateFolder(items);
-    saveItems(newItems);
-    showToast("Folder sorted A → Z");
+const handleSortFolder = (folderId) => {
+  const folder = findItemById(items, folderId);
+  const folderName = folder?.name || "Folder";
+
+  const sortRecursively = (list) => {
+    const sorted = [...list].sort((a, b) => {
+      if (a.type === "folder" && b.type !== "folder") return -1;
+      if (a.type !== "folder" && b.type === "folder") return 1;
+      return a.name.localeCompare(b.name);
+    });
+    return sorted.map(item =>
+      item.type === "folder"
+        ? { ...item, children: sortRecursively(item.children || []) }
+        : item
+    );
   };
+
+  const updateFolder = (list) =>
+    list.map(item => {
+      if (item.id === folderId && item.type === "folder") {
+        return { ...item, children: sortRecursively(item.children || []) };
+      } else if (item.type === "folder") {
+        return { ...item, children: updateFolder(item.children || []) };
+      }
+      return item;
+    });
+
+  const newItems = updateFolder(items);
+  saveItems(newItems);
+  showToast(`Folder "${folderName}" was sorted A → Z`);
+};
 
   const handleFolderCreate = () => {
     const base = "New Folder";
