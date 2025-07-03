@@ -13,7 +13,7 @@ export default function TemplateHeader() {
     if (el) {
       el.style.height = "auto";
       const minHeight = 10 * 10;
-      el.style.height = Math.max(el.scrollHeight+14, minHeight) + "px";
+      el.style.height = Math.max(el.scrollHeight+16, minHeight) + "px";
     }
   }, [inputValue]);
 

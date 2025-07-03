@@ -70,12 +70,14 @@ Layout.prototype.rotate = function (
     axisPosition.z += (minimums.z + maximums.z) / 2;
   }
 
+  let currentRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
+  currentRotation += Math.random() * (usedRotationTo - usedRotationFrom) + usedRotationFrom;
+
   for (let i = 0; i < this.layouts.length; i++) {
     const assetCenter = parsedIndex[this.layouts[i].uuid].type === 'Tiles' ? parsedIndex[this.layouts[i].uuid].center : { x: 0, y: 0, z: 0 };
 
     for (let j = 0; j < this.layouts[i].assets.length; j++) {
-      let currentRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
-      currentRotation += Math.random() * (usedRotationTo - usedRotationFrom) + usedRotationFrom;
+      
       const rotationRad = -currentRotation / 180 * Math.PI;
       const rotCos = Math.cos(rotationRad);
       const rotSin = Math.sin(rotationRad);
