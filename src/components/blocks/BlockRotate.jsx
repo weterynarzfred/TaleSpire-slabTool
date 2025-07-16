@@ -37,19 +37,19 @@ export default function BlockRotate({ className, block }) {
           tooltip="rotate_type"
         />
         {
-          (!block.data.type || block.data.type === 'degree') ?
-            <BlockInput path={block.path} dataPath={['rotation']} tooltip="rotate_rotation" /> : null
+          (!block.data.type || block.data.type === 'degree') &&
+          <BlockInput path={block.path} dataPath={['rotation']} tooltip="rotate_rotation" />
         }
         {
-          (block.data.type === 'variation') ?
-            <BlockTextInput path={block.path} dataPath={['rotation_variations']} tooltip="rotate_rotationVariations" /> : null
+          block.data.type === 'variation' &&
+          <BlockTextInput path={block.path} dataPath={['rotation_variations']} tooltip="rotate_rotationVariations" />
         }
         {
-          (block.data.type === 'random') ?
-            <>
-              <BlockInput path={block.path} dataPath={['rotation_from']} tooltip="rotate_rotationFrom" />
-              <BlockInput path={block.path} dataPath={['rotation_to']} tooltip="rotate_rotationTo" />
-            </> : null
+          block.data.type === 'random' &&
+          <>
+            <BlockInput path={block.path} dataPath={['rotation_from']} tooltip="rotate_rotationFrom" />
+            <BlockInput path={block.path} dataPath={['rotation_to']} tooltip="rotate_rotationTo" />
+          </>
         }
       </div>
 
@@ -62,36 +62,40 @@ export default function BlockRotate({ className, block }) {
           tooltip="rotate_axis"
         />
         {
-          (!block.data.axis || block.data.axis === 'y') ?
-            <BlockCheckboxInput path={block.path} dataPath={['elements_only']} tooltip="rotate_elementsOnly" /> :
-            null
+          (!block.data.axis || block.data.axis === 'y') &&
+          <BlockCheckboxInput path={block.path} dataPath={['elements_only']} tooltip="rotate_elementsOnly" />
         }
         {
-          (!block.data.elements_only || (block.data.axis && block.data.axis !== 'y')) ? <BlockSelectInput
+          (!block.data.elements_only || (block.data.axis && block.data.axis !== 'y')) &&
+          <BlockSelectInput
             path={block.path}
             dataPath={['center']}
             options={center}
             def={center[0]}
             key="center"
             tooltip="rotate_center"
-          /> : null
+          />
         }
         {
-          (!block.data.elements_only || (block.data.axis && block.data.axis !== 'y')) ?
-            [
-              (block.data.axis !== 'x') ?
-                <BlockInput path={block.path} dataPath={['axis_offset', 'x']} key="offset.x" tooltip="rotate_offset_x" /> :
-                null,
-              (block.data.axis !== undefined && block.data.axis !== 'y') ?
-                <BlockInput path={block.path} dataPath={['axis_offset', 'y']} key="offset.y" tooltip="rotate_offset_y" /> :
-                null,
-              (block.data.axis !== 'z') ?
-                <BlockInput path={block.path} dataPath={['axis_offset', 'z']} key="offset.z" tooltip="rotate_offset_z" /> :
-                null
-            ] : null
+          (!block.data.elements_only || (block.data.axis && block.data.axis !== 'y')) && [
+            (block.data.axis !== 'x') &&
+            <BlockInput path={block.path} dataPath={['axis_offset', 'x']} key="offset.x" tooltip="rotate_offset_x" />,
+            (block.data.axis !== undefined && block.data.axis !== 'y') &&
+            <BlockInput path={block.path} dataPath={['axis_offset', 'y']} key="offset.y" tooltip="rotate_offset_y" />,
+            (block.data.axis !== 'z') &&
+            <BlockInput path={block.path} dataPath={['axis_offset', 'z']} key="offset.z" tooltip="rotate_offset_z" />
+          ]
         }
 
+        {
+          (block.data.type === 'variation' || block.data.type === 'random') &&
+          <BlockCheckboxInput
+            path={block.path}
+            dataPath={['randomise_per_object']}
+            tooltip="rotate_randomisePerObject"
+          />
+        }
       </div>
-    </BlockContents >
-  </div >;
-};
+    </BlockContents>
+  </div>;
+}

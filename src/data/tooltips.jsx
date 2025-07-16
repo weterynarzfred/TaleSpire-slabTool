@@ -52,6 +52,7 @@ export default {
   rotate_rotationFrom: <>Set minimum rotation.</>,
   rotate_rotationTo: <>Set maximum rotation.</>,
   rotate_elementsOnly: <><h3>Elements only</h3><p>If selected, all the objects (prop or tile) in the layout above will only rotate around their own center without rotating the entire slab.</p></>,
+  rotate_randomisePerObject: <><h3>Randomise per object</h3><p>If selecteed, it will apply a different rotation to each object individually.</p></>,
   rotate_offset_x: <><h3>Axis offset X</h3><p>Offsets the axis of rotation by specified value in horizontal direction (left or right).</p><p><i className="tt-info">You can treat it as a radius of the rotation.</i></p></>,
   rotate_offset_y: <><h3>Axis offset Y</h3><p>Offsets the axis of rotation by specified value in vertical direction (up or down).</p><p><i className="tt-info">You can treat it as a radius of the rotation.</i></p></>,
   rotate_offset_z: <><h3>Axis offset Z</h3><p>Offsets the axis of rotation by specified value in depth direction (forward or backward).</p><p><i className="tt-info">You can treat it as a radius of the rotation.</i></p></>,
