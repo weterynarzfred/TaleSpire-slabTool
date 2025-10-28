@@ -73,6 +73,7 @@ export default {
   slab_eyedropperButton: <><h3>Eyedropper Tool</h3><p>Select the object (prop or tile) in Talespire to automatically get the UUID of the object in the field below.</p><p><i>Only works if used in a Symbiote version of the tool inside Talespire.</i></p><p><i><b className="tt-warn">It will break if a mini is selected.</b></i></p></>,
 
   copyButton: <><p>Place the entire layout in your hand. It will also be copied to clipboard so you can paste it later on if you wish.</p><p><i><b className="tt-warn">It will clear any other things that have been copied or cut previously.</b></i></p></>,
+  selectionToggle: <><p>Checks the slab size of selected area in build mode.</p><p><i className="tt-info">Oversized slabs cannot be shared outside the game.</i></p><p><i><b className="tt-warn">Oversized slabs can be cut and pasted within the board but will be lost on board change or if the game is closed.</b></i></p></>,
 
   blockDelete: <><h3>Delete Block</h3><p><i><b className="tt-warn">Deletes the block and all children.</b></i></p></>,
   blockToggle: <><h3>Toggle Block</h3><p>Toggles the block and all children on and off.</p><p><i className="tt-info">This will prevent the objects from being affected by the disabled blocks.</i></p></>,
