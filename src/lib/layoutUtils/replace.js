@@ -9,8 +9,12 @@ Layout.prototype.replace = function (
     to = 'uuid',
     to_uuid = '',
     to_slab = ''
-  }
+  },
+  scope,
+  fromSeq = 0
 ) {
+  const floor = (fromSeq ?? 0);
+
   let slabLayout;
   if (from === 'uuid') {
     if (from_uuid === '') throw new Error('uuid empty');
@@ -27,34 +31,42 @@ Layout.prototype.replace = function (
     catch { throw new Error('incorrect slab format'); }
   }
 
+  // Collect & remove in-scope assets to replace
   const assetsToReplace = [];
 
-  const testLayout = this.clone();
-  for (let i = 0; i < testLayout.layouts.length; i++) {
-    if (from === 'uuid' && from_uuid !== testLayout.layouts[i].uuid) continue;
+  for (const l of this.layouts) {
+    if (from === 'uuid' && from_uuid !== l.uuid) continue;
 
-    assetsToReplace.push(...testLayout.layouts[i].assets);
-    testLayout.layouts[i].assets = [];
+    const kept = [];
+    for (const a of (l.assets ?? [])) {
+      if ((a.__seq ?? -1) >= floor) {
+        assetsToReplace.push(a);
+      } else {
+        kept.push(a);
+      }
+    }
+    l.assets = kept;
   }
 
+  // Now add replacements
   if (to === 'uuid') {
-    if (!to_uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/))
-      throw new Error('incorrect uuid format');
-    testLayout.layouts.push({
+    this.layouts.push({
       uuid: to_uuid,
-      assets: assetsToReplace,
+      assets: assetsToReplace
     });
   } else if (to === 'slab') {
     for (const asset of assetsToReplace) {
       const slabClone = slabLayout.clone()
-        .offset({ offset: asset })
-        .rotate({ rotation: '' + asset.rotation, center: 'center' })
+        .offset({ offset: asset }, scope, 0)
+        .rotate({ rotation: '' + asset.rotation, center: 'center' }, scope, 0)
         .cleanup();
-      testLayout.add(slabClone);
+
+      // New geometry: strip seq so parent assigns fresh ids
+      slabClone._stripSeq(slabClone.layouts);
+
+      this.add(slabClone);
     }
   }
-  testLayout.cleanup();
-  this.layouts = testLayout.layouts;
 
   return this.cleanup();
 };

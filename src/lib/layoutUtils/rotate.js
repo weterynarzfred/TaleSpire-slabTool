@@ -26,9 +26,11 @@ Layout.prototype.rotate = function (
     rotation_to,
     elements_only = false
   },
-  scope
+  scope,
+  fromSeq = 0
 ) {
   const parsedIndex = getIndex();
+  const floor = (fromSeq ?? 0);
 
   const axisPosition = {
     x: parseInput('float', axis_offset.x, 0, scope),
@@ -52,11 +54,15 @@ Layout.prototype.rotate = function (
   if (axis !== 'y') elements_only = false;
   if (elements_only) center = 'zero';
 
+  // Compute center only over in-scope assets
   if (center === 'center') {
     const minimums = { x: Infinity, y: Infinity, z: Infinity };
     const maximums = { x: -Infinity, y: -Infinity, z: -Infinity };
-    for (const layout of this.layouts) {
-      for (const asset of layout.assets) {
+
+    for (let i = 0; i < this.layouts.length; i++) {
+      for (const asset of this.layouts[i].assets) {
+        if ((asset.__seq ?? -1) < floor) continue;
+
         minimums.x = Math.min(minimums.x, asset.x);
         minimums.y = Math.min(minimums.y, asset.y);
         minimums.z = Math.min(minimums.z, asset.z);
@@ -65,52 +71,59 @@ Layout.prototype.rotate = function (
         maximums.z = Math.max(maximums.z, asset.z);
       }
     }
-    axisPosition.x += (minimums.x + maximums.x) / 2;
-    axisPosition.y += (minimums.y + maximums.y) / 2;
-    axisPosition.z += (minimums.z + maximums.z) / 2;
+
+    if (minimums.x !== Infinity) {
+      axisPosition.x += (minimums.x + maximums.x) / 2;
+      axisPosition.y += (minimums.y + maximums.y) / 2;
+      axisPosition.z += (minimums.z + maximums.z) / 2;
+    }
   }
 
   let currentRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
   currentRotation += Math.random() * (usedRotationTo - usedRotationFrom) + usedRotationFrom;
 
   for (let i = 0; i < this.layouts.length; i++) {
-    const assetCenter = parsedIndex[this.layouts[i].uuid].type === 'Tiles' ? parsedIndex[this.layouts[i].uuid].center : { x: 0, y: 0, z: 0 };
+    const layout = this.layouts[i];
+    const indexInfo = parsedIndex[layout.uuid];
+    const assetCenter = indexInfo?.type === 'Tiles' ? indexInfo.center : { x: 0, y: 0, z: 0 };
 
-    for (let j = 0; j < this.layouts[i].assets.length; j++) {
-      
+    for (let j = 0; j < layout.assets.length; j++) {
+      const asset = layout.assets[j];
+      if ((asset.__seq ?? -1) < floor) continue;
+
       const rotationRad = -currentRotation / 180 * Math.PI;
       const rotCos = Math.cos(rotationRad);
       const rotSin = Math.sin(rotationRad);
 
       if (!elements_only) {
-        const currentAssetCenter = rotateTheCenter(assetCenter, this.layouts[i].assets[j].rotation);
-        this.layouts[i].assets[j].x -= axisPosition.x - currentAssetCenter.x;
-        this.layouts[i].assets[j].y -= axisPosition.y - currentAssetCenter.y;
-        this.layouts[i].assets[j].z -= axisPosition.z - currentAssetCenter.z;
+        const currentAssetCenter = rotateTheCenter(assetCenter, asset.rotation);
+        asset.x -= axisPosition.x - currentAssetCenter.x;
+        asset.y -= axisPosition.y - currentAssetCenter.y;
+        asset.z -= axisPosition.z - currentAssetCenter.z;
 
-        const oldX = this.layouts[i].assets[j].x;
-        const oldY = this.layouts[i].assets[j].y;
-        const oldZ = this.layouts[i].assets[j].z;
+        const oldX = asset.x;
+        const oldY = asset.y;
+        const oldZ = asset.z;
 
         if (axis === 'x') {
-          this.layouts[i].assets[j].y = oldY * rotCos - oldZ * rotSin;
-          this.layouts[i].assets[j].z = oldY * rotSin + oldZ * rotCos;
+          asset.y = oldY * rotCos - oldZ * rotSin;
+          asset.z = oldY * rotSin + oldZ * rotCos;
         } else if (axis === 'y') {
-          this.layouts[i].assets[j].x = oldX * rotCos - oldZ * rotSin;
-          this.layouts[i].assets[j].z = oldX * rotSin + oldZ * rotCos;
+          asset.x = oldX * rotCos - oldZ * rotSin;
+          asset.z = oldX * rotSin + oldZ * rotCos;
         } else if (axis === 'z') {
-          this.layouts[i].assets[j].x = oldX * rotCos - oldY * rotSin;
-          this.layouts[i].assets[j].y = oldX * rotSin + oldY * rotCos;
+          asset.x = oldX * rotCos - oldY * rotSin;
+          asset.y = oldX * rotSin + oldY * rotCos;
         }
 
         const rotatedAssetCenter = rotateTheCenter(currentAssetCenter, currentRotation);
-        this.layouts[i].assets[j].x += axisPosition.x - rotatedAssetCenter.x;
-        this.layouts[i].assets[j].y += axisPosition.y - rotatedAssetCenter.y;
-        this.layouts[i].assets[j].z += axisPosition.z - rotatedAssetCenter.z;
+        asset.x += axisPosition.x - rotatedAssetCenter.x;
+        asset.y += axisPosition.y - rotatedAssetCenter.y;
+        asset.z += axisPosition.z - rotatedAssetCenter.z;
       }
 
       if (axis === 'y') {
-        this.layouts[i].assets[j].rotation += currentRotation;
+        asset.rotation += currentRotation;
       }
     }
   }

@@ -4,10 +4,40 @@ import writeSlab from './writeSlab';
 
 export default class Layout {
   layouts;
+  _seq = 0;
 
   constructor(layouts = []) {
     this.layouts = layouts;
+
+    // Initialise sequence counter from existing assets (if any)
+    let maxSeq = -1;
+    for (const l of this.layouts) {
+      for (const a of (l.assets ?? [])) {
+        if (typeof a.__seq === 'number') maxSeq = Math.max(maxSeq, a.__seq);
+      }
+    }
+    this._seq = maxSeq + 1;
+
+    // Ensure every asset has a seq marker
+    this._assignSeqIfMissing(this.layouts);
+
     this.cleanup();
+  }
+
+  _assignSeqIfMissing(layouts) {
+    for (const l of layouts) {
+      for (const a of (l.assets ?? [])) {
+        if (typeof a.__seq !== 'number') a.__seq = this._seq++;
+      }
+    }
+  }
+
+  // Used when a layout represents "new geometry" being added into a parent,
+  // so the parent can assign fresh global seq ids.
+  _stripSeq(layouts) {
+    for (const l of layouts) {
+      for (const a of (l.assets ?? [])) delete a.__seq;
+    }
   }
 
   empty() {
@@ -15,11 +45,16 @@ export default class Layout {
   }
 
   add(addedLayout) {
+    // Preserve seq if present; assign if missing.
+    this._assignSeqIfMissing(addedLayout.layouts);
     this.layouts = this.layouts.concat(addedLayout.layouts);
     return this.cleanup();
   }
 
   addAsset(uuid, position) {
+    // If we're moving an existing asset, keep its __seq.
+    // If it's new, assign one.
+    if (typeof position.__seq !== 'number') position.__seq = this._seq++;
     this.layouts.push({ uuid, assets: [position] });
     return this.cleanup();
   }
