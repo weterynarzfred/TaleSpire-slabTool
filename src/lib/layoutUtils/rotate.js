@@ -47,8 +47,11 @@ Layout.prototype.rotate = function (
   if (type === "degree") {
     rotationArray = [usedRotation];
   } else if (type === "variation") {
-    rotationArray = rotation_variations.replaceAll(/[^0-9;,. ]/g, '')
-      .split(/[;, ]+/).filter(e => e !== "").map(e => parseFloat(e));
+    rotationArray = rotation_variations
+      .replaceAll(/[^0-9;,. ]/g, '')
+      .split(/[;, ]+/)
+      .filter(e => e !== "")
+      .map(e => parseFloat(e));
   }
   if (rotationArray.length === 0) rotationArray = [0];
 
@@ -80,31 +83,49 @@ Layout.prototype.rotate = function (
     }
   }
 
+  // Shared rotation (when not randomising per object)
   let sharedRotation = 0;
+  let sharedRotCos = 1;
+  let sharedRotSin = 0;
+
   if (!randomise_per_object) {
     sharedRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
     sharedRotation += Math.random() * (usedRotationTo - usedRotationFrom) + usedRotationFrom;
+
+    const rotationRad = -sharedRotation / 180 * Math.PI;
+    sharedRotCos = Math.cos(rotationRad);
+    sharedRotSin = Math.sin(rotationRad);
   }
 
   for (let i = 0; i < this.layouts.length; i++) {
-    const assetCenter = parsedIndex[this.layouts[i].uuid].type === 'Tiles'
-      ? parsedIndex[this.layouts[i].uuid].center
+    const layout = this.layouts[i];
+
+    const indexInfo = parsedIndex[layout.uuid];
+    const assetCenter = indexInfo?.type === 'Tiles'
+      ? indexInfo.center
       : { x: 0, y: 0, z: 0 };
 
-    for (let j = 0; j < this.layouts[i].assets.length; j++) {
+    for (let j = 0; j < layout.assets.length; j++) {
+      const asset = layout.assets[j];
+      if ((asset.__seq ?? -1) < floor) continue;
+
+      // Choose rotation per asset (or reuse shared)
       let currentRotation = sharedRotation;
+      let rotCos = sharedRotCos;
+      let rotSin = sharedRotSin;
 
       if (randomise_per_object) {
         currentRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
         currentRotation += Math.random() * (usedRotationTo - usedRotationFrom) + usedRotationFrom;
-      }
 
-      const rotationRad = -currentRotation / 180 * Math.PI;
-      const rotCos = Math.cos(rotationRad);
-      const rotSin = Math.sin(rotationRad);
+        const rotationRad = -currentRotation / 180 * Math.PI;
+        rotCos = Math.cos(rotationRad);
+        rotSin = Math.sin(rotationRad);
+      }
 
       if (!elements_only) {
         const currentAssetCenter = rotateTheCenter(assetCenter, asset.rotation);
+
         asset.x -= axisPosition.x - currentAssetCenter.x;
         asset.y -= axisPosition.y - currentAssetCenter.y;
         asset.z -= axisPosition.z - currentAssetCenter.z;
@@ -125,6 +146,7 @@ Layout.prototype.rotate = function (
         }
 
         const rotatedAssetCenter = rotateTheCenter(currentAssetCenter, currentRotation);
+
         asset.x += axisPosition.x - rotatedAssetCenter.x;
         asset.y += axisPosition.y - rotatedAssetCenter.y;
         asset.z += axisPosition.z - rotatedAssetCenter.z;
