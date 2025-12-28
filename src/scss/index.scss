@@ -418,6 +418,87 @@ body {
   }
 }
 
+.block--results > .block__contents .controls .selection-size-toggle {
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 0.25rem;
+
+  height: 100%;
+  padding: 0.5em 1em;
+  min-width: 14em;
+
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8em;
+  font-weight: 700;
+
+  background-color: #222 !important;
+  color: inherit;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease, transform 100ms ease;
+
+  box-shadow: none;
+
+  &:hover {
+    background-color: #333 !important;
+  }
+
+  &:active {
+    background-color: #444 !important;
+  }
+
+  .label {
+    white-space: nowrap;
+  }
+
+  .count {
+    font-family: inherit;
+    opacity: 0.95;
+  }
+
+  &.inactive {
+    background-color: #222 !important;
+    color: inherit;
+
+    &:hover {
+      background-color: #333 !important;
+    }
+
+    &:active {
+      background-color: #444 !important;
+    }
+  }
+
+  &.active-within {
+    background-color: #1f7a1f !important;
+    color: #fff;
+
+    &:hover {
+      background-color: #1a671a !important;
+    }
+
+    &:active {
+      background-color: #278f27 !important;
+    }
+  }
+
+
+  &.active-over {
+    background-color: #f55 !important;
+    color: #fff;
+
+    &:hover {
+      background-color: #523 !important;
+    }
+
+    &:active {
+      background-color: #f77 !important;
+    }
+  }
+}
+
+
 @import url("blockHeader.scss");
 @import url("inputs.scss");
 @import url("blockList.scss");

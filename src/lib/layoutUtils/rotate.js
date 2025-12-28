@@ -24,7 +24,8 @@ Layout.prototype.rotate = function (
     rotation_variations = "",
     rotation_from,
     rotation_to,
-    elements_only = false
+    elements_only = false,
+    randomise_per_object = false,
   },
   scope,
   fromSeq = 0
@@ -79,17 +80,24 @@ Layout.prototype.rotate = function (
     }
   }
 
-  let currentRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
-  currentRotation += Math.random() * (usedRotationTo - usedRotationFrom) + usedRotationFrom;
+  let sharedRotation = 0;
+  if (!randomise_per_object) {
+    sharedRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
+    sharedRotation += Math.random() * (usedRotationTo - usedRotationFrom) + usedRotationFrom;
+  }
 
   for (let i = 0; i < this.layouts.length; i++) {
-    const layout = this.layouts[i];
-    const indexInfo = parsedIndex[layout.uuid];
-    const assetCenter = indexInfo?.type === 'Tiles' ? indexInfo.center : { x: 0, y: 0, z: 0 };
+    const assetCenter = parsedIndex[this.layouts[i].uuid].type === 'Tiles'
+      ? parsedIndex[this.layouts[i].uuid].center
+      : { x: 0, y: 0, z: 0 };
 
-    for (let j = 0; j < layout.assets.length; j++) {
-      const asset = layout.assets[j];
-      if ((asset.__seq ?? -1) < floor) continue;
+    for (let j = 0; j < this.layouts[i].assets.length; j++) {
+      let currentRotation = sharedRotation;
+
+      if (randomise_per_object) {
+        currentRotation = rotationArray[Math.floor(Math.random() * rotationArray.length)];
+        currentRotation += Math.random() * (usedRotationTo - usedRotationFrom) + usedRotationFrom;
+      }
 
       const rotationRad = -currentRotation / 180 * Math.PI;
       const rotCos = Math.cos(rotationRad);
