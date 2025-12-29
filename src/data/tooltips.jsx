@@ -10,7 +10,7 @@ export default {
   addFilter: <><h3>Filter assets</h3><p>Filters the specified assets and either deletes them or applies the sub-modifiers to them.</p></>,
   addGroup: <><h3>Group block</h3><p>Creates an empty group block to help with organising the layout edits.</p></>,
 
-  duplicate_count: <><h3>Duplicates count</h3><p>Amount of times the layout above is duplicated.</p></>,
+  duplicate_count: <><h3>Duplicates count</h3><p>Amount of times the layout above is duplicated.</p><p><i className="tt-info">If set to <b className="tt-warn">0</b>, the objects will be deleted.</i></p></>,
   duplicate_iter_name: <><h3>Iteration Variable Name</h3><p>A name for the variable storing the current iteration of duplication.</p><p><i className="tt-info">Defaults to <b className="tt-warn">iterN</b> where <b className="tt-warn">N</b> is the depth of the duplicate block.</i></p></>,
   duplicate_modifiers: "",
   duplicate_modifiersRelativeOption: <><h3>Relative</h3><p>Applies the sub-modifiers relative to the previous iteration.</p><p><i className="tt-info">For example, if used with the Rotate modifier set to <b className="tt-warn">15</b> degrees, it will rotate the first duplicate by <b>15</b> degrees, second one by <b>30</b> degrees, and so on.</i></p></>,

@@ -6,17 +6,29 @@ import _ from 'lodash';
 Layout.prototype.duplicate = function (data, blocks = {}, scope = {}, fromSeq = 0) {
   const { count = 1, modifiers = "relative", iterName = "" } = data;
 
-  const usedCount = parseInput('integer', count, 1, scope);
+  let usedCount = parseInput('integer', count, 1, scope);
+  if (usedCount < 0) usedCount = 0;
+
   const floor = (fromSeq ?? 0);
 
-  // Duplicate only assets that are in-scope (>= floor)
-  // We build a baseSlice containing ONLY those assets.
-  const baseSlice = new Layout(_.cloneDeep(this.layouts));
+  // If count === 0, delete in-scope geometry and exit
+  if (usedCount === 0) {
+    for (const l of this.layouts) {
+      l.assets = (l.assets ?? []).filter(a => (a.__seq ?? -1) < floor);
+    }
+    return this.cleanup();
+  }
 
+  // Build a baseSlice containing ONLY in-scope assets
+  const baseSlice = new Layout(_.cloneDeep(this.layouts));
   for (const l of baseSlice.layouts) {
     l.assets = (l.assets ?? []).filter(a => (a.__seq ?? -1) >= floor);
   }
   baseSlice.cleanup();
+
+  if (!baseSlice.layouts.some(l => (l.assets?.length ?? 0) > 0)) {
+    return this.cleanup();
+  }
 
   let lastLayout = baseSlice.clone();
 
@@ -36,7 +48,7 @@ Layout.prototype.duplicate = function (data, blocks = {}, scope = {}, fromSeq = 
 
   for (let i = modifiers === "relative" ? 1 : 0; i < usedCount; i++) {
     const scoped = Object.create(scope);
-    scoped.assetStart = 0; // modifiers inside duplicate apply to the duplicated set only
+    scoped.assetStart = 0;
     scoped.iter = i;
     scoped[`iter${depth}`] = i;
     if (iterName !== "") scoped[iterName] = i;
@@ -45,13 +57,13 @@ Layout.prototype.duplicate = function (data, blocks = {}, scope = {}, fromSeq = 
       for (const block of orderedBlockList) applyBlock(lastLayout, block, scoped);
 
       const toAdd = lastLayout.clone();
-      toAdd._stripSeq(toAdd.layouts); // ensure new global ids
+      toAdd._stripSeq(toAdd.layouts);
       this.add(toAdd);
-    } else { // absolute
+    } else {
       lastLayout = baseSlice.clone();
       for (const block of orderedBlockList) applyBlock(lastLayout, block, scoped);
 
-      lastLayout._stripSeq(lastLayout.layouts); // ensure new global ids
+      lastLayout._stripSeq(lastLayout.layouts);
       this.add(lastLayout);
     }
   }
