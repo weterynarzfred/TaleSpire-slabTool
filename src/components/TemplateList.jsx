@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 function FolderDropTarget({ id, children }) {
   const { isOver, setNodeRef } = useDroppable({ id });
+
   return (
     <div ref={setNodeRef} className={`folder-target ${isOver ? "highlight" : ""}`}>
       {children}
@@ -42,6 +43,26 @@ export default function TemplateList({
       renameInputRef.current.select();
     }
   }, [renamingId]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!pendingConfirmation) return;
+
+      const activeElement = document.querySelector(
+        `[data-confirm-parent-id="${pendingConfirmation.id}"]`
+      );
+
+      if (activeElement && !activeElement.contains(e.target)) {
+        clearConfirmation();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [pendingConfirmation]);
 
   const isCollapsed = (id) => collapsedFolders.has(id);
 
@@ -117,15 +138,34 @@ export default function TemplateList({
           {truncate(item.name)}
         </span>
       </button>
-      <button className="default-tooltip-anchor" data-tooltip-key="folderRename" onClick={() => onRenameStart(item.id)} title="Rename Folder">
+
+      <button
+        className="default-tooltip-anchor"
+        data-tooltip-key="folderRename"
+        onClick={() => onRenameStart(item.id)}
+        title="Rename Folder"
+      >
         <Pencil size={15} />
       </button>
-      <button className="default-tooltip-anchor" data-tooltip-key="folderCopy" onClick={() => onCopyFolder(item)} title="Copy Folder and Contents">
+
+      <button
+        className="default-tooltip-anchor"
+        data-tooltip-key="folderCopy"
+        onClick={() => onCopyFolder(item)}
+        title="Copy Folder and Contents"
+      >
         <CopyIcon size={15} />
       </button>
-      <button className="default-tooltip-anchor" data-tooltip-key="folderSort" onClick={() => onSortFolder(item.id)} title="Sort Folder Alphabetically">
+
+      <button
+        className="default-tooltip-anchor"
+        data-tooltip-key="folderSort"
+        onClick={() => onSortFolder(item.id)}
+        title="Sort Folder Alphabetically"
+      >
         <ArrowDownAZ size={15} />
       </button>
+
       {isConfirming(item, "delete") ? (
         <>
           <button
@@ -256,6 +296,7 @@ export default function TemplateList({
     list.map((item) => {
       const isFolder = item.type === "folder";
       const nestingClass = level > 0 ? "nested-item" : "";
+      const isConfirmationActive = pendingConfirmation?.id === item.id;
 
       const content = (
         <>
@@ -263,7 +304,12 @@ export default function TemplateList({
 
           <SortableItem id={item.id}>
             <FolderDropTarget id={item.id}>
-              <div className={`template-item ${isFolder ? "template-folder" : ""} ${nestingClass}`}>
+              <div
+                data-confirm-parent-id={item.id}
+                className={`template-item ${isFolder ? "template-folder" : ""} ${nestingClass} ${
+                  isConfirmationActive ? "confirm-active" : ""
+                }`}
+              >
                 {renamingId === item.id
                   ? renderRenameInput(item)
                   : isFolder
@@ -273,11 +319,11 @@ export default function TemplateList({
             </FolderDropTarget>
           </SortableItem>
 
-          {isFolder && !isCollapsed(item.id) && item.children?.length > 0 &&
+          {isFolder && !isCollapsed(item.id) && item.children?.length > 0 && (
             <div className="folder-visual">
               {renderItems(item.children, level + 1)}
             </div>
-          }
+          )}
 
           <DropZone id={`after-${item.id}`} onDrop={(id) => onDropOutside?.(id)} />
         </>
