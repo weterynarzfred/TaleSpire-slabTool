@@ -349,3 +349,31 @@
     z-index: 1000;
   }
 }
+
+.template-confirm-actions {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0.25em;
+  margin: 0.25em 0;
+}
+
+.template-confirm-actions button {
+  @extend %button-base;
+  @extend %text-style-uppercase;
+  margin: 0;
+  padding: 0.1em 0.35em;
+}
+
+.template-confirm-button {
+  background-color: #092 !important;
+  &:hover {
+    color: #111 !important;
+  }
+}
+
+.template-cancel-button {
+  background-color: #f55 !important;
+  &:hover {
+    color: #111 !important;
+  }
+}

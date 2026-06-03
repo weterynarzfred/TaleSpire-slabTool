@@ -3,7 +3,7 @@ import { Pencil, RotateCcw, Copy as CopyIcon, CircleX, Folder, ArrowDownAZ, Clip
 import SortableItem from "./SortableItem";
 import DropZone from "./DropZone";
 import { truncate } from "../lib/templateUtils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function FolderDropTarget({ id, children }) {
   const { isOver, setNodeRef } = useDroppable({ id });
@@ -34,6 +34,8 @@ export default function TemplateList({
   setCollapsedFolders,
   onCollapseChange,
 }) {
+  const [pendingConfirmation, setPendingConfirmation] = useState(null);
+
   useEffect(() => {
     if (renamingId && renameInputRef.current) {
       renameInputRef.current.focus();
@@ -50,6 +52,28 @@ export default function TemplateList({
       onCollapseChange?.(Array.from(next));
       return next;
     });
+  };
+
+  const isConfirming = (item, action) =>
+    pendingConfirmation?.id === item.id &&
+    pendingConfirmation?.action === action;
+
+  const requestConfirmation = (item, action) => {
+    setPendingConfirmation({ id: item.id, action });
+  };
+
+  const clearConfirmation = () => {
+    setPendingConfirmation(null);
+  };
+
+  const confirmDelete = (item) => {
+    onDelete(item);
+    clearConfirmation();
+  };
+
+  const confirmOverwrite = (item) => {
+    onOverwrite(item.id);
+    clearConfirmation();
   };
 
   const renderRenameInput = (item) => (
@@ -102,32 +126,129 @@ export default function TemplateList({
       <button className="default-tooltip-anchor" data-tooltip-key="folderSort" onClick={() => onSortFolder(item.id)} title="Sort Folder Alphabetically">
         <ArrowDownAZ size={15} />
       </button>
-      <button className="default-tooltip-anchor" data-tooltip-key="folderDelete" onClick={() => onDelete(item)} title="Delete Folder and Contents">
-        <CircleX size={15} />
-      </button>
+      {isConfirming(item, "delete") ? (
+        <>
+          <button
+            className="template-confirm-button"
+            onClick={() => confirmDelete(item)}
+            title="Confirm Delete Folder and Contents"
+          >
+            ✓
+          </button>
+          <button
+            className="template-cancel-button"
+            onClick={clearConfirmation}
+            title="Cancel"
+          >
+            ✕
+          </button>
+        </>
+      ) : (
+        <button
+          className="default-tooltip-anchor"
+          data-tooltip-key="folderDelete"
+          onClick={() => requestConfirmation(item, "delete")}
+          title="Delete Folder and Contents"
+        >
+          <CircleX size={15} />
+        </button>
+      )}
     </>
   );
 
   const renderTemplateButtons = (item) => (
     <>
-      <button className="template-name default-tooltip-anchor" data-tooltip-key="templateLoad" onClick={() => onLoad(item)} title={item.name}>
+      <button
+        className="template-name default-tooltip-anchor"
+        data-tooltip-key="templateLoad"
+        onClick={() => onLoad(item)}
+        title={item.name}
+      >
         {truncate(item.name)}
       </button>
-      <button className="default-tooltip-anchor" data-tooltip-key="templateCopyResult" onClick={() => onCopyResult(item)} title="Copy Template Result">
+
+      <button
+        className="default-tooltip-anchor"
+        data-tooltip-key="templateCopyResult"
+        onClick={() => onCopyResult(item)}
+        title="Copy Template Result"
+      >
         <ClipboardCopy size={15} />
       </button>
-      <button className="default-tooltip-anchor" data-tooltip-key="templateRename" onClick={() => onRenameStart(item.id)} title="Rename">
+
+      <button
+        className="default-tooltip-anchor"
+        data-tooltip-key="templateRename"
+        onClick={() => onRenameStart(item.id)}
+        title="Rename"
+      >
         <Pencil size={15} />
       </button>
-      <button className="default-tooltip-anchor" data-tooltip-key="templateCopy" onClick={() => onCopy(item)} title="Copy">
+
+      <button
+        className="default-tooltip-anchor"
+        data-tooltip-key="templateCopy"
+        onClick={() => onCopy(item)}
+        title="Copy"
+      >
         <CopyIcon size={15} />
       </button>
-      <button className="default-tooltip-anchor" data-tooltip-key="templateReplace" onClick={() => onOverwrite(item.id)} title="Replace">
-        <RotateCcw size={15} />
-      </button>
-      <button className="default-tooltip-anchor" data-tooltip-key="templateDelete" onClick={() => onDelete(item)} title="Delete">
-        <CircleX size={15} />
-      </button>
+
+      {isConfirming(item, "overwrite") ? (
+        <>
+          <button
+            className="template-confirm-button"
+            onClick={() => confirmOverwrite(item)}
+            title="Confirm Replace"
+          >
+            ✓
+          </button>
+          <button
+            className="template-cancel-button"
+            onClick={clearConfirmation}
+            title="Cancel"
+          >
+            ✕
+          </button>
+        </>
+      ) : (
+        <button
+          className="default-tooltip-anchor"
+          data-tooltip-key="templateReplace"
+          onClick={() => requestConfirmation(item, "overwrite")}
+          title="Replace"
+        >
+          <RotateCcw size={15} />
+        </button>
+      )}
+
+      {isConfirming(item, "delete") ? (
+        <>
+          <button
+            className="template-confirm-button"
+            onClick={() => confirmDelete(item)}
+            title="Confirm Delete"
+          >
+            ✓
+          </button>
+          <button
+            className="template-cancel-button"
+            onClick={clearConfirmation}
+            title="Cancel"
+          >
+            ✕
+          </button>
+        </>
+      ) : (
+        <button
+          className="default-tooltip-anchor"
+          data-tooltip-key="templateDelete"
+          onClick={() => requestConfirmation(item, "delete")}
+          title="Delete"
+        >
+          <CircleX size={15} />
+        </button>
+      )}
     </>
   );
 
