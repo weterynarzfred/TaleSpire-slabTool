@@ -2,6 +2,7 @@ export default {
   header: <><h3>Template Header</h3><p>Allows for writing comments and setting global variables that can be accessed in all other blocks.</p><i className="tt-info"><p>Each variable must start in a new line or be seperated by a <b className="tt-warn">;</b> symbol.</p><p>Comments start with a <b className="tt-warn">#</b> symbol.</p><p>Math is allowed in the header and most input fields.</p></i></>,
 
   addSlab: <><h3>Add a slab</h3><p>Adds a slab to the existing layout.</p></>,
+  addTextSlab: <><h3>Text Slab</h3><p>Generates text from letter slabs. Each character uses the slab assigned to that letter and is offset by the configured widths.</p></>,
   addDuplicate: <><h3>Duplicate layout</h3><p>Duplicates the existing layout a set number of times, applying modifiers to each copy.</p></>,
   addOffset: <><h3>Offset layout</h3><p>Offsets the existing layout by the specified amount. Keep in mind that the end result is always normalized to have only positive position values.</p></>,
   addRotate: <><h3>Rotate layout</h3><p>Rotates the existing layout by the specified amount.</p></>,
@@ -71,6 +72,15 @@ export default {
   slab_base64: <><p>Base64 code that Talespire uses for it's building blocks.</p><p>You can copy from and paste to this field directly.</p></>,
   slab_copyButton: <><p>Place the slab from the field below in your hand. It will also be copied to clipboard so you can paste it later on if you wish.</p><p><i><b className="tt-warn">It will clear any other things that have been copied or cut previously.</b></i></p></>,
   slab_eyedropperButton: <><h3>Eyedropper Tool</h3><p>Select the object (prop or tile) in Talespire to automatically get the UUID of the object in the field below.</p><p><i>Only works if used in a Symbiote version of the tool inside Talespire.</i></p><p><i><b className="tt-warn">It will break if a mini is selected.</b></i></p></>,
+
+  textSlab_text: <><h3>Text</h3><p>The text to generate. New lines are supported.</p></>,
+  textSlab_lineHeight: <><h3>Line height</h3><p>Vertical offset applied to each new line of text.</p></>,
+  textSlab_globalLetterWidth: <><h3>Global letter width</h3><p>Default horizontal offset applied after every character.</p></>,
+  textSlab_spaceWidth: <><h3>Space width</h3><p>Horizontal offset used for spaces. If empty, the global letter width is used.</p></>,
+  textSlab_letters: <><h3>Letters</h3><p>Characters shown below as editable slab fields.</p></>,
+  textSlab_individualLetterWidth: <><h3>Individual letter width</h3><p>Optional width used after this character. If empty, the global letter width is used.</p></>,
+  textSlab_individualXOffset: <><h3>Individual X offset</h3><p>Extra X offset applied to this character when it is placed.</p></>,
+  textSlab_individualZOffset: <><h3>Individual Z offset</h3><p>Extra Z offset applied to this character when it is placed.</p></>,
 
   copyButton: <><p>Place the entire layout in your hand. It will also be copied to clipboard so you can paste it later on if you wish.</p><p><i><b className="tt-warn">It will clear any other things that have been copied or cut previously.</b></i></p></>,
   selectionToggle: <><p>Checks the slab size of selected area in build mode.</p><p><i className="tt-info">Oversized slabs cannot be shared outside the game.</i></p><p><i><b className="tt-warn">Oversized slabs can be cut and pasted within the board but will be lost on board change or if the game is closed.</b></i></p></>,

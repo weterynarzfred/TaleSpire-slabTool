@@ -3,47 +3,11 @@
 .block-controls {
   display: flex;
   justify-content: flex-end;
-
   padding: 0.5rem;
   font-size: 0.8em;
-}
 
-.block {
-  .BlockList {
-    position: relative;
-    margin-top: 0.4rem;
-    margin-left: 1rem;
-    margin-right: 0.5rem;
-    min-height: 1em;
-
-    .block {
-      border: 2px solid $contentColor;
-      border-right: none;
-    }
-
-    .block-controls {
-      position: relative;
-      background: none;
-      padding: 0;
-      margin-bottom: 0.5em;
-      font-size: 0.8rem;
-
-      .add-block {
-        background: $inputBackgroundColor;
-        color: #eee;
-
-        &:hover {
-          background: #444;
-        }
-      }
-    }
-  }
-}
-
-.block-controls {
   .add-block {
     min-width: 6em;
-
     margin-left: 2px;
     position: relative;
     color: #eee;
@@ -65,4 +29,116 @@
       color: #eee;
     }
   }
+}
+
+.block {
+  .BlockList {
+    position: relative;
+    margin: 0.4rem 0.5rem 0 1rem;
+    min-height: 1em;
+
+    .block {
+      border: 2px solid $contentColor;
+      border-right: none;
+    }
+
+    .block-controls {
+      position: relative;
+      background: none;
+      padding: 0;
+      margin-bottom: 0.5em;
+      font-size: 0.8rem;
+
+      .add-block {
+        background: $inputBackgroundColor;
+
+        &:hover {
+          background: #444;
+        }
+      }
+    }
+  }
+}
+
+.text-slab-letter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.text-slab-letter-row {
+  display: grid;
+  grid-template-columns: 45px minmax(220px, 1fr) 70px 70px 70px;
+  gap: 6px;
+  align-items: start;
+
+  > div {
+    min-width: 0;
+
+    > input {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+
+  .BlockInput {
+    margin: 0;
+    padding: 0;
+
+    .label {
+      display: none;
+    }
+
+    input {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+}
+
+.text-slab-letter-row--header {
+  font-weight: bold;
+  align-items: center;
+}
+
+.text-slab-letter-label {
+  font-weight: bold;
+  text-align: center;
+  padding-top: 6px;
+}
+
+.text-slab-letter-error {
+  color: red;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.text-slab-textarea {
+  width: 100%;
+  min-height: 70px;
+  resize: none;
+  overflow: hidden;
+  font-family: monospace;
+  white-space: pre;
+}
+
+.text-slab-letters-input {
+  label {
+    width: 100%;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.text-slab-text-input,
+.text-slab-letters-input {
+  margin-bottom: 0.3rem;
+}
+
+.block--text_slab > .block__contents > .BlockInput {
+  margin-bottom: 0.3rem;
 }

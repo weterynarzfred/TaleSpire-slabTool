@@ -1,18 +1,24 @@
 import { evaluate } from "mathjs";
 import Layout from '../Layout';
-import _ from 'lodash';
+
+function plainClone(value) {
+  return JSON.parse(JSON.stringify(value ?? []));
+}
 
 function flattenData(data, prefix = "") {
   const result = {};
+
   for (const key in data) {
     const val = data[key];
     const path = prefix ? `${prefix}.${key}` : key;
+
     if (typeof val === "object" && val !== null && !Array.isArray(val)) {
       Object.assign(result, flattenData(val, path));
     } else {
       result[path] = val;
     }
   }
+
   return result;
 }
 
@@ -20,19 +26,19 @@ function applyBlock(layout, block, scope) {
   if (block.disabled) return;
 
   try {
-    // Evaluate any string expressions in block.data into scope
     if (block.data) {
       const flatData = flattenData(block.data);
+
       for (const [key, val] of Object.entries(flatData)) {
         if (typeof val === "string" && val.trim()) {
           try {
             const evaluated = evaluate(val, scope);
-            // Avoid poisoning scope with null (can crash mathjs later)
+
             if (evaluated !== undefined && evaluated !== null) {
               scope[key] = evaluated;
             }
           } catch {
-            // parse/eval errors ignored by design
+            // Ignore expression errors.
           }
         }
       }
@@ -40,6 +46,7 @@ function applyBlock(layout, block, scope) {
 
     const applySubBlocks = (targetLayout, subBlocks, childScope) => {
       const blockArray = Object.values(subBlocks).sort((a, b) => a.order - b.order);
+
       for (const subBlock of blockArray) {
         applyBlock(targetLayout, subBlock, childScope);
       }
@@ -47,17 +54,31 @@ function applyBlock(layout, block, scope) {
 
     switch (block.type) {
       case 'slab': {
-        const newLayout = new Layout(_.cloneDeep(block.data.layouts));
+        const newLayout = new Layout(plainClone(block.data.layouts));
 
         if (block.blocks) {
           const slabScope = Object.create(scope);
-          slabScope.assetStart = 0; // slab-local children only affect slab-local assets
+          slabScope.assetStart = 0;
           applySubBlocks(newLayout, block.blocks, slabScope);
         }
 
-        // This newLayout represents "new geometry". Strip seq so parent assigns fresh global ids on add.
         newLayout._stripSeq(newLayout.layouts);
+        layout.add(newLayout);
+        break;
+      }
 
+      case 'text_slab': {
+        const newLayout = new Layout();
+
+        newLayout.textSlab(block.data, scope);
+
+        if (block.blocks) {
+          const textSlabScope = Object.create(scope);
+          textSlabScope.assetStart = 0;
+          applySubBlocks(newLayout, block.blocks, textSlabScope);
+        }
+
+        newLayout._stripSeq(newLayout.layouts);
         layout.add(newLayout);
         break;
       }
@@ -87,9 +108,8 @@ function applyBlock(layout, block, scope) {
         break;
 
       case 'group': {
-        // Scope boundary: anything created after this point is "in group"
         const groupScope = Object.create(scope);
-        groupScope.assetStart = layout._seq; // next asset id at group entry
+        groupScope.assetStart = layout._seq;
 
         if (block.blocks) applySubBlocks(layout, block.blocks, groupScope);
         break;
@@ -106,7 +126,6 @@ function applyBlock(layout, block, scope) {
 export default function recalculateLayout(state) {
   const layout = new Layout();
 
-  // TemplateHeader globals live here
   const headerScope = {};
 
   try {
@@ -116,7 +135,6 @@ export default function recalculateLayout(state) {
     state.templateHeaderError = e.message;
   }
 
-  // All blocks inherit from TemplateHeader globals
   const scope = Object.create(headerScope);
   scope.assetStart = 0;
 

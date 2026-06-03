@@ -5,6 +5,7 @@ import BlockDuplicate from '../blocks/BlockDuplicate';
 import BlockOffset from '../blocks/BlockOffset';
 import BlockRotate from '../blocks/BlockRotate';
 import BlockSlab from '../blocks/BlockSlab';
+import BlockTextSlab from '../blocks/BlockTextSlab';
 import BlockScale from '../blocks/BlockScale';
 import BlockReplace from '../blocks/BlockReplace';
 import BlockFilter from '../blocks/BlockFilter';
@@ -41,92 +42,68 @@ export default function BlockList({ path = [], scope = {} }) {
   const blockElements = [];
   const subBlocksArray = parentBlock.blocks ?
     Object.values(parentBlock.blocks).sort((a, b) => a.order - b.order) : [];
+
   for (let i = 0; i < subBlocksArray.length; i++) {
     const block = subBlocksArray[i];
     let className = [];
     if (i === 0) className.push('block--first');
     if (i === subBlocksArray.length - 1) className.push('block--last');
     className = classNames(className);
+
     if (block.type === 'group') {
-      blockElements.push(<BlockGroup
-        key={block.id}
-        block={block}
-        className={className}
-      />);
+      blockElements.push(<BlockGroup key={block.id} block={block} className={className} />);
     } else if (block.type === 'slab') {
-      blockElements.push(<BlockSlab
-        key={block.id}
-        block={block}
-        className={className}
-      />);
+      blockElements.push(<BlockSlab key={block.id} block={block} className={className} />);
+    } else if (block.type === 'text_slab') {
+      blockElements.push(<BlockTextSlab key={block.id} block={block} className={className} />);
     } else if (block.type === 'duplicate') {
-      blockElements.push(<BlockDuplicate
-        key={block.id}
-        block={block}
-        className={className}
-        scope={scope}
-      />);
+      blockElements.push(<BlockDuplicate key={block.id} block={block} className={className} scope={scope} />);
     } else if (block.type === 'offset') {
-      blockElements.push(<BlockOffset
-        key={block.id}
-        block={block}
-        className={className}
-      />);
+      blockElements.push(<BlockOffset key={block.id} block={block} className={className} />);
     } else if (block.type === 'rotate') {
-      blockElements.push(<BlockRotate
-        key={block.id}
-        block={block}
-        className={className}
-      />);
+      blockElements.push(<BlockRotate key={block.id} block={block} className={className} />);
     } else if (block.type === 'scale') {
-      blockElements.push(<BlockScale
-        key={block.id}
-        block={block}
-        className={className}
-      />);
+      blockElements.push(<BlockScale key={block.id} block={block} className={className} />);
     } else if (block.type === 'replace') {
-      blockElements.push(<BlockReplace
-        key={block.id}
-        block={block}
-        className={className}
-      />);
+      blockElements.push(<BlockReplace key={block.id} block={block} className={className} />);
     } else if (block.type === 'filter') {
-      blockElements.push(<BlockFilter
-        key={block.id}
-        block={block}
-        className={className}
-      />);
+      blockElements.push(<BlockFilter key={block.id} block={block} className={className} />);
     }
   }
 
   const blockOptions = [];
-  if (!isChildOf(['group', 'duplicate', 'filter', 'slab'], state, path)) {
+  if (!isChildOf(['group', 'duplicate', 'filter', 'slab', 'text_slab'], state, path)) {
     blockOptions.push(
-      < button className="add-block" key='group' data-tooltip-key="addGroup" onClick={() => handleAddBlock('group')}> Group</button >
+      <button className="add-block" key="group" data-tooltip-key="addGroup" onClick={() => handleAddBlock('group')}>Group</button>
     );
   }
-  if (!isChildOf(['duplicate', 'filter', 'slab'], state, path)) {
+
+  if (!isChildOf(['duplicate', 'filter', 'slab', 'text_slab'], state, path)) {
     blockOptions.push(
-      <button className="add-block" key='slab' data-tooltip-key="addSlab" onClick={() => handleAddBlock('slab')}>Slab</button>
+      <button className="add-block" key="slab" data-tooltip-key="addSlab" onClick={() => handleAddBlock('slab')}>Slab</button>
+    );
+    blockOptions.push(
+      <button className="add-block" key="text_slab" data-tooltip-key="addTextSlab" onClick={() => handleAddBlock('text_slab')}>Text</button>
     );
   }
+
   blockOptions.push(
-    < button className="add-block" key='duplicate' data-tooltip-key="addDuplicate" onClick={() => handleAddBlock('duplicate')}> Duplicate</button >
+    <button className="add-block" key="duplicate" data-tooltip-key="addDuplicate" onClick={() => handleAddBlock('duplicate')}>Duplicate</button>
   );
   blockOptions.push(
-    < button className="add-block" key='offset' data-tooltip-key="addOffset" onClick={() => handleAddBlock('offset')}> Offset</button >
+    <button className="add-block" key="offset" data-tooltip-key="addOffset" onClick={() => handleAddBlock('offset')}>Offset</button>
   );
   blockOptions.push(
-    < button className="add-block" key='rotate' data-tooltip-key="addRotate" onClick={() => handleAddBlock('rotate')}> Rotate</button >
+    <button className="add-block" key="rotate" data-tooltip-key="addRotate" onClick={() => handleAddBlock('rotate')}>Rotate</button>
   );
   blockOptions.push(
-    < button className="add-block" key='scale' data-tooltip-key="addScale" onClick={() => handleAddBlock('scale')}> Scale</button >
+    <button className="add-block" key="scale" data-tooltip-key="addScale" onClick={() => handleAddBlock('scale')}>Scale</button>
   );
   blockOptions.push(
-    < button className="add-block" key='replace' data-tooltip-key="addReplace" onClick={() => handleAddBlock('replace')}> Replace</button >
+    <button className="add-block" key="replace" data-tooltip-key="addReplace" onClick={() => handleAddBlock('replace')}>Replace</button>
   );
   blockOptions.push(
-    < button className="add-block" key='filter' data-tooltip-key="addFilter" onClick={() => handleAddBlock('filter')}> Filter</button >
+    <button className="add-block" key="filter" data-tooltip-key="addFilter" onClick={() => handleAddBlock('filter')}>Filter</button>
   );
 
   return <div className="BlockList">
