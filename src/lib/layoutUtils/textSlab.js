@@ -1,4 +1,3 @@
-
 import Layout from '../Layout';
 import parseInput from '../parseInput';
 
@@ -49,6 +48,7 @@ function getLetterSlab(data, char) {
 
 Layout.prototype.textSlab = function (data = {}, scope) {
   const text = data.text || '';
+  const lineHeightMode = data.line_height_mode || 'horizontal';
 
   const lineHeight = parseInput('float', data.line_height, 1, scope);
   const globalLetterWidth = parseInput('float', data.global_letter_width, 0.5, scope);
@@ -65,7 +65,10 @@ Layout.prototype.textSlab = function (data = {}, scope) {
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
     let xOffset = 0;
-    const zLineOffset = -lineIndex * lineHeight;
+
+    const lineOffset = -lineIndex * lineHeight;
+    const yLineOffset = lineHeightMode === 'vertical' ? lineOffset : 0;
+    const zLineOffset = lineHeightMode === 'horizontal' ? lineOffset : 0;
 
     for (const char of [...lines[lineIndex]]) {
       const letterLayouts = getLetterSlab(data, char);
@@ -85,13 +88,20 @@ Layout.prototype.textSlab = function (data = {}, scope) {
         scope
       );
 
+      const individualYOffset = parseInput(
+        'float',
+        letterSetting.y_offset,
+        0,
+        scope
+      );
+
       if (letterLayouts) {
         const letterLayout = new Layout(plainClone(letterLayouts));
 
         letterLayout.offset({
           offset: {
             x: xOffset + individualXOffset,
-            y: 0,
+            y: yLineOffset + individualYOffset,
             z: zLineOffset + individualZOffset,
           },
         }, scope, 0);

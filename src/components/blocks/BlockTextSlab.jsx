@@ -7,6 +7,7 @@ import BlockHeader from '../blockParts/BlockHeader';
 import BlockList from '../blockParts/BlockList';
 import BlockContents from '../blockParts/BlockContents';
 import BlockInput from '../blockParts/BlockInput';
+import BlockSelectInput from '../blockParts/BlockSelectInput';
 import { useTrackedState, useUpdate } from '../StateProvider';
 
 const DEFAULT_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,!?-_';
@@ -220,24 +221,35 @@ export default function BlockTextSlab({ className, block }) {
             </div>
 
             <BlockInput
-                path={block.path}
-                dataPath={['line_height']}
-                def="1"
-                tooltip="textSlab_lineHeight"
-                />
+            path={block.path}
+            dataPath={['line_height']}
+            def="1"
+            tooltip="textSlab_lineHeight"
+            />
 
-                <BlockInput
-                path={block.path}
-                dataPath={['global_letter_width']}
-                def="0.5"
-                tooltip="textSlab_globalLetterWidth"
-                />
+            <BlockSelectInput
+            path={block.path}
+            dataPath={['line_height_mode']}
+            def={{ value: 'horizontal' }}
+            tooltip="textSlab_lineHeightMode"
+            options={[
+                { value: 'horizontal', label: 'Horizontal' },
+                { value: 'vertical', label: 'Vertical' },
+            ]}
+            />
 
-                <BlockInput
-                path={block.path}
-                dataPath={['space_width']}
-                def=""
-                tooltip="textSlab_spaceWidth"
+            <BlockInput
+            path={block.path}
+            dataPath={['global_letter_width']}
+            def="0.5"
+            tooltip="textSlab_globalLetterWidth"
+            />
+
+            <BlockInput
+            path={block.path}
+            dataPath={['space_width']}
+            def=""
+            tooltip="textSlab_spaceWidth"
             />
 
         <div className="text-slab-letter-list">
@@ -245,9 +257,10 @@ export default function BlockTextSlab({ className, block }) {
             <div>Letter</div>
             <div>Paste slab</div>
             <div>Width</div>
-            <div>X</div>
-            <div>Z</div>
-          </div>
+            <div>X Offset</div>
+            <div>Z Offset</div>
+            <div>Y Offset</div>
+            </div>
 
           {[...letters].map((letter) => (
             <div
@@ -270,6 +283,8 @@ export default function BlockTextSlab({ className, block }) {
                       e.target.value
                     )
                   }
+                  className="default-tooltip-anchor"
+                  data-tooltip-key="textSlab_individualCharacterSlab"
                 />
 
                 {letterErrors[letter] && (
@@ -311,6 +326,17 @@ export default function BlockTextSlab({ className, block }) {
                 def="0"
                 tooltip="textSlab_individualZOffset"
               />
+
+              <BlockInput
+                path={block.path}
+                dataPath={[
+                    'letter_settings',
+                    letter,
+                    'y_offset',
+                ]}
+                def="0"
+                tooltip="textSlab_individualYOffset"
+                />
             </div>
           ))}
         </div>

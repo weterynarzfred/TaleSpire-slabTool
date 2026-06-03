@@ -69,8 +69,8 @@
 
 .text-slab-letter-row {
   display: grid;
-  grid-template-columns: 45px minmax(220px, 1fr) 70px 70px 70px;
-  gap: 6px;
+  grid-template-columns: 45px minmax(220px, 1fr) 70px 70px 70px 70px;
+  gap: 1px;
   align-items: start;
 
   > div {
@@ -98,8 +98,14 @@
 }
 
 .text-slab-letter-row--header {
+  position: sticky;
+  top: 2.8rem;
+  z-index: 5;
+  background: #333;
   font-weight: bold;
   align-items: center;
+  text-align: center;
+  padding: 6px 0;
 }
 
 .text-slab-letter-label {
