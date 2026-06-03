@@ -75,7 +75,7 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
         return { ...item, children: [...(item.children || []), insertItem] };
       }
       if (item.type === "folder") {
-        return { ...item, children: insertIntoFolder(item.children || [], folderId, insertItem) };
+        return { ...item, children: insertIntoFolder(item.children || [], folderId) };
       }
       return item;
     });
@@ -250,47 +250,79 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
     }
   };
 
-  const handleImportTemplate = () => {
+  const importTemplatesFromString = (input, clearInput = false) => {
     let parsed;
+
     try {
-      parsed = JSON.parse(decompressFromBase64(importInput));
+      parsed = JSON.parse(decompressFromBase64(input));
     } catch {
       try {
-        parsed = JSON.parse(importInput);
+        parsed = JSON.parse(input);
       } catch {
         return alert("Invalid JSON or compressed data.");
       }
     }
-    const existingIds = new Set(items.map(i => i.id));
+
     const existingNames = new Set(items.map(i => i.name));
+
     const normalizeTemplates = input => {
       const arr = Array.isArray(input) ? input : [input];
+
       const processItem = item => {
         const id = crypto.randomUUID();
         const base = item.name || (item.type === "folder" ? "Imported Folder" : "Imported Template");
         let name = base;
         let count = 1;
-        while (existingNames.has(name)) name = `${base} - copy${count++ > 1 ? ` ${count - 1}` : ""}`;
-        existingNames.add(name);
-        if (item.type === "folder") {
-          return { id, type: "folder", name, children: (item.children || []).map(processItem) };
+
+        while (existingNames.has(name)) {
+          name = `${base} - copy${count++ > 1 ? ` ${count - 1}` : ""}`;
         }
+
+        existingNames.add(name);
+
+        if (item.type === "folder") {
+          return {
+            id,
+            type: "folder",
+            name,
+            children: (item.children || []).map(processItem).filter(Boolean),
+          };
+        }
+
         if (!item.blocks) return null;
+
         return {
           id,
           type: "template",
           name,
           blocks: item.blocks,
-          templateHeader: typeof item.templateHeader === "string" ? item.templateHeader : JSON.stringify(item.templateHeader || {}, null, 2),
+          templateHeader:
+            typeof item.templateHeader === "string"
+              ? item.templateHeader
+              : JSON.stringify(item.templateHeader || {}, null, 2),
         };
       };
+
       return arr.map(processItem).filter(Boolean);
     };
+
     const normalized = normalizeTemplates(parsed);
-    if (!normalized.length) return alert("No valid templates found to import.");
+
+    if (!normalized.length) {
+      return alert("No valid templates found to import.");
+    }
+
     saveItems([...items, ...normalized]);
-    setImportInput("");
+
+    if (clearInput) {
+      setImportInput("");
+    }
+
     showToast(`${normalized.length} template(s) imported!`);
+  };
+
+  const handleImportTemplate = () => {
+    importTemplatesFromString(importInput, true);
   };
 
   const handleSortTemplates = () => {
@@ -312,37 +344,37 @@ export default function useTemplateActions(items, setItems, state, dispatch, col
     showToast("Templates sorted A → Z");
   };
 
-const handleSortFolder = (folderId) => {
-  const folder = findItemById(items, folderId);
-  const folderName = folder?.name || "Folder";
+  const handleSortFolder = (folderId) => {
+    const folder = findItemById(items, folderId);
+    const folderName = folder?.name || "Folder";
 
-  const sortRecursively = (list) => {
-    const sorted = [...list].sort((a, b) => {
-      if (a.type === "folder" && b.type !== "folder") return -1;
-      if (a.type !== "folder" && b.type === "folder") return 1;
-      return a.name.localeCompare(b.name);
-    });
-    return sorted.map(item =>
-      item.type === "folder"
-        ? { ...item, children: sortRecursively(item.children || []) }
-        : item
-    );
+    const sortRecursively = (list) => {
+      const sorted = [...list].sort((a, b) => {
+        if (a.type === "folder" && b.type !== "folder") return -1;
+        if (a.type !== "folder" && b.type === "folder") return 1;
+        return a.name.localeCompare(b.name);
+      });
+      return sorted.map(item =>
+        item.type === "folder"
+          ? { ...item, children: sortRecursively(item.children || []) }
+          : item
+      );
+    };
+
+    const updateFolder = (list) =>
+      list.map(item => {
+        if (item.id === folderId && item.type === "folder") {
+          return { ...item, children: sortRecursively(item.children || []) };
+        } else if (item.type === "folder") {
+          return { ...item, children: updateFolder(item.children || []) };
+        }
+        return item;
+      });
+
+    const newItems = updateFolder(items);
+    saveItems(newItems);
+    showToast(`Folder "${folderName}" was sorted A → Z`);
   };
-
-  const updateFolder = (list) =>
-    list.map(item => {
-      if (item.id === folderId && item.type === "folder") {
-        return { ...item, children: sortRecursively(item.children || []) };
-      } else if (item.type === "folder") {
-        return { ...item, children: updateFolder(item.children || []) };
-      }
-      return item;
-    });
-
-  const newItems = updateFolder(items);
-  saveItems(newItems);
-  showToast(`Folder "${folderName}" was sorted A → Z`);
-};
 
   const handleFolderCreate = () => {
     const base = "New Folder";
@@ -398,6 +430,7 @@ const handleSortFolder = (folderId) => {
     handleOverwriteTemplate,
     handleCopyAllTemplates,
     handleImportTemplate,
+    importTemplatesFromString,
     handleSortTemplates,
     handleSortFolder,
     handleFolderCreate,

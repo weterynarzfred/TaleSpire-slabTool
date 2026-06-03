@@ -1,6 +1,7 @@
 import bytes from 'bytes';
 import { useTrackedState } from './StateProvider';
 import { useEffect, useRef, useState } from 'react';
+import { BookOpen } from "lucide-react";
 
 export default function Results() {
   const state = useTrackedState();
@@ -140,6 +141,15 @@ export default function Results() {
                 )}
               </span>
             )}
+          </button>
+
+          <button
+            type="button"
+            className="selection-size-toggle example-templates-button default-tooltip-anchor inactive"
+            data-tooltip-key="exampleTemplates"
+            onClick={() => window.dispatchEvent(new Event("IMPORT_EXAMPLE_TEMPLATES"))}
+          >
+            <BookOpen size={16} />
           </button>
 
           <div className="byte-count">

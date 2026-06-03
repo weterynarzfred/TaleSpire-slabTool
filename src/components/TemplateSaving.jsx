@@ -5,6 +5,7 @@ import TemplateList from "./TemplateList";
 import TemplateImportExport from "./TemplateImportExport";
 import TemplateDndContext from "./TemplateDndContext";
 import useTemplateActions from "../lib/useTemplateActions";
+import exampleTemplates from '../data/exampleTemplates';
 
 export default function TemplateSaving() {
   const [items, setItems] = useState([]);
@@ -35,6 +36,18 @@ export default function TemplateSaving() {
   }, []);
 
   const actions = useTemplateActions(items, setItems, state, dispatch, collapsed);
+
+  useEffect(() => {
+    const handleImportExamples = () => {
+      actions.importTemplatesFromString(exampleTemplates);
+    };
+
+    window.addEventListener("IMPORT_EXAMPLE_TEMPLATES", handleImportExamples);
+
+    return () => {
+      window.removeEventListener("IMPORT_EXAMPLE_TEMPLATES", handleImportExamples);
+    };
+  }, [actions, exampleTemplates]);
 
   return (
     <div className="TemplateSaving block--results">

@@ -418,6 +418,22 @@ body {
   }
 }
 
+.example-templates-button {
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 30;
+    height: 30;
+  }
+}
+
 .block--results > .block__contents .controls .selection-size-toggle {
   align-items: center;
   gap: 0.5rem;
