@@ -5,15 +5,46 @@ function plainClone(value) {
   return JSON.parse(JSON.stringify(value ?? []));
 }
 
+function hasOwn(object, key) {
+  return Object.prototype.hasOwnProperty.call(object, key);
+}
+
+function shouldUseCaseSensitiveLetters(data, char) {
+  const letters = String(data.letters || '');
+
+  const upper = char.toUpperCase?.();
+  const lower = char.toLowerCase?.();
+
+  if (!upper || !lower || upper === lower) {
+    return false;
+  }
+
+  return letters.includes(upper) && letters.includes(lower);
+}
+
+function resolveLetterKey(data, map, char) {
+  if (!map || !char) return undefined;
+
+  if (shouldUseCaseSensitiveLetters(data, char)) {
+    return hasOwn(map, char) ? char : undefined;
+  }
+
+  if (hasOwn(map, char)) return char;
+
+  const upper = char.toUpperCase?.();
+  const lower = char.toLowerCase?.();
+
+  if (hasOwn(map, upper)) return upper;
+  if (hasOwn(map, lower)) return lower;
+
+  return undefined;
+}
+
 function getLetterSetting(data, char) {
   const settings = data.letter_settings || {};
+  const key = resolveLetterKey(data, settings, char);
 
-  return (
-    settings[char] ||
-    settings[char.toUpperCase?.()] ||
-    settings[char.toLowerCase?.()] ||
-    {}
-  );
+  return key === undefined ? {} : settings[key];
 }
 
 function getLetterWidth(data, char, scope, globalWidth, spaceWidth) {
@@ -38,12 +69,9 @@ function getLetterWidth(data, char, scope, globalWidth, spaceWidth) {
 
 function getLetterSlab(data, char) {
   const letterSlabs = data.letter_slabs || {};
+  const key = resolveLetterKey(data, letterSlabs, char);
 
-  return (
-    letterSlabs[char] ||
-    letterSlabs[char.toUpperCase?.()] ||
-    letterSlabs[char.toLowerCase?.()]
-  );
+  return key === undefined ? undefined : letterSlabs[key];
 }
 
 Layout.prototype.textSlab = function (data = {}, scope) {
